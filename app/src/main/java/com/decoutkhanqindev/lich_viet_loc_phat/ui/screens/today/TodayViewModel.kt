@@ -30,7 +30,6 @@ class TodayViewModel(
 
     fun onIntent(intent: TodayIntent) {
         when (intent) {
-            is TodayIntent.SelectDate -> loadMetadata(intent.date)
             is TodayIntent.RequestToday -> loadMetadata(SolarDate.today())
             is TodayIntent.NavigateToPrevDay -> loadMetadata(_state.value.selectedDate.minusDays(1))
             is TodayIntent.NavigateToNextDay -> loadMetadata(_state.value.selectedDate.plusDays(1))
