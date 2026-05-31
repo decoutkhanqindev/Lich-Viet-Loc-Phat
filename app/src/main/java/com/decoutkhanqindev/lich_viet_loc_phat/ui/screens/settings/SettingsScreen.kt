@@ -88,7 +88,7 @@ private fun SettingsGroup(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
         Text(
-            title.uppercase(),
+            title,
             color = GoldAccent,
             fontSize = 11.sp,
             fontWeight = FontWeight.SemiBold,

@@ -1,7 +1,5 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today
 
-import android.annotation.SuppressLint
-import androidx.activity.ComponentActivity
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -30,7 +28,6 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +36,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +52,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.InauspiciousGray
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.GlassCard
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.HourInfoUiModel
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
@@ -160,30 +157,37 @@ private fun DateNavigationHeader(
                 .padding(16.dp)
                 .padding(bottom = 8.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = onToday, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        Icons.Default.Today,
-                        contentDescription = "Hôm nay",
-                        tint = GoldAccent
-                    )
-                }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    Icons.Default.Today,
+                    contentDescription = "Hôm nay",
+                    tint = GoldAccent,
+                    modifier = Modifier
+                        .onClick { onToday() }
+                        .size(28.dp)
+                )
                 Spacer(Modifier.weight(1f))
-                IconButton(onClick = onPrev, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        Icons.Default.ChevronLeft,
-                        contentDescription = "Ngày trước",
-                        tint = IvoryWhite
-                    )
-                }
-                Spacer(Modifier.width(4.dp))
-                IconButton(onClick = onNext, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        Icons.Default.ChevronRight,
-                        contentDescription = "Ngày sau",
-                        tint = IvoryWhite
-                    )
-                }
+                Icon(
+                    Icons.Default.ChevronLeft,
+                    contentDescription = "Ngày trước",
+                    tint = IvoryWhite,
+                    modifier = Modifier
+                        .onClick { onPrev() }
+                        .size(32.dp)
+                )
+                Icon(
+                    Icons.Default.ChevronRight,
+                    contentDescription = "Ngày sau",
+                    tint = IvoryWhite,
+                    modifier = Modifier
+                        .onClick { onNext() }
+                        .size(32.dp)
+                )
             }
             Spacer(Modifier.height(8.dp))
             AnimatedContent(

@@ -23,7 +23,10 @@ class CalendarViewModel(
     private val initDate = SolarDate.today()
 
     private val _state = MutableStateFlow(
-        CalendarContract.State(displayedYear = initDate.year, displayedMonth = initDate.month)
+        CalendarContract.State(
+            displayedYear = initDate.year,
+            displayedMonth = initDate.month
+        )
     )
     val state: StateFlow<CalendarContract.State> = _state.asStateFlow()
 

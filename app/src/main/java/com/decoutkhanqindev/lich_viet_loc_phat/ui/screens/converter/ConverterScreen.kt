@@ -12,7 +12,6 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,16 +21,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -40,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -57,6 +55,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldLight
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.GlassCard
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.ConvertResultUiModel
 import org.koin.androidx.compose.koinViewModel
 
@@ -174,19 +173,25 @@ fun ConverterScreen() {
                 },
             )
 
+            val shape = remember { RoundedCornerShape(12.dp) }
             // Convert button
-            Button(
-                onClick = { viewModel.onIntent(ConverterContract.Intent.Convert) },
+            Box(
                 modifier = Modifier
+                    .onClick(shape) {
+                        if (!state.isLoading) viewModel.onIntent(ConverterContract.Intent.Convert)
+                    }
                     .fillMaxWidth()
-                    .height(52.dp),
-                enabled = !state.isLoading,
-                colors = ButtonDefaults.buttonColors(containerColor = GoldAccent),
-                shape = RoundedCornerShape(12.dp),
+                    .height(52.dp)
+                    .alpha(if (state.isLoading) 0.6f else 1f)
+                    .background(GoldAccent, shape),
+                contentAlignment = Alignment.Center
             ) {
                 AnimatedContent(
                     targetState = state.isLoading,
-                    transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(180)) },
+                    transitionSpec = {
+                        fadeIn(tween(220)) togetherWith
+                                fadeOut(tween(180))
+                    },
                     label = "ConvertButtonTransition",
                 ) { loading ->
                     if (loading) {
@@ -199,7 +204,7 @@ fun ConverterScreen() {
                         )
                     } else {
                         Text(
-                            "Chuyển Đổi",
+                            text = "Chuyển Đổi",
                             color = Color.Black,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
@@ -301,7 +306,13 @@ private fun InputCard(
 }
 
 @Composable
-private fun ModeTab(label: String, selected: Boolean, modifier: Modifier, onClick: () -> Unit) {
+private fun ModeTab(
+    label: String,
+    selected: Boolean,
+    modifier: Modifier,
+    onClick: () -> Unit,
+) {
+    val shape = remember { RoundedCornerShape(10.dp) }
     val bg = remember(selected) {
         if (selected) GoldAccent.copy(alpha = 0.25f) else Color.Transparent
     }
@@ -314,9 +325,9 @@ private fun ModeTab(label: String, selected: Boolean, modifier: Modifier, onClic
 
     Box(
         modifier = modifier
-            .clickable { onClick() }
-            .background(bg, RoundedCornerShape(10.dp))
-            .border(1.dp, border, RoundedCornerShape(10.dp))
+            .onClick(shape) { onClick() }
+            .background(bg, shape)
+            .border(1.dp, border, shape)
             .padding(vertical = 10.dp, horizontal = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
@@ -338,38 +349,57 @@ private fun NumberPicker(
     modifier: Modifier,
     onChanged: (Int) -> Unit,
 ) {
-    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, color = IvoryWhite.copy(alpha = 0.6f), fontSize = 11.sp)
+    val shape = remember { RoundedCornerShape(8.dp) }
+
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            label,
+            color = IvoryWhite.copy(alpha = 0.6f),
+            fontSize = 11.sp
+        )
         Spacer(Modifier.height(4.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            IconButton(
-                onClick = { if (value > range.first) onChanged(value - 1) },
+            Text(
+                "−",
+                color = GoldAccent,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .height(28.dp)
-                    .width(24.dp),
-            ) {
-                Text("−", color = GoldAccent, fontSize = 18.sp, fontWeight = FontWeight.Light)
-            }
+                    .onClick { if (value > range.first) onChanged(value - 1) }
+                    .size(28.dp)
+            )
             Box(
                 modifier = Modifier
-                    .border(1.dp, GlassBorder, RoundedCornerShape(8.dp))
-                    .background(GlassTint, RoundedCornerShape(8.dp))
-                    .padding(horizontal = 6.dp, vertical = 6.dp),
+                    .border(1.dp, GlassBorder, shape)
+                    .background(GlassTint, shape)
+                    .padding(8.dp),
                 contentAlignment = Alignment.Center,
             ) {
-                Text("$value", color = IvoryWhite, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+                Text(
+                    "$value",
+                    color = IvoryWhite,
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Medium,
+                    textAlign = TextAlign.Center,
+                )
             }
-            IconButton(
-                onClick = { if (value < range.last) onChanged(value + 1) },
+            Text(
+                "+",
+                color = GoldAccent,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Light,
+                textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .height(28.dp)
-                    .width(24.dp),
-            ) {
-                Text("+", color = GoldAccent, fontSize = 18.sp, fontWeight = FontWeight.Light)
-            }
+                    .onClick { if (value < range.last) onChanged(value + 1) }
+                    .size(28.dp)
+            )
         }
     }
 }
@@ -382,7 +412,12 @@ private fun ResultCard(result: ConvertResultUiModel) {
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("Kết Quả", color = GoldAccent, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+            Text(
+                "Kết Quả",
+                color = GoldAccent,
+                fontSize = 13.sp,
+                fontWeight = FontWeight.SemiBold
+            )
             Spacer(Modifier.height(4.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp),

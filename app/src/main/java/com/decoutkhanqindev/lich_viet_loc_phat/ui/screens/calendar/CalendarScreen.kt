@@ -30,7 +30,6 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,6 +56,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.WeekendColor
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.DayCellComponent
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DayCellUiModel
 import kotlinx.collections.immutable.ImmutableList
 import org.koin.androidx.compose.koinViewModel
@@ -155,7 +155,7 @@ private fun CalendarMonthHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -167,13 +167,14 @@ private fun CalendarMonthHeader(
                 enter = fadeIn(tween(200)),
                 exit = fadeOut(tween(150)),
             ) {
-                IconButton(onClick = onToday, modifier = Modifier.size(36.dp)) {
-                    Icon(
-                        Icons.Default.Today,
-                        contentDescription = "Hôm nay",
-                        tint = GoldAccent
-                    )
-                }
+                Icon(
+                    Icons.Default.Today,
+                    contentDescription = "Hôm nay",
+                    tint = GoldAccent,
+                    modifier = Modifier
+                        .onClick { onToday() }
+                        .size(28.dp)
+                )
             }
         }
 
@@ -195,26 +196,22 @@ private fun CalendarMonthHeader(
             )
         }
 
-        IconButton(
-            onClick = onPrev,
-            modifier = Modifier.size(36.dp)
-        ) {
-            Icon(
-                Icons.Default.ChevronLeft,
-                contentDescription = "Tháng trước",
-                tint = IvoryWhite
-            )
-        }
-        IconButton(
-            onClick = onNext,
-            modifier = Modifier.size(36.dp)
-        ) {
-            Icon(
-                Icons.Default.ChevronRight,
-                contentDescription = "Tháng sau",
-                tint = IvoryWhite
-            )
-        }
+        Icon(
+            Icons.Default.ChevronLeft,
+            contentDescription = "Ngày trước",
+            tint = IvoryWhite,
+            modifier = Modifier
+                .onClick { onPrev() }
+                .size(32.dp)
+        )
+        Icon(
+            Icons.Default.ChevronRight,
+            contentDescription = "Ngày sau",
+            tint = IvoryWhite,
+            modifier = Modifier
+                .onClick { onNext() }
+                .size(32.dp)
+        )
     }
 }
 
