@@ -9,15 +9,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.CalculateCanChiUse
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ConvertLunarToSolarUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ConvertSolarToLunarUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.ConvertResultUiModel
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterEffect
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterState
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -29,9 +25,6 @@ class ConverterViewModel(
 
     private val _state = MutableStateFlow(ConverterState())
     val state: StateFlow<ConverterState> = _state.asStateFlow()
-
-    private val _effect = Channel<ConverterEffect>(Channel.BUFFERED)
-    val effect: Flow<ConverterEffect> = _effect.receiveAsFlow()
 
     fun onIntent(intent: ConverterIntent) {
         when (intent) {
@@ -101,8 +94,12 @@ class ConverterViewModel(
                     }
                 }
             }.onSuccess { result ->
-                _state.update { it.copy(isLoading = false, result = result) }
-                _effect.send(ConverterEffect.ScrollResultIntoView)
+                _state.update {
+                    it.copy(
+                        isLoading = false,
+                        result = result
+                    )
+                }
             }.onFailure { err ->
                 _state.update {
                     it.copy(

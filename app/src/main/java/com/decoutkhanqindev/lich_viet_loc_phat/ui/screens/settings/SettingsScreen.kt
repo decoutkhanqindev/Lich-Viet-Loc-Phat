@@ -8,11 +8,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 
-@SuppressLint("ContextCastToActivity")
 @Composable
 fun SettingsScreen() {
-    val activity = LocalContext.current as ComponentActivity
-    val viewModel: SettingsViewModel = koinViewModel(viewModelStoreOwner = activity)
+    val viewModel: SettingsViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     SettingsContent(state = state, onIntent = viewModel::onIntent)

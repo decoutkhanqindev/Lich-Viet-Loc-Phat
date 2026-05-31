@@ -133,4 +133,10 @@ class CalendarViewModel(
 
     private fun nextMonth(year: Int, month: Int): Pair<Int, Int> =
         if (month == 12) year + 1 to 1 else year to month + 1
+
+
+    override fun onCleared() {
+        _effect.close()
+        super.onCleared()
+    }
 }
