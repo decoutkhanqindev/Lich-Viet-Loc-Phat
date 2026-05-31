@@ -1,0 +1,250 @@
+[
+  {
+    "content-desc": "Home",
+    "interactions": [
+      "focusable"
+    ],
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2836]",
+    "resource-id": "googleapp_navigation_bar_discover",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[504,2836]",
+    "resource-id": "googleapp_navigation_bar_search",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Notifications",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[840,2836]",
+    "resource-id": "googleapp_navigation_bar_inbox",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Activity",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1176,2836]",
+    "resource-id": "googleapp_navigation_bar_collections",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2842]",
+    "resource-id": "navigation_bar_item_content_container",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2812]",
+    "resource-id": "navigation_bar_item_icon_container",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[167,2896]",
+    "resource-id": "navigation_bar_item_labels_group",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2812]",
+    "resource-id": "navigation_bar_item_active_indicator_view",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2812]",
+    "resource-id": "navigation_bar_item_inner_content_container",
+    "key": 3506402
+  },
+  {
+    "text": "Home",
+    "state": [
+      "selected"
+    ],
+    "center": "[167,2896]",
+    "resource-id": "navigation_bar_item_large_label_view",
+    "key": 3506402
+  },
+  {
+    "text": "Search",
+    "center": "[503,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "text": "Notifications",
+    "center": "[839,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "text": "Activity",
+    "center": "[1175,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[168,2812]",
+    "resource-id": "navigation_bar_item_icon_view",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[351,909]",
+    "resource-id": "googleapp_sbn_aim_chip",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[823,909]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1144,909]",
+    "resource-id": "googleapp_sbn_lens_image_generation_chip",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,663]",
+    "resource-id": "googleapp_facade_search_box",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Google logo",
+    "center": "[672,262]",
+    "resource-id": "google_logo_test_tag",
+    "key": 3506402
+  },
+  {
+    "text": "AI Mode",
+    "center": "[402,909]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search Live",
+    "center": "[823,909]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search Live",
+    "center": "[824,909]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Generate Image",
+    "center": "[1144,909]",
+    "key": 3506402
+  },
+  {
+    "text": "🍌",
+    "content-desc": "Generate Image",
+    "center": "[1144,909]",
+    "key": 3506402
+  },
+  {
+    "text": "Search",
+    "center": "[244,663]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1032,663]",
+    "resource-id": "googleapp_searchbox_mic",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1176,663]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "focusable"
+    ],
+    "center": "[672,1376]",
+    "resource-id": "googleapp_discover_recycler_view",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Voice search",
+    "center": "[1032,663]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Camera search",
+    "center": "[1176,663]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[96,243]",
+    "resource-id": "aimThreadsIconButton",
+    "key": 3506402
+  },
+  {
+    "content-desc": "AI mode history",
+    "center": "[96,243]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Sign in",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1236,243]",
+    "resource-id": "googleapp_selected_account_disc",
+    "key": 3506402
+  }
+]

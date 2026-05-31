@@ -1,0 +1,197 @@
+[
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[159,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[501,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "focusable"
+    ],
+    "state": [
+      "selected"
+    ],
+    "center": "[843,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1185,2800]",
+    "key": 3506402
+  },
+  {
+    "text": "Đổi Ngày",
+    "center": "[672,252]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,1095]",
+    "key": 3506402
+  },
+  {
+    "text": "Dương Lịch",
+    "center": "[207,657]",
+    "key": 3506402
+  },
+  {
+    "text": "Ngày",
+    "center": "[250,765]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[175,867]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[326,867]",
+    "key": 3506402
+  },
+  {
+    "text": "Tháng",
+    "center": "[594,765]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[519,867]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[670,867]",
+    "key": 3506402
+  },
+  {
+    "text": "Năm",
+    "center": "[1016,765]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[894,867]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1140,867]",
+    "key": 3506402
+  },
+  {
+    "text": "Chuyển Đổi",
+    "center": "[672,1095]",
+    "key": 3506402
+  },
+  {
+    "text": "Hôm Nay",
+    "center": "[159,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Lịch",
+    "center": "[501,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Đổi Ngày",
+    "center": "[842,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Cài Đặt",
+    "center": "[1184,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Dương → Âm",
+    "center": "[366,435]",
+    "key": 3506402
+  },
+  {
+    "text": "Âm → Dương",
+    "center": "[978,435]",
+    "key": 3506402
+  },
+  {
+    "text": "−",
+    "center": "[175,867]",
+    "key": 3506402
+  },
+  {
+    "text": "1",
+    "center": "[247,867]",
+    "key": 3506402
+  },
+  {
+    "text": "+",
+    "center": "[326,867]",
+    "key": 3506402
+  },
+  {
+    "text": "−",
+    "center": "[519,867]",
+    "key": 3506402
+  },
+  {
+    "text": "1",
+    "center": "[591,867]",
+    "key": 3506402
+  },
+  {
+    "text": "+",
+    "center": "[670,867]",
+    "key": 3506402
+  },
+  {
+    "text": "−",
+    "center": "[894,867]",
+    "key": 3506402
+  },
+  {
+    "text": "2026",
+    "center": "[1014,867]",
+    "key": 3506402
+  },
+  {
+    "text": "+",
+    "center": "[1140,867]",
+    "key": 3506402
+  }
+]

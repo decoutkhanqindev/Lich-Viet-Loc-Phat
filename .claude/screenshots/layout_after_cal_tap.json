@@ -1,0 +1,1023 @@
+[
+  {
+    "content-desc": "Home",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[168,2836]",
+    "resource-id": "googleapp_navigation_bar_discover",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search",
+    "interactions": [
+      "focusable"
+    ],
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2836]",
+    "resource-id": "googleapp_navigation_bar_search",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Notifications",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[840,2836]",
+    "resource-id": "googleapp_navigation_bar_inbox",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Activity",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1176,2836]",
+    "resource-id": "googleapp_navigation_bar_collections",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2842]",
+    "resource-id": "navigation_bar_item_content_container",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2812]",
+    "resource-id": "navigation_bar_item_icon_container",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[503,2896]",
+    "resource-id": "navigation_bar_item_labels_group",
+    "key": 3506402
+  },
+  {
+    "text": "Home",
+    "center": "[167,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2812]",
+    "resource-id": "navigation_bar_item_active_indicator_view",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2812]",
+    "resource-id": "navigation_bar_item_inner_content_container",
+    "key": 3506402
+  },
+  {
+    "text": "Search",
+    "state": [
+      "selected"
+    ],
+    "center": "[503,2896]",
+    "resource-id": "navigation_bar_item_large_label_view",
+    "key": 3506402
+  },
+  {
+    "text": "Notifications",
+    "center": "[839,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "text": "Activity",
+    "center": "[1175,2896]",
+    "resource-id": "navigation_bar_item_small_label_view",
+    "key": 3506402
+  },
+  {
+    "state": [
+      "selected"
+    ],
+    "center": "[504,2812]",
+    "resource-id": "navigation_bar_item_icon_view",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,259]",
+    "resource-id": "googleapp_search_header",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,423]",
+    "resource-id": "googleapp_srp_search_box",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Go to Home",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,273]",
+    "resource-id": "googleapp_logo",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Sign in",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1248,243]",
+    "resource-id": "googleapp_selected_account_disc",
+    "key": 3506402
+  },
+  {
+    "text": "highly contagious vomiting bug",
+    "center": "[594,423]",
+    "resource-id": "googleapp_srp_search_box_text",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Voice search",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1068,423]",
+    "resource-id": "googleapp_mic_icon",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Camera search",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1212,423]",
+    "resource-id": "googleapp_lens_icon",
+    "key": 3506402
+  },
+  {
+    "text": "highly contagious vomiting bug - Google Search",
+    "interactions": [
+      "focusable",
+      "scrollable"
+    ],
+    "state": [
+      "focused"
+    ],
+    "center": "[672,1455]",
+    "bounds": "[0,159][1344,2752]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "focusable"
+    ],
+    "center": "[672,583]",
+    "key": 3506402
+  },
+  {
+    "text": "Search Results",
+    "center": "[1,684]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "scrollable"
+    ],
+    "center": "[672,582]",
+    "bounds": "[0,510][1344,654]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "More search results",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "See more discussions",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "More news",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "People.com https://people.com Highly Contagious Vomiting Bug Spreading Across the U.S.: Report",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "highly contagious vomiting bug from people.com",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Centers for Disease Control and Prevention | CDC (.gov) https://www.cdc.gov About Norovirus",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Mayo Clinic https://www.mayoclinic.org Norovirus infection - Symptoms \u0026 causes",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "National Foundation for Infectious Diseases https://www.nfid.org Norovirus – NFID",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "University of Rochester Medicine https://www.urmc.rochester.edu Norovirus 2026: Stomach Bug Myths, Symptoms, and Prevention",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Highly contagious norovirus strain causing surge of infections across Southern California Reddit ·  r/orangecounty  ·  140+ comments  ·  5mo",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Northern California is enduring a \u0027late-spring surge\u0027 of rotavirus Reddit ·  r/bayarea  ·  7 comments  ·  3d",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Can adults have a milder norovirus, and is it contagious? iCliniq ·  1 answer  ·  10mo",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Images",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "AI Mode",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[127,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "All",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[301,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "News",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[450,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Images",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[645,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Forums",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[858,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Shopping",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1089,582]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Short videos",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1278,582]",
+    "key": 3506402
+  },
+  {
+    "text": "Top stories",
+    "center": "[672,1824]",
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus levels rising across the United States",
+    "center": "[672,1947]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "scrollable"
+    ],
+    "center": "[672,2385]",
+    "bounds": "[0,2019][1344,2752]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "More videos",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "scrollable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "AI Mode",
+    "center": "[127,580]",
+    "key": 3506402
+  },
+  {
+    "text": "All",
+    "center": "[301,582]",
+    "key": 3506402
+  },
+  {
+    "text": "News",
+    "center": "[450,580]",
+    "key": 3506402
+  },
+  {
+    "text": "Images",
+    "center": "[645,580]",
+    "key": 3506402
+  },
+  {
+    "text": "Forums",
+    "center": "[858,580]",
+    "key": 3506402
+  },
+  {
+    "text": "Shopping",
+    "center": "[1089,580]",
+    "key": 3506402
+  },
+  {
+    "text": "Short videos",
+    "center": "[1296,580]",
+    "key": 3506402
+  },
+  {
+    "text": "When are you most contagious with a vomiting bug?",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "What are 6 signs of norovirus?",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "What is the 24-hour rule after vomiting?",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "How long after you are exposed do you get norovirus?",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus is making the rounds again. This is not a new virus, however, as we see it every ... Instagram Dr. Jen Caudle 8 hours ago",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus is making the rounds again. This is not a new virus, however, as we see it every ... by Dr. Jen Caudle on Instagram. Play on Instagram. 1:25",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Winter Vomiting Bug Becomes Summer Outbreak? Wastewater Shows Norovirus ... YouTube VERTEX 1 day ago",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Winter Vomiting Bug Becomes Summer Outbreak? Wastewater Shows Norovirus ... by VERTEX on YouTube. Play on Google. 8:37",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "A stomach bug appears to be making its way through the Bay Area. According to ... Facebook NBC Bay Area 3 days ago",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "A stomach bug appears to be making its way through the Bay Area. According to ... by NBC Bay Area on Facebook. Play on Facebook. 1:53",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Highly contagious norovirus strain causing surge of infections across Southern California Reddit ·  r/orangecounty  ·  140+ comments  ·  5mo",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Northern California is enduring a \u0027late-spring surge\u0027 of rotavirus Reddit ·  r/bayarea  ·  7 comments  ·  3d",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Can adults have a milder norovirus, and is it contagious? iCliniq ·  1 answer  ·  10mo",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Highly contagious vomiting bug map",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Vomiting virus 2026",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus symptoms",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "What kills stomach virus",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus treatment",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus contagious period",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Thinking Searching Thinking a little longer",
+    "center": "[288,741]",
+    "key": 3506402
+  },
+  {
+    "text": "Highly Contagious Vomiting Bug Spreading Across the U.S.: Report",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "About Norovirus",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus infection - Symptoms \u0026 causes",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus – NFID",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus 2026: Stomach Bug Myths, Symptoms, and Prevention",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Highly contagious norovirus strain causing surge of infections across Southern California",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "The virus spreads when someone accidentally ingests small particles of feces or vomit from a person who is infected. This is why there are site ...   More",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Northern California is enduring a \u0027late-spring surge\u0027 of rotavirus",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Can adults have a milder norovirus, and is it contagious?",
+    "interactions": [
+      "clickable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus is making the rounds again. This is not a new virus, however, as we see it every year. Doesn’t make it less painful, however. For the full video on Norovirus comment “send.” Follow ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Highly Contagious Vomiting Bug Spreading Across the U.S.: Report",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus is a highly contagious virus that leads to diarrhea ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Norovirus is nicknamed the “winter vomiting disease.” This ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus is making the rounds again. This is not a new virus, however, as we see it every year. Doesn’t make it less painful, however. For the full video on Norovirus comment “send.” Follow ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Highly Contagious Vomiting Bug Spreading Across the U.S.: Report",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus is a highly contagious virus that leads to diarrhea ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Norovirus is nicknamed the “winter vomiting disease.” This ...",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "More images .",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "Vomiting virus is spreading across most of the U.S. 1 day ago NBC News",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[399,2385]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Is a \u0027vomiting virus\u0027 going around? Data shows spikes across US 1 day ago USA Today",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1065,2385]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "¿Gripe estomacal? Entérate aquí cuál es el virus altamente contagioso que afecta a casi todo EEUU. 1 day ago Telemundo31 Facebook",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "1:53 NBC Bay Area. . A stomach bug appears to be making its way through the Bay Area. According to epidemiologists, it\u0027s a late-season rotavirus. http://nbcbay.com/biDiyTk 1.3K+ reactions · 3 days ago NBCBayArea · Facebook San Jose-based NBC affiliate",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "text": "Vomiting virus is spreading across most of the U.S.",
+    "center": "[399,2509]",
+    "key": 3506402
+  },
+  {
+    "text": "1 day ago",
+    "center": "[399,2677]",
+    "key": 3506402
+  },
+  {
+    "text": "NBC News",
+    "center": "[354,2738]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[681,2708]",
+    "key": 3506402
+  },
+  {
+    "text": "Is a \u0027vomiting virus\u0027 going around? Data shows spikes across US",
+    "center": "[1083,2539]",
+    "key": 3506402
+  },
+  {
+    "text": "1 day ago",
+    "center": "[1083,2677]",
+    "key": 3506402
+  },
+  {
+    "text": "USA Today",
+    "center": "[1083,2738]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  },
+  {
+    "content-desc": "About this result",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "off-screen": true,
+    "key": 3506402
+  }
+]

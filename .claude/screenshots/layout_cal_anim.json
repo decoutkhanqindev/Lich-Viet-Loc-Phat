@@ -1,0 +1,397 @@
+[
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[672,1496]",
+    "resource-id": "googleapp_suggestions_fragment",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Predictions",
+    "interactions": [
+      "focusable"
+    ],
+    "center": "[672,1661]",
+    "resource-id": "googleapp_suggestions",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,504]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,660]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,816]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,972]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1128]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1284]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1440]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1596]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1753]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,1909]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,2066]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,2222]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,2378]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,2534]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "center": "[672,2690]",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Go Back",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[108,243]",
+    "resource-id": "googleapp_search_box_back_button",
+    "key": 3506402
+  },
+  {
+    "text": "Search…",
+    "interactions": [
+      "clickable",
+      "focusable",
+      "long-clickable"
+    ],
+    "state": [
+      "focused"
+    ],
+    "center": "[600,243]",
+    "resource-id": "googleapp_search_box",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Voice Search",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1080,243]",
+    "resource-id": "googleapp_mic_icon",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Camera search",
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1236,243]",
+    "resource-id": "googleapp_lens_icon",
+    "key": 3506402
+  },
+  {
+    "text": "Trending searches",
+    "center": "[247,378]",
+    "resource-id": "googleapp_text",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search oura ring 5.",
+    "center": "[672,504]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search jean dujardin zorro trailer.",
+    "center": "[672,660]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search blue origin new glenn rocket explodes.",
+    "center": "[672,816]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search fairview texas temple.",
+    "center": "[672,972]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search adidas messi shoes.",
+    "center": "[672,1128]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search highly contagious vomiting bug.",
+    "center": "[672,1284]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search 2028 jeep wrangler scrambler.",
+    "center": "[672,1440]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search fifa world cup Soccer competition.",
+    "center": "[672,1596]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search dutton ranch episode 4.",
+    "center": "[672,1753]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Search congressman tom kean jr Thomas Kean Jr. — United States Representative.",
+    "center": "[672,1909]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search chick fil a summer menu.",
+    "center": "[672,2066]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search copperhead srt hyper muscle car.",
+    "center": "[672,2222]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search no lightsabers mandalorian movie.",
+    "center": "[672,2378]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search iowa ebt.",
+    "center": "[672,2534]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "content-desc": "Trending search ncaa college baseball tournament.",
+    "center": "[672,2690]",
+    "resource-id": "googleapp_core_suggestion",
+    "key": 3506402
+  },
+  {
+    "text": "oura ring 5",
+    "center": "[333,504]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "jean dujardin zorro trailer",
+    "center": "[490,660]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "blue origin new glenn rocket explodes",
+    "center": "[626,816]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "fairview texas temple",
+    "center": "[446,972]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "adidas messi shoes",
+    "center": "[427,1128]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "highly contagious vomiting bug",
+    "center": "[553,1284]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "2028 jeep wrangler scrambler",
+    "center": "[539,1440]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "FIFA World Cup",
+    "center": "[383,1569]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "Soccer competition",
+    "center": "[376,1633]",
+    "resource-id": "text2",
+    "key": 3506402
+  },
+  {
+    "text": "dutton ranch episode 4",
+    "center": "[468,1753]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "congressman tom kean jr",
+    "center": "[488,1882]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "Thomas Kean Jr. — United States Representative",
+    "center": "[612,1946]",
+    "resource-id": "text2",
+    "key": 3506402
+  },
+  {
+    "text": "chick fil a summer menu",
+    "center": "[478,2066]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "copperhead srt hyper muscle car",
+    "center": "[578,2222]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "no lightsabers mandalorian movie",
+    "center": "[581,2378]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "iowa ebt",
+    "center": "[309,2534]",
+    "resource-id": "text1",
+    "key": 3506402
+  },
+  {
+    "text": "ncaa college baseball tournament",
+    "center": "[584,2690]",
+    "resource-id": "text1",
+    "key": 3506402
+  }
+]

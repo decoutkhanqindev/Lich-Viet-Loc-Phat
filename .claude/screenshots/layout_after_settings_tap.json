@@ -1,0 +1,120 @@
+[
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[159,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[501,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "clickable",
+      "focusable"
+    ],
+    "center": "[843,2800]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "focusable"
+    ],
+    "state": [
+      "selected"
+    ],
+    "center": "[1185,2800]",
+    "key": 3506402
+  },
+  {
+    "text": "Cài Đặt",
+    "center": "[169,252]",
+    "key": 3506402
+  },
+  {
+    "text": "HIỂN THỊ",
+    "center": "[133,381]",
+    "key": 3506402
+  },
+  {
+    "text": "VỀ ỨNG DỤNG",
+    "center": "[177,765]",
+    "key": 3506402
+  },
+  {
+    "text": "Hiển thị Can Chi trên ô lịch",
+    "center": "[370,525]",
+    "key": 3506402
+  },
+  {
+    "text": "Hiện Can Chi của mỗi ngày trong lưới lịch tháng",
+    "center": "[490,597]",
+    "key": 3506402
+  },
+  {
+    "interactions": [
+      "checkable",
+      "clickable",
+      "focusable"
+    ],
+    "center": "[1170,561]",
+    "key": 3506402
+  },
+  {
+    "text": "Phiên bản",
+    "center": "[198,915]",
+    "key": 3506402
+  },
+  {
+    "text": "1.0.0",
+    "center": "[1200,915]",
+    "key": 3506402
+  },
+  {
+    "text": "Thuật toán",
+    "center": "[209,1074]",
+    "key": 3506402
+  },
+  {
+    "text": "Hồ Ngọc Đức",
+    "center": "[1116,1074]",
+    "key": 3506402
+  },
+  {
+    "text": "Chế độ",
+    "center": "[169,1233]",
+    "key": 3506402
+  },
+  {
+    "text": "100% Offline",
+    "center": "[1117,1233]",
+    "key": 3506402
+  },
+  {
+    "text": "Hôm Nay",
+    "center": "[159,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Lịch",
+    "center": "[501,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Đổi Ngày",
+    "center": "[842,2848]",
+    "key": 3506402
+  },
+  {
+    "text": "Cài Đặt",
+    "center": "[1184,2848]",
+    "key": 3506402
+  }
+]
