@@ -9,6 +9,9 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.CalculateCanChiUse
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ConvertLunarToSolarUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ConvertSolarToLunarUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.ConvertResultUiModel
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterEffect
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterIntent
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,19 +27,24 @@ class ConverterViewModel(
     private val calculateCanChi: CalculateCanChiUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(ConverterContract.State())
-    val state: StateFlow<ConverterContract.State> = _state.asStateFlow()
+    private val _state = MutableStateFlow(ConverterState())
+    val state: StateFlow<ConverterState> = _state.asStateFlow()
 
-    private val _effect = Channel<ConverterContract.Effect>(Channel.BUFFERED)
-    val effect: Flow<ConverterContract.Effect> = _effect.receiveAsFlow()
+    private val _effect = Channel<ConverterEffect>(Channel.BUFFERED)
+    val effect: Flow<ConverterEffect> = _effect.receiveAsFlow()
 
-    fun onIntent(intent: ConverterContract.Intent) {
+    fun onIntent(intent: ConverterIntent) {
         when (intent) {
-            is ConverterContract.Intent.ChangeMode -> _state.update {
-                it.copy(mode = intent.mode, result = null, error = null, isLeapMonth = false)
+            is ConverterIntent.ChangeMode -> _state.update {
+                it.copy(
+                    mode = intent.mode,
+                    result = null,
+                    error = null,
+                    isLeapMonth = false
+                )
             }
 
-            is ConverterContract.Intent.InputChanged -> _state.update {
+            is ConverterIntent.InputChanged -> _state.update {
                 it.copy(
                     inputDay = intent.day,
                     inputMonth = intent.month,
@@ -46,11 +54,11 @@ class ConverterViewModel(
                 )
             }
 
-            is ConverterContract.Intent.ToggleLeapMonth -> _state.update {
+            is ConverterIntent.ToggleLeapMonth -> _state.update {
                 it.copy(isLeapMonth = intent.checked)
             }
 
-            is ConverterContract.Intent.Convert -> performConvert()
+            is ConverterIntent.Convert -> performConvert()
         }
     }
 
@@ -58,7 +66,12 @@ class ConverterViewModel(
         if (_state.value.isLoading) return
         val s = _state.value
         viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null) }
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    error = null
+                )
+            }
             runCatching {
                 when (s.mode) {
                     ConvertMode.SOLAR_TO_LUNAR -> {
@@ -89,7 +102,7 @@ class ConverterViewModel(
                 }
             }.onSuccess { result ->
                 _state.update { it.copy(isLoading = false, result = result) }
-                _effect.send(ConverterContract.Effect.ScrollResultIntoView)
+                _effect.send(ConverterEffect.ScrollResultIntoView)
             }.onFailure { err ->
                 _state.update {
                     it.copy(

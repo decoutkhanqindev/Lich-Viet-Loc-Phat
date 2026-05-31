@@ -11,6 +11,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -25,7 +26,6 @@ private data class Tab(
     val destination: NavKey,
     val icon: ImageVector,
     val label: String,
-    val isSelected: (NavKey?) -> Boolean,
 ) {
     companion object {
         val default by lazy {
@@ -34,22 +34,22 @@ private data class Tab(
                     TodayDestination(),
                     Icons.Default.Today,
                     "Hôm Nay"
-                ) { it is TodayDestination },
+                ),
                 Tab(
                     CalendarDestination,
                     Icons.Default.CalendarMonth,
                     "Lịch"
-                ) { it == CalendarDestination },
+                ),
                 Tab(
                     ConverterDestination,
                     Icons.Default.SwapHoriz,
                     "Đổi Ngày"
-                ) { it == ConverterDestination },
+                ),
                 Tab(
                     SettingsDestination,
                     Icons.Default.Settings,
                     "Cài Đặt"
-                ) { it == SettingsDestination },
+                )
             )
         }
     }
@@ -59,11 +59,13 @@ private data class Tab(
 fun GlassBottomNavBar(backStack: NavBackStack<NavKey>) {
     val currentDestination = backStack.lastOrNull()
 
-
     NavigationBar {
         Tab.default.forEach { tab ->
+            val selected = remember(currentDestination) {
+                currentDestination == tab.destination
+            }
             NavigationBarItem(
-                selected = tab.isSelected(currentDestination),
+                selected = selected,
                 onClick = { backStack.navigateToTab(tab.destination) },
                 icon = { Icon(tab.icon, contentDescription = tab.label) },
                 label = { Text(tab.label) },

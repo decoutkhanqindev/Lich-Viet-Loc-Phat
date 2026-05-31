@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDailyMetadataUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.toUiModel
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayIntent
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +19,8 @@ class TodayViewModel(
     initialDate: SolarDate? = null,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow(TodayContract.State())
-    val state: StateFlow<TodayContract.State> = _state.asStateFlow()
+    private val _state = MutableStateFlow(TodayState())
+    val state: StateFlow<TodayState> = _state.asStateFlow()
 
     private var loadMetadataJob: Job? = null
 
@@ -26,24 +28,25 @@ class TodayViewModel(
         loadMetadata(initialDate ?: SolarDate.today())
     }
 
-    fun onIntent(intent: TodayContract.Intent) {
+    fun onIntent(intent: TodayIntent) {
         when (intent) {
-            is TodayContract.Intent.SelectDate -> loadMetadata(intent.date)
-            is TodayContract.Intent.RequestToday -> loadMetadata(SolarDate.today())
-            is TodayContract.Intent.NavigateToPrevDay -> loadMetadata(
-                _state.value.selectedDate.minusDays(1)
-            )
-
-            is TodayContract.Intent.NavigateToNextDay -> loadMetadata(
-                _state.value.selectedDate.plusDays(1)
-            )
+            is TodayIntent.SelectDate -> loadMetadata(intent.date)
+            is TodayIntent.RequestToday -> loadMetadata(SolarDate.today())
+            is TodayIntent.NavigateToPrevDay -> loadMetadata(_state.value.selectedDate.minusDays(1))
+            is TodayIntent.NavigateToNextDay -> loadMetadata(_state.value.selectedDate.plusDays(1))
         }
     }
 
     private fun loadMetadata(date: SolarDate) {
         loadMetadataJob?.cancel()
         loadMetadataJob = viewModelScope.launch {
-            _state.update { it.copy(isLoading = true, error = null, selectedDate = date) }
+            _state.update {
+                it.copy(
+                    isLoading = true,
+                    error = null,
+                    selectedDate = date
+                )
+            }
             getDailyMetadata(date)
                 .onSuccess { metadata ->
                     _state.update {
