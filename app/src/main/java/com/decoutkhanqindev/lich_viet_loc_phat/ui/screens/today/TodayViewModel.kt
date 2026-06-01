@@ -16,16 +16,21 @@ import kotlinx.coroutines.launch
 
 class TodayViewModel(
     private val getDailyMetadata: GetDailyMetadataUseCase,
-    initialDate: SolarDate? = null,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(TodayState())
     val state: StateFlow<TodayState> = _state.asStateFlow()
 
+    private val initialDate: SolarDate? = null
+
     private var loadMetadataJob: Job? = null
 
     init {
         loadMetadata(initialDate ?: SolarDate.today())
+    }
+
+    fun setInitialDate(date: SolarDate) {
+        loadMetadata(date)
     }
 
     fun onIntent(intent: TodayIntent) {

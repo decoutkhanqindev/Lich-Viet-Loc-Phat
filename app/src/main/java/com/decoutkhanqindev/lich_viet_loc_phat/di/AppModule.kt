@@ -29,7 +29,7 @@ val appModule = module {
     single { androidContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE) }
 
     // --- Screen ViewModels ---
-    viewModel { (initialDate: SolarDate?) -> TodayViewModel(get(), initialDate) }
+    viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get()) }
     viewModel { ConverterViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }

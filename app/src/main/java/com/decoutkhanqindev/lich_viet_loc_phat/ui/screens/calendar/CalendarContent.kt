@@ -332,6 +332,7 @@ private fun DayCell(
 
     Box(
         modifier = modifier
+            .onClick(RoundedCornerShape(8.dp)) { onClick() }
             .clip(RoundedCornerShape(8.dp))
             .then(
                 if (cell.isSelected && !cell.isToday)
@@ -341,8 +342,7 @@ private fun DayCell(
                         RoundedCornerShape(8.dp)
                     )
                 else Modifier
-            )
-            .clickable(onClick = onClick),
+            ),
         contentAlignment = Alignment.Center,
     ) {
         // Today: gold circle background

@@ -10,11 +10,12 @@ import com.decoutkhanqindev.lich_viet_loc_phat.navigation.toTodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.ObserveOnLifecycleOwner
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.state.CalendarEffect
 import org.koin.androidx.compose.koinViewModel
+import org.koin.compose.viewmodel.koinActivityViewModel
 
 @SuppressLint("ContextCastToActivity")
 @Composable
 fun CalendarScreen(backStack: NavBackStack<NavKey>) {
-    val viewModel: CalendarViewModel = koinViewModel()
+    val viewModel: CalendarViewModel = koinActivityViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ObserveOnLifecycleOwner {

@@ -83,7 +83,7 @@ fun GlassBottomNavBar(backStack: NavBackStack<NavKey>) {
         ) {
             Tab.default.forEach { tab ->
                 val selected = remember(currentDestination) {
-                    currentDestination == tab.destination
+                    currentDestination?.let { it::class == tab.destination::class } ?: false
                 }
                 NavItem(
                     tab = tab,
