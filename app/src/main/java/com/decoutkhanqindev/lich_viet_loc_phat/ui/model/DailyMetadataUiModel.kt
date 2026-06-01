@@ -15,6 +15,7 @@ data class DailyMetadataUiModel(
     val canChi: CanChi,
     val auspiciousHours: ImmutableList<HourInfoUiModel>,
     val solarTerm: String?,
+    val holiday: String?,
 )
 
 fun DailyMetadata.toUiModel() = DailyMetadataUiModel(
@@ -23,4 +24,5 @@ fun DailyMetadata.toUiModel() = DailyMetadataUiModel(
     canChi = canChi,
     auspiciousHours = auspiciousHours.map { it.toUiModel() }.toImmutableList(),
     solarTerm = solarTerm,
+    holiday = holiday,
 )

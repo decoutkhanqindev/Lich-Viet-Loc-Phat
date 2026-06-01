@@ -15,4 +15,7 @@ data class CalendarState(
     val selectedDate: SolarDate? = null,
     val showTodayButton: Boolean = false,
     val error: String? = null,
+    val showCanChiOnCell: Boolean = true,
+    val lunarYearLabel: String? = null,
+    val lunarMonthLabel: String? = null,
 )

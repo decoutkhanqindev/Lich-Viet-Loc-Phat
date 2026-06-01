@@ -6,4 +6,5 @@ data class DailyMetadata(
     val canChi: CanChi,
     val auspiciousHours: List<HourInfo>,
     val solarTerm: String?,
+    val holiday: String?,
 )

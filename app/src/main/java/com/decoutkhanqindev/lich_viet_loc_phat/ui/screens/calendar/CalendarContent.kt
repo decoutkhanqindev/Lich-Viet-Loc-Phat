@@ -14,9 +14,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -41,6 +42,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
@@ -52,6 +54,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.HolidayDot
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SolarTermColor
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.WeekendColor
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DayCellUiModel
@@ -73,6 +76,8 @@ fun CalendarContent(
         CalendarMonthHeader(
             displayedMonth = state.displayedMonth,
             displayedYear = state.displayedYear,
+            lunarYearLabel = state.lunarYearLabel,
+            lunarMonthLabel = state.lunarMonthLabel,
             showTodayButton = state.showTodayButton,
             onToday = { onIntent(CalendarIntent.RequestToday) },
             onPrev = { onIntent(CalendarIntent.PrevMonth) },
@@ -116,16 +121,26 @@ fun CalendarContent(
                 isLoading = state.isLoading,
                 error = state.error,
                 days = state.days,
+                showCanChiOnCell = state.showCanChiOnCell,
                 onDayClick = { onIntent(CalendarIntent.SelectDay(it)) },
             )
         }
     }
 }
 
+private data class CalendarHeaderState(
+    val month: Int,
+    val year: Int,
+    val lunarYear: String?,
+    val lunarMonth: String?,
+)
+
 @Composable
 private fun CalendarMonthHeader(
     displayedMonth: Int,
     displayedYear: Int,
+    lunarYearLabel: String?,
+    lunarMonthLabel: String?,
     showTodayButton: Boolean,
     onToday: () -> Unit,
     onPrev: () -> Unit,
@@ -165,21 +180,31 @@ private fun CalendarMonthHeader(
         }
 
         AnimatedContent(
-            targetState = displayedMonth to displayedYear,
+            targetState = CalendarHeaderState(displayedMonth, displayedYear, lunarYearLabel, lunarMonthLabel),
             modifier = Modifier.weight(1f),
             transitionSpec = {
                 (slideInVertically { it / 3 } + fadeIn(tween(200))) togetherWith
                         (slideOutVertically { -it / 3 } + fadeOut(tween(150)))
             },
             label = "MonthYearTransition",
-        ) { (month, year) ->
-            Text(
-                "${monthNames[month - 1]} · $year",
-                textAlign = TextAlign.Center,
-                color = IvoryWhite,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-            )
+        ) { hs ->
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    "${monthNames[hs.month - 1]} · ${hs.year}",
+                    textAlign = TextAlign.Center,
+                    color = IvoryWhite,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                )
+                if (hs.lunarYear != null && hs.lunarMonth != null) {
+                    Text(
+                        "Năm ${hs.lunarYear} · Tháng ${hs.lunarMonth}",
+                        textAlign = TextAlign.Center,
+                        color = GoldAccent.copy(alpha = 0.75f),
+                        fontSize = 10.sp,
+                    )
+                }
+            }
         }
 
         Icon(
@@ -206,6 +231,7 @@ private fun CalendarGrid(
     isLoading: Boolean,
     error: String?,
     days: ImmutableList<DayCellUiModel>,
+    showCanChiOnCell: Boolean,
     onDayClick: (SolarDate) -> Unit,
 ) {
     val contentKey = when {
@@ -257,6 +283,7 @@ private fun CalendarGrid(
                 ) { cell ->
                     DayCell(
                         cell = cell,
+                        showCanChi = showCanChiOnCell,
                         onClick = { onDayClick(cell.solar) },
                     )
                 }
@@ -268,13 +295,10 @@ private fun CalendarGrid(
 @Composable
 private fun DayCell(
     cell: DayCellUiModel,
+    showCanChi: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val hasIndicator = remember(cell.lunar.day, cell.holiday) {
-        cell.holiday != null || cell.lunar.day == 1 || cell.lunar.day == 15
-    }
-
     val solarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
             !cell.isCurrentMonth -> IvoryWhite.copy(alpha = 0.3f)
@@ -289,10 +313,25 @@ private fun DayCell(
             else -> IvoryWhite.copy(alpha = 0.7f)
         }
     }
+    val canChiTextColor = remember(cell.isCurrentMonth, cell.isToday) {
+        when {
+            !cell.isCurrentMonth -> GoldAccent.copy(alpha = 0.2f)
+            cell.isToday -> Color.Black.copy(alpha = 0.55f)
+            else -> GoldAccent.copy(alpha = 0.65f)
+        }
+    }
+    val holidayTextColor = remember(cell.isToday) {
+        if (cell.isToday) Color.Black.copy(alpha = 0.7f) else HolidayDot
+    }
+    val solarTermTextColor = remember(cell.isToday) {
+        if (cell.isToday) Color.Black.copy(alpha = 0.65f) else SolarTermColor
+    }
+    val lunarDotColor = remember(cell.isToday) {
+        if (cell.isToday) Color.Black.copy(alpha = 0.5f) else GoldAccent
+    }
 
     Box(
         modifier = modifier
-            .aspectRatio(1f)
             .clip(RoundedCornerShape(8.dp))
             .then(
                 if (cell.isSelected && !cell.isToday)
@@ -318,7 +357,10 @@ private fun DayCell(
             )
         }
 
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Column(
+            modifier = Modifier.padding(vertical = 5.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             Text(
                 text = "${cell.solar.day}",
                 color = solarTextColor,
@@ -332,20 +374,49 @@ private fun DayCell(
                 fontSize = 9.sp,
                 textAlign = TextAlign.Center,
             )
-        }
-
-        // Dot indicator — holiday / rằm / mùng một
-        if (hasIndicator && cell.isCurrentMonth) {
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 2.dp)
-                    .size(4.dp)
-                    .background(
-                        if (cell.holiday != null) HolidayDot else GoldAccent,
-                        CircleShape,
-                    ),
-            )
+            if (showCanChi) {
+                Text(
+                    text = cell.canChiLabel,
+                    color = canChiTextColor,
+                    fontSize = 7.sp,
+                    textAlign = TextAlign.Center,
+                    maxLines = 1,
+                )
+            }
+            // Bottom indicator — priority: holiday name > solar term > lunar 1/15 dot
+            if (cell.isCurrentMonth) {
+                when {
+                    cell.holiday != null -> {
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = cell.holiday,
+                            color = holidayTextColor,
+                            fontSize = 6.sp,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    cell.solarTerm != null -> {
+                        Spacer(Modifier.height(2.dp))
+                        Text(
+                            text = cell.solarTerm,
+                            color = solarTermTextColor,
+                            fontSize = 6.sp,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                        )
+                    }
+                    cell.lunar.day == 1 || cell.lunar.day == 15 -> {
+                        Spacer(Modifier.height(3.dp))
+                        Box(
+                            modifier = Modifier
+                                .size(4.dp)
+                                .background(lunarDotColor, CircleShape),
+                        )
+                    }
+                }
+            }
         }
     }
 }

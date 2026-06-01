@@ -30,7 +30,7 @@ val appModule = module {
 
     // --- Screen ViewModels ---
     viewModel { (initialDate: SolarDate?) -> TodayViewModel(get(), initialDate) }
-    viewModel { CalendarViewModel(get()) }
+    viewModel { CalendarViewModel(get(), get()) }
     viewModel { ConverterViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
 

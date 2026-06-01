@@ -13,6 +13,8 @@ data class DayCellUiModel(
     val isToday: Boolean,
     val isSelected: Boolean,
     val holiday: String?,
+    val canChiLabel: String,
+    val solarTerm: String?,
 )
 
 fun DayCell.toUiModel(selectedDate: SolarDate? = null) = DayCellUiModel(
@@ -22,4 +24,6 @@ fun DayCell.toUiModel(selectedDate: SolarDate? = null) = DayCellUiModel(
     isToday = isToday,
     isSelected = selectedDate != null && solar == selectedDate,
     holiday = holiday,
+    canChiLabel = "${canChi.canNgay} ${canChi.chiNgay}",
+    solarTerm = solarTerm,
 )

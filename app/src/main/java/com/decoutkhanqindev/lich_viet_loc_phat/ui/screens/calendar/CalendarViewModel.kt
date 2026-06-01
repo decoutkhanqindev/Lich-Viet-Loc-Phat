@@ -1,5 +1,6 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar
 
+import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
@@ -21,17 +22,29 @@ import kotlinx.coroutines.launch
 
 class CalendarViewModel(
     private val getDaysInMonth: GetDaysInMonthUseCase,
+    private val prefs: SharedPreferences,
 ) : ViewModel() {
+
+    companion object {
+        private const val KEY_SHOW_CAN_CHI_ON_CELL = "show_can_chi_on_cell"
+    }
 
     private val initDate = SolarDate.today()
 
     private val _state = MutableStateFlow(
         CalendarState(
             displayedYear = initDate.year,
-            displayedMonth = initDate.month
+            displayedMonth = initDate.month,
+            showCanChiOnCell = prefs.getBoolean(KEY_SHOW_CAN_CHI_ON_CELL, true),
         )
     )
     val state: StateFlow<CalendarState> = _state.asStateFlow()
+
+    private val prefsListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == KEY_SHOW_CAN_CHI_ON_CELL) {
+            _state.update { it.copy(showCanChiOnCell = prefs.getBoolean(key, true)) }
+        }
+    }
 
     private val _effect = Channel<CalendarEffect>(Channel.BUFFERED)
     val effect: Flow<CalendarEffect> = _effect.receiveAsFlow()
@@ -39,6 +52,7 @@ class CalendarViewModel(
     private var loadMonthJob: Job? = null
 
     init {
+        prefs.registerOnSharedPreferenceChangeListener(prefsListener)
         loadMonth(initDate.year, initDate.month)
     }
 
@@ -103,12 +117,17 @@ class CalendarViewModel(
             val selected = _state.value.selectedDate
             getDaysInMonth(year, month)
                 .onSuccess { cells ->
+                    val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
+                    val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
+                    val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
                     _state.update {
                         it.copy(
                             isLoading = false,
                             days = cells.map { c ->
                                 c.toUiModel(selected)
-                            }.toImmutableList()
+                            }.toImmutableList(),
+                            lunarYearLabel = lunarYearLabel,
+                            lunarMonthLabel = lunarMonthLabel,
                         )
                     }
                 }
@@ -136,6 +155,7 @@ class CalendarViewModel(
 
 
     override fun onCleared() {
+        prefs.unregisterOnSharedPreferenceChangeListener(prefsListener)
         _effect.close()
         super.onCleared()
     }

@@ -24,7 +24,8 @@ class CalendarRepositoryImpl(
             val canChi = algorithmSource.calculateCanChi(date, lunar)
             val hours = algorithmSource.getAuspiciousHours(date)
             val term = assetSource.getSolarTerm(date)
-            DailyMetadata(date, lunar, canChi, hours, term)
+            val holiday = assetSource.getHoliday(date, lunar)
+            DailyMetadata(date, lunar, canChi, hours, term, holiday)
         }
 
     override suspend fun getDaysInMonth(year: Int, month: Int): List<DayCell> =
@@ -45,6 +46,8 @@ class CalendarRepositoryImpl(
                     isCurrentMonth = date.monthValue == month,
                     isToday = solar == today,
                     holiday = assetSource.getHoliday(solar, lunar),
+                    canChi = algorithmSource.calculateCanChi(solar, lunar),
+                    solarTerm = assetSource.getSolarTerm(solar),
                 )
             }
         }

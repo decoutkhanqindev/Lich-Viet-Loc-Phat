@@ -43,7 +43,8 @@ fun ObserveOnLifecycleOwner(
 
 fun Modifier.onClick(
     shape: Shape = CircleShape,
-    block: () -> Unit,
+    ripple: Boolean = true,
+    action: () -> Unit,
 ): Modifier = composed {
     var isPressed by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
@@ -68,9 +69,15 @@ fun Modifier.onClick(
                 isPressed = false
             }
         }
-        .clickable(
-            interactionSource = interactionSource,
-            indication = ripple(),
-            onClick = block,
+        .then(
+            if (ripple) Modifier.clickable(
+                interactionSource = interactionSource,
+                indication = ripple(),
+                onClick = action,
+            ) else Modifier.clickable(
+                interactionSource = null,
+                indication = null,
+                onClick = action,
+            )
         )
 }

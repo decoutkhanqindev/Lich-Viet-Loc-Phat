@@ -1,6 +1,7 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -8,6 +9,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,9 +48,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.AuspiciousGold
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.HolidayDot
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.InauspiciousGray
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SolarTermColor
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.GlassCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.HourInfoUiModel
@@ -113,6 +117,8 @@ fun TodayContent(
                             DateNavigationHeader(
                                 solar = state.dailyMetadata.solar,
                                 lunar = state.dailyMetadata.lunar,
+                                holiday = state.dailyMetadata.holiday,
+                                solarTerm = state.dailyMetadata.solarTerm,
                                 onPrev = { onIntent(TodayIntent.NavigateToPrevDay) },
                                 onNext = { onIntent(TodayIntent.NavigateToNextDay) },
                                 onToday = { onIntent(TodayIntent.RequestToday) },
@@ -135,6 +141,8 @@ fun TodayContent(
 private fun DateNavigationHeader(
     solar: SolarDate,
     lunar: LunarDate,
+    holiday: String?,
+    solarTerm: String?,
     onPrev: () -> Unit,
     onNext: () -> Unit,
     onToday: () -> Unit,
@@ -265,7 +273,66 @@ private fun DateNavigationHeader(
                     }
                 }
             }
+
+            AnimatedVisibility(
+                visible = holiday != null || solarTerm != null,
+                enter = fadeIn(tween(220)) + slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180)) + slideOutVertically(tween(180)) { it / 2 },
+            ) {
+                Spacer(Modifier.height(4.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (holiday != null) {
+                        HolidayBadge(label = holiday)
+                    }
+                    if (holiday != null && solarTerm != null) {
+                        Spacer(Modifier.width(8.dp))
+                    }
+                    if (solarTerm != null) {
+                        SolarTermBadge(label = solarTerm)
+                    }
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun HolidayBadge(label: String) {
+    val shape = remember { RoundedCornerShape(20.dp) }
+    Box(
+        modifier = Modifier
+            .background(HolidayDot.copy(alpha = 0.15f), shape)
+            .border(1.dp, HolidayDot.copy(alpha = 0.5f), shape)
+            .padding(horizontal = 14.dp, vertical = 5.dp),
+    ) {
+        Text(
+            label,
+            color = HolidayDot,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+        )
+    }
+}
+
+@Composable
+private fun SolarTermBadge(label: String) {
+    val shape = remember { RoundedCornerShape(20.dp) }
+    Box(
+        modifier = Modifier
+            .background(SolarTermColor.copy(alpha = 0.12f), shape)
+            .border(1.dp, SolarTermColor.copy(alpha = 0.45f), shape)
+            .padding(horizontal = 14.dp, vertical = 5.dp),
+    ) {
+        Text(
+            label,
+            color = SolarTermColor,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium,
+        )
     }
 }
 
@@ -283,15 +350,21 @@ private fun CanChiCard(
             CanChiRow("Năm", can = canChi.canNam, chi = canChi.chiNam)
             CanChiRow("Tháng", can = canChi.canThang, chi = canChi.chiThang)
             CanChiRow("Ngày", can = canChi.canNgay, chi = canChi.chiNgay)
-            if (solarTerm != null) {
+            AnimatedVisibility(
+                visible = solarTerm != null,
+                enter = fadeIn(tween(220)) + slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180)) + slideOutVertically(tween(180)) { it / 2 },
+            ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text("Tiết khí: ", color = IvoryWhite.copy(alpha = 0.6f), fontSize = 13.sp)
-                    Text(
-                        solarTerm,
-                        color = IvoryWhite,
-                        fontSize = 13.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+                    solarTerm?.let {
+                        Text(
+                            it,
+                            color = IvoryWhite,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }

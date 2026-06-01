@@ -21,3 +21,4 @@ val WeekendColor = Color(0xFFFF8A80)    // T7/CN màu hồng đỏ
 
 val AuspiciousGold = Color(0xFFD4A840)  // Giờ Hoàng Đạo
 val InauspiciousGray = Color(0x80FFFFFF) // Giờ Hắc Đạo — mờ
+val SolarTermColor = Color(0xFF80C8A0)  // Xanh ngọc nhạt — tiết khí
