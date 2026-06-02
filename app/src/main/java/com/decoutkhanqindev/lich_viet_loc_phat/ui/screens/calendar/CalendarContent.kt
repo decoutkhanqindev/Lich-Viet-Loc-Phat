@@ -9,7 +9,6 @@ import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,20 +19,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronLeft
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,16 +40,22 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorderStrong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassTint
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.HolidayDot
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.SolarTermColor
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.WeekendColor
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.CuoiTuan
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSon
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSonLight
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDo
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoDark
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.PrevNextButtons
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.TodayButton
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DayCellUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.state.CalendarIntent
@@ -71,7 +71,7 @@ fun CalendarContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(BaTrauDark, NauToi))),
+            .background(Brush.verticalGradient(listOf(GiayDo, GiayDoMid, GiayDoDark))),
     ) {
         CalendarMonthHeader(
             displayedMonth = state.displayedMonth,
@@ -88,16 +88,18 @@ fun CalendarContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp)
+                .padding(horizontal = 12.dp)
+                .padding(bottom = 4.dp)
         ) {
             weekdays.forEachIndexed { idx, label ->
                 Text(
                     label,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
-                    color = if (idx >= 5) WeekendColor else IvoryWhite.copy(alpha = 0.7f),
+                    color = if (idx >= 5) CuoiTuan else NauAm,
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Medium,
+                    letterSpacing = 0.5.sp,
                 )
             }
         }
@@ -105,16 +107,9 @@ fun CalendarContent(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp)
-                .border(
-                    1.dp,
-                    GlassBorder,
-                    RoundedCornerShape(16.dp)
-                )
-                .background(
-                    GlassTint,
-                    RoundedCornerShape(16.dp)
-                )
+                .padding(horizontal = 8.dp)
+                .border(1.dp, BorderWarm, RoundedCornerShape(12.dp))
+                .background(SurfaceCard, RoundedCornerShape(12.dp))
                 .padding(8.dp),
         ) {
             CalendarGrid(
@@ -128,6 +123,7 @@ fun CalendarContent(
     }
 }
 
+@Immutable
 private data class CalendarHeaderState(
     val month: Int,
     val year: Int,
@@ -156,32 +152,24 @@ private fun CalendarMonthHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Box(
-            modifier = Modifier.width(80.dp),
-            contentAlignment = Alignment.CenterStart
-        ) {
-            androidx.compose.animation.AnimatedVisibility(
-                visible = showTodayButton,
-                enter = fadeIn(tween(200)),
-                exit = fadeOut(tween(150)),
-            ) {
-                Icon(
-                    Icons.Default.Today,
-                    contentDescription = "Hôm nay",
-                    tint = GoldAccent,
-                    modifier = Modifier
-                        .onClick { onToday() }
-                        .size(28.dp)
-                )
-            }
-        }
+        TodayButton(
+            visible = showTodayButton,
+            onClick = onToday,
+            modifier = Modifier.weight(0.15f)
+        )
 
         AnimatedContent(
-            targetState = CalendarHeaderState(displayedMonth, displayedYear, lunarYearLabel, lunarMonthLabel),
-            modifier = Modifier.weight(1f),
+            targetState = CalendarHeaderState(
+                displayedMonth,
+                displayedYear,
+                lunarYearLabel,
+                lunarMonthLabel
+            ),
+            modifier = Modifier.weight(0.7f),
             transitionSpec = {
                 (slideInVertically { it / 3 } + fadeIn(tween(200))) togetherWith
                         (slideOutVertically { -it / 3 } + fadeOut(tween(150)))
@@ -192,37 +180,23 @@ private fun CalendarMonthHeader(
                 Text(
                     "${monthNames[hs.month - 1]} · ${hs.year}",
                     textAlign = TextAlign.Center,
-                    color = IvoryWhite,
-                    fontSize = 17.sp,
+                    color = MucDen,
+                    fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
                 if (hs.lunarYear != null && hs.lunarMonth != null) {
                     Text(
                         "Năm ${hs.lunarYear} · Tháng ${hs.lunarMonth}",
                         textAlign = TextAlign.Center,
-                        color = GoldAccent.copy(alpha = 0.75f),
-                        fontSize = 10.sp,
+                        color = VangDong.copy(alpha = 0.75f),
+                        fontSize = 11.sp,
+                        letterSpacing = 0.3.sp,
                     )
                 }
             }
         }
 
-        Icon(
-            Icons.Default.ChevronLeft,
-            contentDescription = "Ngày trước",
-            tint = IvoryWhite,
-            modifier = Modifier
-                .onClick { onPrev() }
-                .size(32.dp)
-        )
-        Icon(
-            Icons.Default.ChevronRight,
-            contentDescription = "Ngày sau",
-            tint = IvoryWhite,
-            modifier = Modifier
-                .onClick { onNext() }
-                .size(32.dp)
-        )
+        PrevNextButtons(onPrev = onPrev, onNext = onNext)
     }
 }
 
@@ -241,20 +215,17 @@ private fun CalendarGrid(
     }
     AnimatedContent(
         targetState = contentKey,
-        transitionSpec = {
-            fadeIn(tween(220)) togetherWith
-                    fadeOut(tween(180))
-        },
+        transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(180)) },
         label = "CalendarGridTransition",
     ) { key ->
         when (key) {
             "loading" -> Box(
-                Modifier.fillMaxWidth(),
+                Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.padding(32.dp),
-                    color = GoldAccent,
+                    color = VangDong
                 )
             }
 
@@ -264,7 +235,7 @@ private fun CalendarGrid(
             ) {
                 Text(
                     text = error ?: "",
-                    color = IvoryWhite,
+                    color = MucDen,
                     modifier = Modifier.padding(32.dp),
                     textAlign = TextAlign.Center,
                 )
@@ -274,8 +245,8 @@ private fun CalendarGrid(
                 columns = GridCells.Fixed(7),
                 modifier = Modifier.fillMaxWidth(),
                 userScrollEnabled = false,
-                horizontalArrangement = Arrangement.spacedBy(2.dp),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
+                horizontalArrangement = Arrangement.spacedBy(3.dp),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
             ) {
                 items(
                     items = days,
@@ -299,64 +270,66 @@ private fun DayCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val cellShape = remember { RoundedCornerShape(10.dp) }
+    val todayOnRed = Color.White
+
     val solarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> IvoryWhite.copy(alpha = 0.3f)
-            cell.isToday -> Color.Black
-            else -> IvoryWhite
+            !cell.isCurrentMonth -> MucDen.copy(alpha = 0.25f)
+            cell.isToday -> todayOnRed
+            else -> MucDen
         }
     }
     val lunarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> IvoryWhite.copy(alpha = 0.25f)
-            cell.isToday -> Color.Black.copy(alpha = 0.7f)
-            else -> IvoryWhite.copy(alpha = 0.7f)
+            !cell.isCurrentMonth -> NauNhat.copy(alpha = 0.4f)
+            cell.isToday -> todayOnRed.copy(alpha = 0.85f)
+            else -> NauAm.copy(alpha = 0.7f)
         }
     }
     val canChiTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> GoldAccent.copy(alpha = 0.2f)
-            cell.isToday -> Color.Black.copy(alpha = 0.55f)
-            else -> GoldAccent.copy(alpha = 0.65f)
+            !cell.isCurrentMonth -> VangDong.copy(alpha = 0.2f)
+            cell.isToday -> todayOnRed.copy(alpha = 0.8f)
+            else -> VangDong.copy(alpha = 0.7f)
         }
     }
     val holidayTextColor = remember(cell.isToday) {
-        if (cell.isToday) Color.Black.copy(alpha = 0.7f) else HolidayDot
+        if (cell.isToday) todayOnRed else DoLe
     }
     val solarTermTextColor = remember(cell.isToday) {
-        if (cell.isToday) Color.Black.copy(alpha = 0.65f) else SolarTermColor
+        if (cell.isToday) todayOnRed else NgocBich
     }
     val lunarDotColor = remember(cell.isToday) {
-        if (cell.isToday) Color.Black.copy(alpha = 0.5f) else GoldAccent
+        if (cell.isToday) todayOnRed.copy(alpha = 0.7f) else VangDong.copy(alpha = 0.7f)
     }
 
     Box(
         modifier = modifier
-            .onClick(RoundedCornerShape(8.dp)) { onClick() }
-            .clip(RoundedCornerShape(8.dp))
+            .onClick(cellShape) { onClick() }
+            .clip(cellShape)
             .then(
-                if (cell.isSelected && !cell.isToday)
-                    Modifier.border(
-                        1.5.dp,
-                        GlassBorderStrong,
-                        RoundedCornerShape(8.dp)
+                when {
+                    cell.isToday -> Modifier.background(
+                        Brush.verticalGradient(
+                            listOf(
+                                DoSonLight.copy(alpha = 0.95f),
+                                DoSon.copy(alpha = 0.90f)
+                            )
+                        )
                     )
-                else Modifier
+
+                    cell.isSelected -> Modifier.border(
+                        1.5.dp,
+                        VangDong.copy(alpha = 0.5f),
+                        cellShape
+                    )
+
+                    else -> Modifier
+                }
             ),
         contentAlignment = Alignment.Center,
     ) {
-        // Today: gold circle background
-        if (cell.isToday) {
-            Box(
-                modifier = Modifier
-                    .size(36.dp)
-                    .background(
-                        Brush.radialGradient(listOf(GoldAccent, GoldAccent.copy(alpha = 0.7f))),
-                        CircleShape,
-                    ),
-            )
-        }
-
         Column(
             modifier = Modifier.padding(vertical = 5.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -383,7 +356,6 @@ private fun DayCell(
                     maxLines = 1,
                 )
             }
-            // Bottom indicator — priority: holiday name > solar term > lunar 1/15 dot
             if (cell.isCurrentMonth) {
                 when {
                     cell.holiday != null -> {
@@ -397,6 +369,7 @@ private fun DayCell(
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
+
                     cell.solarTerm != null -> {
                         Spacer(Modifier.height(2.dp))
                         Text(
@@ -407,6 +380,7 @@ private fun DayCell(
                             maxLines = 1,
                         )
                     }
+
                     cell.lunar.day == 1 || cell.lunar.day == 15 -> {
                         Spacer(Modifier.height(3.dp))
                         Box(

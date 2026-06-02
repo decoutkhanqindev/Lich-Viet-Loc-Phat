@@ -11,9 +11,7 @@ class App : Application() {
         super.onCreate()
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
         startKoin {
-            // Android context
             androidContext(this@App)
-            // Modules
             modules(appModule)
         }
     }

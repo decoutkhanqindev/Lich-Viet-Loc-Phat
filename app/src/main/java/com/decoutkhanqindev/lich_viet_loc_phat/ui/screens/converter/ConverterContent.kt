@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -40,14 +39,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ConvertMode
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassTint
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldLight
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.GlassCard
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderStrong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSon
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSonLight
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDo
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoDark
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceElevated
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLight
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.ConvertResultUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.state.ConverterIntent
@@ -58,12 +62,8 @@ fun ConverterContent(
     state: ConverterState,
     onIntent: (ConverterIntent) -> Unit,
 ) {
-    val solarToLunarSelected = remember(state.mode) {
-        state.mode == ConvertMode.SOLAR_TO_LUNAR
-    }
-    val lunarToSolarSelected = remember(state.mode) {
-        state.mode == ConvertMode.LUNAR_TO_SOLAR
-    }
+    val solarToLunarSelected = remember(state.mode) { state.mode == ConvertMode.SOLAR_TO_LUNAR }
+    val lunarToSolarSelected = remember(state.mode) { state.mode == ConvertMode.LUNAR_TO_SOLAR }
     val modeLabel = remember(state.mode) {
         if (state.mode == ConvertMode.SOLAR_TO_LUNAR) "Dương Lịch" else "Âm Lịch"
     }
@@ -71,7 +71,7 @@ fun ConverterContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(BaTrauDark, NauToi))),
+            .background(Brush.verticalGradient(listOf(GiayDo, GiayDoMid, GiayDoDark))),
     ) {
         Column(
             modifier = Modifier
@@ -80,8 +80,7 @@ fun ConverterContent(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            // Mode segmented control
-            GlassCard {
+            AppCard {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -92,22 +91,17 @@ fun ConverterContent(
                         label = "Dương → Âm",
                         selected = solarToLunarSelected,
                         modifier = Modifier.weight(1f),
-                        onClick = {
-                            onIntent(ConverterIntent.ChangeMode(ConvertMode.SOLAR_TO_LUNAR))
-                        },
+                        onClick = { onIntent(ConverterIntent.ChangeMode(ConvertMode.SOLAR_TO_LUNAR)) },
                     )
                     ModeTab(
                         label = "Âm → Dương",
                         selected = lunarToSolarSelected,
                         modifier = Modifier.weight(1f),
-                        onClick = {
-                            onIntent(ConverterIntent.ChangeMode(ConvertMode.LUNAR_TO_SOLAR))
-                        },
+                        onClick = { onIntent(ConverterIntent.ChangeMode(ConvertMode.LUNAR_TO_SOLAR)) },
                     )
                 }
             }
 
-            // Input card
             InputCard(
                 modeLabel = modeLabel,
                 inputDay = state.inputDay,
@@ -143,52 +137,45 @@ fun ConverterContent(
                         )
                     )
                 },
-                onLeapMonthToggled = {
-                    onIntent(ConverterIntent.ToggleLeapMonth(it))
-                },
+                onLeapMonthToggled = { onIntent(ConverterIntent.ToggleLeapMonth(it)) },
             )
 
-            val shape = remember { RoundedCornerShape(12.dp) }
-            // Convert button
+            val buttonShape = remember { RoundedCornerShape(14.dp) }
             Box(
                 modifier = Modifier
-                    .onClick(shape) {
-                        if (!state.isLoading) onIntent(ConverterIntent.Convert)
-                    }
+                    .onClick(buttonShape) { if (!state.isLoading) onIntent(ConverterIntent.Convert) }
                     .fillMaxWidth()
-                    .height(52.dp)
+                    .height(54.dp)
                     .alpha(if (state.isLoading) 0.6f else 1f)
-                    .background(GoldAccent, shape),
-                contentAlignment = Alignment.Center
+                    .background(
+                        Brush.horizontalGradient(listOf(DoSon, DoSonLight)),
+                        buttonShape,
+                    ),
+                contentAlignment = Alignment.Center,
             ) {
                 AnimatedContent(
                     targetState = state.isLoading,
-                    transitionSpec = {
-                        fadeIn(tween(220)) togetherWith
-                                fadeOut(tween(180))
-                    },
+                    transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(180)) },
                     label = "ConvertButtonTransition",
                 ) { loading ->
                     if (loading) {
                         CircularProgressIndicator(
-                            modifier = Modifier
-                                .height(20.dp)
-                                .width(20.dp),
-                            color = Color.Black,
-                            strokeWidth = 2.dp,
+                            modifier = Modifier.size(20.dp),
+                            color = Color.White,
+                            strokeWidth = 2.dp
                         )
                     } else {
                         Text(
                             text = "Chuyển Đổi",
-                            color = Color.Black,
+                            color = Color.White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.Bold,
+                            letterSpacing = 0.5.sp,
                         )
                     }
                 }
             }
 
-            // Result card
             AnimatedVisibility(
                 visible = state.result != null,
                 enter = fadeIn() + expandVertically(),
@@ -215,16 +202,17 @@ private fun InputCard(
     onYearChanged: (Int) -> Unit,
     onLeapMonthToggled: (Boolean) -> Unit,
 ) {
-    GlassCard {
+    AppCard {
         Column(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                modeLabel,
-                color = GoldAccent,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold
+                modeLabel.uppercase(),
+                color = VangDong,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.5.sp,
             )
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -233,41 +221,39 @@ private fun InputCard(
                     value = inputDay,
                     range = 1..31,
                     modifier = Modifier.weight(1f),
-                    onChanged = onDayChanged,
+                    onChanged = onDayChanged
                 )
                 NumberPicker(
                     label = "Tháng",
                     value = inputMonth,
                     range = 1..12,
                     modifier = Modifier.weight(1f),
-                    onChanged = onMonthChanged,
+                    onChanged = onMonthChanged
                 )
                 NumberPicker(
                     label = "Năm",
                     value = inputYear,
                     range = 1900..2100,
                     modifier = Modifier.weight(1.5f),
-                    onChanged = onYearChanged,
+                    onChanged = onYearChanged
                 )
             }
 
             AnimatedVisibility(
                 visible = lunarToSolarSelected,
-                enter = fadeIn(tween(200)) +
-                        expandVertically(tween(200)),
-                exit = fadeOut(tween(150)) +
-                        shrinkVertically(tween(150)),
+                enter = fadeIn(tween(200)) + expandVertically(tween(200)),
+                exit = fadeOut(tween(150)) + shrinkVertically(tween(150)),
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Checkbox(
                         checked = isLeapMonth,
                         onCheckedChange = onLeapMonthToggled,
                         colors = CheckboxDefaults.colors(
-                            checkedColor = GoldAccent,
-                            uncheckedColor = IvoryWhite.copy(alpha = 0.6f),
+                            checkedColor = VangDong,
+                            uncheckedColor = NauNhat,
                         ),
                     )
-                    Text("Tháng Nhuận", color = IvoryWhite, fontSize = 14.sp)
+                    Text("Tháng Nhuận", color = MucDen, fontSize = 14.sp)
                 }
             }
 
@@ -276,7 +262,7 @@ private fun InputCard(
                 enter = fadeIn(tween(200)),
                 exit = fadeOut(tween(150)),
             ) {
-                Text(error ?: "", color = Color(0xFFFF6B6B), fontSize = 13.sp)
+                Text(error ?: "", color = DoSon, fontSize = 13.sp)
             }
         }
     }
@@ -290,15 +276,9 @@ private fun ModeTab(
     onClick: () -> Unit,
 ) {
     val shape = remember { RoundedCornerShape(10.dp) }
-    val bg = remember(selected) {
-        if (selected) GoldAccent.copy(alpha = 0.25f) else Color.Transparent
-    }
-    val textColor = remember(selected) {
-        if (selected) GoldLight else IvoryWhite.copy(alpha = 0.6f)
-    }
-    val border = remember(selected) {
-        if (selected) GoldAccent.copy(alpha = 0.5f) else Color.Transparent
-    }
+    val bg = if (selected) VangDong.copy(alpha = 0.12f) else Color.Transparent
+    val textColor = if (selected) VangDong else NauNhat
+    val border = if (selected) VangDongLight.copy(alpha = 0.5f) else Color.Transparent
 
     Box(
         modifier = modifier
@@ -326,17 +306,10 @@ private fun NumberPicker(
     modifier: Modifier,
     onChanged: (Int) -> Unit,
 ) {
-    val shape = remember { RoundedCornerShape(8.dp) }
+    val shape = remember { RoundedCornerShape(10.dp) }
 
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            label,
-            color = IvoryWhite.copy(alpha = 0.6f),
-            fontSize = 11.sp
-        )
+    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(label, color = NauNhat, fontSize = 11.sp)
         Spacer(Modifier.height(4.dp))
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -344,24 +317,24 @@ private fun NumberPicker(
         ) {
             Text(
                 "−",
-                color = GoldAccent,
-                fontSize = 18.sp,
+                color = VangDong,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .onClick { if (value > range.first) onChanged(value - 1) }
-                    .size(28.dp)
+                    .size(28.dp),
             )
             Box(
                 modifier = Modifier
-                    .border(1.dp, GlassBorder, shape)
-                    .background(GlassTint, shape)
-                    .padding(8.dp),
+                    .border(1.dp, BorderStrong, shape)
+                    .background(SurfaceElevated, shape)
+                    .padding(horizontal = 8.dp, vertical = 8.dp),
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
                     "$value",
-                    color = IvoryWhite,
+                    color = MucDen,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center,
@@ -369,13 +342,13 @@ private fun NumberPicker(
             }
             Text(
                 "+",
-                color = GoldAccent,
-                fontSize = 18.sp,
+                color = VangDong,
+                fontSize = 20.sp,
                 fontWeight = FontWeight.Light,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .onClick { if (value < range.last) onChanged(value + 1) }
-                    .size(28.dp)
+                    .size(28.dp),
             )
         }
     }
@@ -383,17 +356,18 @@ private fun NumberPicker(
 
 @Composable
 private fun ResultCard(result: ConvertResultUiModel) {
-    GlassCard {
+    AppCard {
         Column(
             modifier = Modifier.padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
-                "Kết Quả",
-                color = GoldAccent,
-                fontSize = 13.sp,
-                fontWeight = FontWeight.SemiBold
+                "KẾT QUẢ",
+                color = VangDong,
+                fontSize = 10.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.5.sp,
             )
             Spacer(Modifier.height(4.dp))
             Row(
@@ -408,25 +382,22 @@ private fun ResultCard(result: ConvertResultUiModel) {
                 Spacer(Modifier.height(8.dp))
                 Text(
                     "${cc.canNgay} ${cc.chiNgay} · ${cc.canThang} ${cc.chiThang} · ${cc.canNam} ${cc.chiNam}",
-                    color = IvoryWhite.copy(alpha = 0.8f),
+                    color = NauAm,
                     fontSize = 13.sp,
                     textAlign = TextAlign.Center,
                 )
             }
             result.leapMonthNote?.let {
-                Text(it, color = GoldAccent, fontSize = 12.sp)
+                Text(it, color = VangDong, fontSize = 12.sp)
             }
         }
     }
 }
 
 @Composable
-private fun ResultField(
-    label: String,
-    value: String,
-) {
+private fun ResultField(label: String, value: String) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(label, color = IvoryWhite.copy(alpha = 0.55f), fontSize = 11.sp)
-        Text(value, color = IvoryWhite, fontSize = 28.sp, fontWeight = FontWeight.Bold)
+        Text(label, color = NauNhat, fontSize = 11.sp)
+        Text(value, color = MucDen, fontSize = 32.sp, fontWeight = FontWeight.Light)
     }
 }

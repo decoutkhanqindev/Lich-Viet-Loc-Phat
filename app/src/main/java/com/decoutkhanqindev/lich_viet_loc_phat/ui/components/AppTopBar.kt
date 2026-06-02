@@ -8,28 +8,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GlassTopAppBar() {
+fun AppTopBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = "Lịch Việt Lộc Phát",
-                color = GoldAccent,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 0.5.sp,
+                color = VangDong,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.sp,
             )
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = BaTrauDark,
-            scrolledContainerColor = BaTrauDark,
-            navigationIconContentColor = Color.Unspecified,
-            titleContentColor = Color.Unspecified,
-            actionIconContentColor = Color.Unspecified
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent,
+            navigationIconContentColor = Color.Transparent,
+            titleContentColor = Color.Transparent,
+            actionIconContentColor = Color.Transparent,
         ),
     )
 }

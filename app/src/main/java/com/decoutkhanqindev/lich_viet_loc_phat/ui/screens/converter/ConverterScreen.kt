@@ -3,7 +3,6 @@ package com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.viewmodel.koinActivityViewModel
 
 @Composable

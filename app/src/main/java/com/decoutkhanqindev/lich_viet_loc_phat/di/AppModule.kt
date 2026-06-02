@@ -6,7 +6,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.LunarMathAlgorithmDataSourceImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSource
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSourceImpl
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.CalendarRepository
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.CalculateCanChiUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ConvertLunarToSolarUseCase
@@ -25,23 +24,18 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    // --- Settings persistence ---
     single { androidContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE) }
 
-    // --- Screen ViewModels ---
     viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get()) }
     viewModel { ConverterViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get()) }
 
-    // --- Data Sources ---
     single<LunarMathAlgorithmDataSource> { LunarMathAlgorithmDataSourceImpl() }
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
 
-    // --- Repository ---
     single<CalendarRepository> { CalendarRepositoryImpl(get(), get()) }
 
-    // --- Use Cases ---
     factory { GetDailyMetadataUseCase(get()) }
     factory { GetDaysInMonthUseCase(get()) }
     factory { ConvertSolarToLunarUseCase(get()) }

@@ -9,12 +9,9 @@ import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ripple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -22,24 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.lifecycle.repeatOnLifecycle
-
-@Composable
-fun ObserveOnLifecycleOwner(
-    state: Lifecycle.State = Lifecycle.State.STARTED,
-    onObserve: suspend () -> Unit,
-) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val currentOnObserve by rememberUpdatedState(onObserve)
-
-    LaunchedEffect(lifecycleOwner) {
-        lifecycleOwner.repeatOnLifecycle(state) {
-            currentOnObserve()
-        }
-    }
-}
 
 fun Modifier.onClick(
     shape: Shape = CircleShape,
@@ -70,14 +49,18 @@ fun Modifier.onClick(
             }
         }
         .then(
-            if (ripple) Modifier.clickable(
-                interactionSource = interactionSource,
-                indication = ripple(),
-                onClick = action,
-            ) else Modifier.clickable(
-                interactionSource = null,
-                indication = null,
-                onClick = action,
-            )
+            if (ripple) {
+                Modifier.clickable(
+                    interactionSource = interactionSource,
+                    indication = ripple(),
+                    onClick = action,
+                )
+            } else {
+                Modifier.clickable(
+                    interactionSource = null,
+                    indication = null,
+                    onClick = action,
+                )
+            }
         )
 }

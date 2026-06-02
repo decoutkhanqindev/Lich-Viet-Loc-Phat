@@ -9,28 +9,24 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassTint
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
 
 @Composable
-fun GlassCard(
+fun AppCard(
     modifier: Modifier = Modifier,
-    cornerRadius: Dp = 16.dp,
+    cornerRadius: Dp = 12.dp,
     content: @Composable () -> Unit,
 ) {
-    val shape = remember { RoundedCornerShape(cornerRadius) }
+    val shape = remember(cornerRadius) { RoundedCornerShape(cornerRadius) }
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .border(
-                width = 1.dp,
-                color = GlassBorder,
-                shape = shape
-            ),
+            .border(width = 1.dp, color = BorderWarm, shape = shape),
         shape = shape,
-        color = GlassTint,
+        color = SurfaceCard,
         tonalElevation = 0.dp,
-        shadowElevation = 4.dp,
+        shadowElevation = 0.dp,
         content = content,
     )
 }

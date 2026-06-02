@@ -41,10 +41,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.navigation.ConverterDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.TodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.navigateToTab
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLight
 
 @Immutable
 private data class Tab(
@@ -65,14 +66,15 @@ private data class Tab(
 }
 
 @Composable
-fun GlassBottomNavBar(backStack: NavBackStack<NavKey>) {
+fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
     val currentDestination = backStack.lastOrNull()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(BaTrauDark),
+            .background(SurfaceCard),
     ) {
+        HorizontalDivider(color = BorderWarm, thickness = 1.dp)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -102,22 +104,22 @@ private fun NavItem(
     onClick: () -> Unit,
 ) {
     val iconColor by animateColorAsState(
-        targetValue = if (selected) GoldAccent else IvoryWhite.copy(alpha = 0.45f),
+        targetValue = if (selected) VangDong else NauNhat,
         animationSpec = tween(200),
         label = "NavIconColor",
     )
     val labelColor by animateColorAsState(
-        targetValue = if (selected) GoldAccent else IvoryWhite.copy(alpha = 0.45f),
+        targetValue = if (selected) VangDong else NauNhat,
         animationSpec = tween(200),
         label = "NavLabelColor",
     )
     val pillBg by animateColorAsState(
-        targetValue = if (selected) GoldAccent.copy(alpha = 0.15f) else Color.Transparent,
+        targetValue = if (selected) VangDong.copy(alpha = 0.12f) else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBg",
     )
     val pillBorder by animateColorAsState(
-        targetValue = if (selected) GoldAccent.copy(alpha = 0.35f) else Color.Transparent,
+        targetValue = if (selected) VangDongLight.copy(alpha = 0.5f) else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBorder",
     )
@@ -125,7 +127,7 @@ private fun NavItem(
     Column(
         modifier = Modifier.onClick(
             shape = RoundedCornerShape(12.dp),
-            ripple = false
+            ripple = false,
         ) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
@@ -149,7 +151,7 @@ private fun NavItem(
             text = tab.label,
             color = labelColor,
             fontSize = 10.sp,
-            fontWeight = FontWeight.Bold,
+            fontWeight = FontWeight.Medium,
         )
     }
 }

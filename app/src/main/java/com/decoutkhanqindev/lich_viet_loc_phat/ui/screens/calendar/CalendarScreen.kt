@@ -9,7 +9,6 @@ import androidx.navigation3.runtime.NavKey
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.toTodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.ObserveOnLifecycleOwner
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.state.CalendarEffect
-import org.koin.androidx.compose.koinViewModel
 import org.koin.compose.viewmodel.koinActivityViewModel
 
 @SuppressLint("ContextCastToActivity")

@@ -8,7 +8,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.R
 
-val ManropeFontFamily = FontFamily(
+private val ManropeFontFamily = FontFamily(
     Font(R.font.manrope_extralight, FontWeight.ExtraLight),
     Font(R.font.manrope_light, FontWeight.Light),
     Font(R.font.manrope_regular, FontWeight.Normal),

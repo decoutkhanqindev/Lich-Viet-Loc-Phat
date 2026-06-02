@@ -8,6 +8,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DailyMetadataUiModel
 data class TodayState(
     val isLoading: Boolean = true,
     val selectedDate: SolarDate = SolarDate.today(),
+    val showTodayButton: Boolean = false,
     val dailyMetadata: DailyMetadataUiModel? = null,
     val error: String? = null,
 )

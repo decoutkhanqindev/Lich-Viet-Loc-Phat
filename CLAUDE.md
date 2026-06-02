@@ -1,6 +1,7 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this
+repository.
 
 ## Android CLI Commands
 
@@ -92,7 +93,7 @@ ui/
     {Screen}ViewModel.kt
     {Screen}Screen.kt   — thin: gets VM, calls LaunchedEffect, passes to Content
     {Screen}Content.kt  — all Compose UI, receives state + onIntent lambda
-  components/    — shared composables (GlassBottomNavBar, GlassTopAppBar, GlassCard, Common)
+  components/    — shared composables (AppBottomNavBar, AppTopBar, AppCard, Common)
   AppScaffold.kt — root: creates backStack, hosts Scaffold + NavDisplay
 
 navigation/
@@ -116,51 +117,77 @@ LunarMathAlgorithmDataSourceImpl ─┘
 
 ### Navigation
 
-Uses **Navigation 3** (`androidx.navigation3`). The backstack is `rememberNavBackStack(TodayDestination())` created in `AppScaffold`.
+Uses **Navigation 3** (`androidx.navigation3`). The backstack is
+`rememberNavBackStack(TodayDestination())` created in `AppScaffold`.
 
-- `TodayDestination(day, month, year)` — **data class**, carries an optional date (`day==0` means today)
+- `TodayDestination(day, month, year)` — **data class**, carries an optional date (`day==0` means
+  today)
 - `CalendarDestination`, `ConverterDestination`, `SettingsDestination` — **data objects**
 
-**`navigateToTab`** pops back to the existing tab entry without destroying root. Never use `clear()` + `add(root)` — that would kill the Today entry and recreate its ViewModel.
+**`navigateToTab`** pops back to the existing tab entry without destroying root. Never use
+`clear()` + `add(root)` — that would kill the Today entry and recreate its ViewModel.
 
 ### ViewModel Scoping
 
-All 4 tab ViewModels are **Activity-scoped** via `koinActivityViewModel()` to survive tab navigation. None are ever recreated on tab switch.
+All 4 tab ViewModels are **Activity-scoped** via `koinActivityViewModel()` to survive tab
+navigation. None are ever recreated on tab switch.
 
-`TodayScreen` additionally uses `LaunchedEffect(initialDate)` to call `viewModel.setInitialDate(date)` when navigated from Calendar with a specific date — only fires when `initialDate` changes.
+`TodayScreen` additionally uses `LaunchedEffect(initialDate)` to call
+`viewModel.setInitialDate(date)` when navigated from Calendar with a specific date — only fires when
+`initialDate` changes.
 
 ### MVI Pattern
 
 Each screen has:
+
 - `State` — `@Immutable data class`, default `isLoading=true`
 - `Intent` — sealed interface or class of user actions
-- `Effect` — one-shot events sent via `Channel<Effect>`, collected via `ObserveOnLifecycleOwner` in the Screen composable (not Content)
+- `Effect` — one-shot events sent via `Channel<Effect>`, collected via `ObserveOnLifecycleOwner` in
+  the Screen composable (not Content)
 
 ### Settings Persistence
 
-`CalendarViewModel` reads/writes `SharedPreferences("app_settings")` directly and registers a listener for live updates. The key `show_can_chi_on_cell` controls whether can-chi labels appear in calendar grid cells.
+`CalendarViewModel` reads/writes `SharedPreferences("app_settings")` directly and registers a
+listener for live updates. The key `show_can_chi_on_cell` controls whether can-chi labels appear in
+calendar grid cells.
 
 ## UI / Theme
 
-Theme: Vietnamese dark — `BaTrauDark` → `NauToi` gradient, `GoldAccent` for active/auspicious, `IvoryWhite` for body text.
+Theme: **Giấy Dó** (light, warm Vietnamese palette) — `GiayDo` → `GiayDoMid` → `GiayDoDark`
+gradient background, `VangDong` (bronze gold) for active/auspicious, `MucDen` for body text.
 
 Key colors in `theme/Color.kt`:
-- `GoldAccent` — active tab, auspicious hours, today glow
-- `HolidayDot` — holiday text/dot (red-pink)
-- `SolarTermColor` — solar term text (jade green)
-- `WeekendColor` — Saturday/Sunday labels
 
-Calendar cell indicator priority (when `isCurrentMonth`): **holiday name** > **solar term name** > **lunar 1st/15th dot**.
+- `GiayDo` / `GiayDoMid` / `GiayDoDark` — background gradient (cream → warm beige)
+- `SurfaceCard` — white card surfaces
+- `SurfaceElevated` — slightly warm elevated surface
+- `BorderWarm` / `BorderStrong` — card and input borders
+- `MucDen` — primary text (near-black ink)
+- `NauAm` — secondary text (warm brown)
+- `NauNhat` — tertiary/muted text
+- `VangDong` / `VangDongLight` — active tab, auspicious hours, section labels (bronze gold)
+- `DoSon` / `DoSonLight` — today cell highlight, CTA button (vermilion red)
+- `DoLe` — holiday text (red)
+- `CuoiTuan` — Saturday/Sunday labels (red)
+- `NgocBich` / `NgocBichLight` — solar term text, auspicious hour chips (jade green)
+- `XamMo` — inauspicious hour chips (muted brown)
+
+Calendar cell indicator priority (when `isCurrentMonth`): **holiday name** > **solar term name** >
+**lunar 1st/15th dot**.
 
 ### Shared Composables
 
-- `Modifier.onClick(shape, ripple)` — scale-down press animation (85%), use instead of raw `clickable` for interactive elements
+- `Modifier.onClick(shape, ripple)` — scale-down press animation (85%), use instead of raw
+  `clickable` for interactive elements
 - `ObserveOnLifecycleOwner` — collect a Flow (usually effects) scoped to lifecycle STARTED state
-- `GlassCard` — frosted glass card with `GlassTint` background + `GlassBorder`
+- `AppCard` — solid white card with `BorderWarm` border + 12dp radius
+- `TodayButton` — animated `VangDong` today icon (fade in/out based on `visible`)
+- `PrevNextButtons` — prev/next chevron row, `MucDen` tint
 
 ## Key Domain Notes
 
 - `SolarDate.today()` uses `Asia/Ho_Chi_Minh` timezone
-- `DayCell` grid is always 42 cells (6 rows × 7 cols); overflow days from adjacent months have `isCurrentMonth = false`
+- `DayCell` grid is always 42 cells (6 rows × 7 cols); overflow days from adjacent months have
+  `isCurrentMonth = false`
 - `LunarDate.isLeapMonth` is respected in `getHoliday()` — leap months never match lunar holidays
 - `CanChi` carries: `canNgay/chiNgay` (day), `canThang/chiThang` (month), `canNam/chiNam` (year)

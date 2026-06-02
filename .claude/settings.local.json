@@ -38,7 +38,8 @@
       "Bash(python3 -c \"import json,sys; data=json.load\\(sys.stdin\\); [print\\(f\\\\\"{x.get\\('text',''\\)} @ {x.get\\('center',''\\)}\\\\\"\\) for x in data if x.get\\('text'\\)]\")",
       "Bash(./gradlew assembleDebug --quiet)",
       "Bash(./gradlew installDebug --quiet)",
-      "Bash(./gradlew compileDebugKotlin --stacktrace)"
+      "Bash(./gradlew compileDebugKotlin --stacktrace)",
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"vietnamese lunar calendar lifestyle meditation spiritual daily ritual dark elegant\" --design-system -p \"Lich Viet Loc Phat\" -f markdown)"
     ]
   }
 }

@@ -12,6 +12,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.state.Calenda
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +28,7 @@ class CalendarViewModel(
 
     companion object {
         private const val KEY_SHOW_CAN_CHI_ON_CELL = "show_can_chi_on_cell"
+        private const val DELAY = 150L
     }
 
     private val initDate = SolarDate.today()
@@ -119,7 +121,9 @@ class CalendarViewModel(
                 .onSuccess { cells ->
                     val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
                     val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
-                    val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
+                    val lunarMonthLabel =
+                        firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
+                    delay(DELAY)
                     _state.update {
                         it.copy(
                             isLoading = false,

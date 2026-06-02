@@ -23,12 +23,16 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BaTrauDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GlassBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GoldAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.IvoryWhite
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauToi
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.GlassCard
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDo
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoDark
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLight
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.state.SettingsIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.state.SettingsState
 
@@ -40,7 +44,7 @@ fun SettingsContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(BaTrauDark, NauToi))),
+            .background(Brush.verticalGradient(listOf(GiayDo, GiayDoMid, GiayDoDark))),
     ) {
         Column(
             modifier = Modifier
@@ -54,18 +58,14 @@ fun SettingsContent(
                     label = "Hiển thị Can Chi trên ô lịch",
                     subtitle = "Hiện Can Chi của mỗi ngày trong lưới lịch tháng",
                     checked = state.showCanChiOnCell,
-                    onCheckedChange = {
-                        onIntent(SettingsIntent.ToggleCanChiOnCell(it))
-                    },
+                    onCheckedChange = { onIntent(SettingsIntent.ToggleCanChiOnCell(it)) },
                 )
             }
 
             SettingsGroup(title = "Về Ứng Dụng") {
                 SettingsInfoRow(label = "Phiên bản", value = state.appVersion)
-                HorizontalDivider(color = GlassBorder, modifier = Modifier.padding(vertical = 4.dp))
+                HorizontalDivider(color = BorderWarm, modifier = Modifier.padding(vertical = 2.dp))
                 SettingsInfoRow(label = "Thuật toán", value = "Hồ Ngọc Đức")
-                HorizontalDivider(color = GlassBorder, modifier = Modifier.padding(vertical = 4.dp))
-                SettingsInfoRow(label = "Chế độ", value = "100% Offline")
             }
 
             Spacer(Modifier.height(16.dp))
@@ -78,16 +78,17 @@ private fun SettingsGroup(
     title: String,
     content: @Composable () -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-            title,
-            color = GoldAccent,
-            fontSize = 11.sp,
+            title.uppercase(),
+            color = VangDong.copy(alpha = 0.85f),
+            fontSize = 10.sp,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 4.dp, bottom = 4.dp),
+            letterSpacing = 1.5.sp,
+            modifier = Modifier.padding(start = 4.dp),
         )
-        GlassCard {
-            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+        AppCard {
+            Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
                 content()
             }
         }
@@ -111,21 +112,22 @@ private fun SettingsToggleRow(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = 8.dp)
+                .padding(end = 12.dp)
         ) {
-            Text(label, color = IvoryWhite, fontSize = 14.sp)
+            Text(label, color = MucDen, fontSize = 14.sp)
             if (subtitle != null) {
-                Text(subtitle, color = IvoryWhite.copy(alpha = 0.55f), fontSize = 11.sp)
+                Spacer(Modifier.height(2.dp))
+                Text(subtitle, color = NauNhat, fontSize = 11.sp)
             }
         }
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
-                checkedThumbColor = GoldAccent,
-                checkedTrackColor = GoldAccent.copy(alpha = 0.4f),
-                uncheckedThumbColor = IvoryWhite.copy(alpha = 0.5f),
-                uncheckedTrackColor = IvoryWhite.copy(alpha = 0.15f),
+                checkedThumbColor = VangDong,
+                checkedTrackColor = VangDongLight.copy(alpha = 0.35f),
+                uncheckedThumbColor = NauNhat,
+                uncheckedTrackColor = NauNhat.copy(alpha = 0.2f),
             ),
         )
     }
@@ -140,7 +142,7 @@ private fun SettingsInfoRow(label: String, value: String) {
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(label, color = IvoryWhite, fontSize = 14.sp)
-        Text(value, color = IvoryWhite.copy(alpha = 0.6f), fontSize = 14.sp)
+        Text(label, color = MucDen, fontSize = 14.sp)
+        Text(value, color = NauAm, fontSize = 14.sp, fontWeight = FontWeight.Medium)
     }
 }

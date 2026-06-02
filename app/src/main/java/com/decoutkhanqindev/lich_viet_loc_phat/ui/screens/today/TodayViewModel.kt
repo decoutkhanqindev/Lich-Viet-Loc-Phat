@@ -8,6 +8,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.toUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayState
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -42,13 +43,15 @@ class TodayViewModel(
     }
 
     private fun loadMetadata(date: SolarDate) {
+        val today = SolarDate.today()
         loadMetadataJob?.cancel()
         loadMetadataJob = viewModelScope.launch {
             _state.update {
                 it.copy(
                     isLoading = true,
                     error = null,
-                    selectedDate = date
+                    selectedDate = date,
+                    showTodayButton = date != today,
                 )
             }
             getDailyMetadata(date)
