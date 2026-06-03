@@ -100,4 +100,9 @@ dependencies {
 
     // Immutable Collections (ImmutableList cho Presentation State)
     implementation(libs.kotlinx.collections.immutable)
+
+    // Glance Widget
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.startup.runtime)
 }

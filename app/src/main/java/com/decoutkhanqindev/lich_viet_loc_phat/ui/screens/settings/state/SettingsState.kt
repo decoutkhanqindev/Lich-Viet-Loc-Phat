@@ -5,5 +5,6 @@ import androidx.compose.runtime.Immutable
 @Immutable
 data class SettingsState(
     val showCanChiOnCell: Boolean = true,
+    val calendarWidgetEnabled: Boolean = true,
     val appVersion: String = "",
 )

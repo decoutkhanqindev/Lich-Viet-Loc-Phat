@@ -62,6 +62,15 @@ fun SettingsContent(
                 )
             }
 
+            SettingsGroup(title = "Tiện Ích") {
+                SettingsToggleRow(
+                    label = "Widget lịch",
+                    subtitle = "Hiển thị lịch tháng trên màn hình chính",
+                    checked = state.calendarWidgetEnabled,
+                    onCheckedChange = { onIntent(SettingsIntent.ToggleCalendarWidget(it)) },
+                )
+            }
+
             SettingsGroup(title = "Về Ứng Dụng") {
                 SettingsInfoRow(label = "Phiên bản", value = state.appVersion)
                 HorizontalDivider(color = BorderWarm, modifier = Modifier.padding(vertical = 2.dp))

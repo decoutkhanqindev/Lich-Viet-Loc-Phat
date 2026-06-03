@@ -18,6 +18,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.CalendarViewM
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.ConverterViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.SettingsViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.TodayViewModel
+import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
@@ -29,7 +30,7 @@ val appModule = module {
     viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get()) }
     viewModel { ConverterViewModel(get(), get(), get()) }
-    viewModel { SettingsViewModel(get()) }
+    viewModel { SettingsViewModel(get(), androidApplication()) }
 
     single<LunarMathAlgorithmDataSource> { LunarMathAlgorithmDataSourceImpl() }
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
