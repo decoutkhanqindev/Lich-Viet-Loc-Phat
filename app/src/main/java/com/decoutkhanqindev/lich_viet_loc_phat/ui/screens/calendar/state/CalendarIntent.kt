@@ -7,4 +7,7 @@ sealed interface CalendarIntent {
     data object PrevMonth : CalendarIntent
     data object NextMonth : CalendarIntent
     data object RequestToday : CalendarIntent
+    data object ShowMonthYearPicker : CalendarIntent
+    data object DismissMonthYearPicker : CalendarIntent
+    data class ConfirmMonthYear(val year: Int, val month: Int) : CalendarIntent
 }

@@ -12,13 +12,22 @@ import kotlin.math.sin
 class LunarMathAlgorithmDataSourceImpl : LunarMathAlgorithmDataSource {
 
     override fun solarToLunar(solar: SolarDate): LunarDate {
-        val r = convertSolar2Lunar(solar.day, solar.month, solar.year, VN_TZ)
+        val r = convertSolar2Lunar(
+            dd = solar.day,
+            mm = solar.month,
+            yyyy = solar.year,
+            timeZone = VN_TZ
+        )
         return LunarDate(r.day, r.month, r.year, r.leap == 1)
     }
 
     override fun lunarToSolar(lunar: LunarDate): SolarDate {
         val (d, m, y) = convertLunar2Solar(
-            lunar.day, lunar.month, lunar.year, if (lunar.isLeapMonth) 1 else 0, VN_TZ
+            lunarDay = lunar.day,
+            lunarMonth = lunar.month,
+            lunarYear = lunar.year,
+            lunarLeap = if (lunar.isLeapMonth) 1 else 0,
+            timeZone = VN_TZ
         )
         if (d == 0) throw IllegalArgumentException(
             "Tháng nhuận ${lunar.month} không tồn tại trong năm Âm lịch ${lunar.year}"
@@ -49,7 +58,11 @@ class LunarMathAlgorithmDataSourceImpl : LunarMathAlgorithmDataSource {
     }
 
     override fun getAuspiciousHours(solar: SolarDate): List<HourInfo> {
-        val jdn = jdFromDate(solar.day, solar.month, solar.year)
+        val jdn = jdFromDate(
+            dd = solar.day,
+            mm = solar.month,
+            yyyy = solar.year
+        )
         val chiNgayIdx = (jdn + 1) % 12
         val auspiciousSet = AUSPICIOUS_HOURS[chiNgayIdx % 6].toHashSet()
         return HOUR_NAMES.mapIndexed { i, (name, timeRange) ->

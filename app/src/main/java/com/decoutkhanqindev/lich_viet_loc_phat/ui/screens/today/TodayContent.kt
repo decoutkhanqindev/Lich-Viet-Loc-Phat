@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
@@ -29,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,20 +36,33 @@ import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.CanChi
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.LunarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderStrong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DateSeparatorBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDo
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLeSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoleBorder
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmMuted
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmSoft
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichLight
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichBorder
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichHint
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichLightBorder
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichMuted
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichSubtle
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongDim
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.XamMo
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.XamMoMuted
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape20dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape6dp
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.TodayButton
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.AnimationContentKey
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.HourInfoUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayState
@@ -66,25 +77,33 @@ fun TodayContent(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Brush.verticalGradient(listOf(GiayDo, GiayDoMid, GiayDoDark))),
+            .background(GiayDoBrush),
     ) {
         val contentKey = when {
-            state.isLoading -> "loading"
-            state.error != null -> "error"
-            else -> "content"
+            state.isLoading -> AnimationContentKey.Loading
+            state.error != null -> AnimationContentKey.Error
+            else -> AnimationContentKey.Content
         }
 
         AnimatedContent(
             targetState = contentKey,
-            transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(180)) },
+            transitionSpec = {
+                fadeIn(tween(220)) togetherWith fadeOut(tween(180))
+            },
             label = "TodayContentTransition",
         ) { key ->
             when (key) {
-                "loading" -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                AnimationContentKey.Loading -> Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     CircularProgressIndicator(color = VangDong)
                 }
 
-                "error" -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                AnimationContentKey.Error -> Box(
+                    Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
                     Text(
                         text = state.error ?: "",
                         color = MucDen,
@@ -93,7 +112,7 @@ fun TodayContent(
                     )
                 }
 
-                else -> {
+                AnimationContentKey.Content -> {
                     if (state.dailyMetadata != null) {
                         Column(
                             modifier = Modifier
@@ -108,9 +127,15 @@ fun TodayContent(
                                 holiday = state.dailyMetadata.holiday,
                                 solarTerm = state.dailyMetadata.solarTerm,
                                 showTodayButton = state.showTodayButton,
-                                onPrev = { onIntent(TodayIntent.NavigateToPrevDay) },
-                                onNext = { onIntent(TodayIntent.NavigateToNextDay) },
-                                onToday = { onIntent(TodayIntent.RequestToday) },
+                                onPrev = {
+                                    onIntent(TodayIntent.NavigateToPrevDay)
+                                },
+                                onNext = {
+                                    onIntent(TodayIntent.NavigateToNextDay)
+                                },
+                                onToday = {
+                                    onIntent(TodayIntent.RequestToday)
+                                },
                             )
                             CanChiCard(
                                 canChi = state.dailyMetadata.canChi,
@@ -137,7 +162,7 @@ private fun DateNavigationHeader(
     onNext: () -> Unit,
     onToday: () -> Unit,
 ) {
-    val weekdays = remember { listOf("CN", "T2", "T3", "T4", "T5", "T6", "T7") }
+    val weekdays = remember { CalendarProperties.weekdaysSunFirst }
 
     AppCard(modifier = Modifier.fillMaxWidth()) {
         Column(
@@ -151,9 +176,15 @@ private fun DateNavigationHeader(
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TodayButton(visible = showTodayButton, onClick = onToday)
+                TodayButton(
+                    visible = showTodayButton,
+                    onClick = onToday
+                )
                 Spacer(Modifier.weight(1f))
-                PrevNextButtons(onPrev = onPrev, onNext = onNext)
+                PrevNextButtons(
+                    onPrev = onPrev,
+                    onNext = onNext
+                )
             }
             Spacer(Modifier.height(8.dp))
             AnimatedContent(
@@ -164,9 +195,16 @@ private fun DateNavigationHeader(
                 },
                 label = "DateTransition",
             ) { displaySolar ->
-                val dayOfWeek = remember(displaySolar.year, displaySolar.month, displaySolar.day) {
-                    LocalDate.of(displaySolar.year, displaySolar.month, displaySolar.day)
-                        .dayOfWeek.value % 7
+                val dayOfWeek = remember(
+                    displaySolar.year,
+                    displaySolar.month,
+                    displaySolar.day
+                ) {
+                    LocalDate.of(
+                        displaySolar.year,
+                        displaySolar.month,
+                        displaySolar.day
+                    ).dayOfWeek.value % 7
                 }
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -179,7 +217,7 @@ private fun DateNavigationHeader(
                     ) {
                         Text(
                             "DƯƠNG LỊCH",
-                            color = VangDong.copy(alpha = 0.8f),
+                            color = VangDongDim,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
@@ -207,16 +245,7 @@ private fun DateNavigationHeader(
                         modifier = Modifier
                             .height(96.dp)
                             .width(1.dp)
-                            .background(
-                                Brush.verticalGradient(
-                                    listOf(
-                                        Color.Transparent,
-                                        BorderStrong,
-                                        BorderStrong,
-                                        Color.Transparent,
-                                    )
-                                )
-                            ),
+                            .background(DateSeparatorBrush),
                     )
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
@@ -224,7 +253,7 @@ private fun DateNavigationHeader(
                     ) {
                         Text(
                             "ÂM LỊCH",
-                            color = VangDong.copy(alpha = 0.8f),
+                            color = VangDongDim,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
@@ -236,10 +265,12 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.ExtraLight,
                             lineHeight = 62.sp,
                         )
-                        val leapNote = if (lunar.isLeapMonth) " (Nhuận)" else ""
+                        val leapNote = remember(lunar.isLeapMonth) {
+                            if (lunar.isLeapMonth) " (Nhuận)" else ""
+                        }
                         Text(
                             "Tháng ${lunar.month}$leapNote · ${lunar.year}",
-                            color = NauAm.copy(alpha = 0.7f),
+                            color = NauAmFaded,
                             fontSize = 13.sp,
                         )
                     }
@@ -248,8 +279,10 @@ private fun DateNavigationHeader(
 
             AnimatedVisibility(
                 visible = holiday != null || solarTerm != null,
-                enter = fadeIn(tween(220)) + slideInVertically(tween(220)) { it / 2 },
-                exit = fadeOut(tween(180)) + slideOutVertically(tween(180)) { it / 2 },
+                enter = fadeIn(tween(220))
+                        + slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180))
+                        + slideOutVertically(tween(180)) { it / 2 },
             ) {
                 Spacer(Modifier.height(4.dp))
                 Row(
@@ -268,32 +301,51 @@ private fun DateNavigationHeader(
 
 @Composable
 private fun HolidayBadge(label: String) {
-    val shape = remember { RoundedCornerShape(20.dp) }
     Box(
         modifier = Modifier
-            .background(DoLe.copy(alpha = 0.1f), shape)
-            .border(1.dp, DoLe.copy(alpha = 0.45f), shape)
+            .background(color = DoLeSubtle, shape = roundedCornerShape20dp)
+            .border(
+                width = 1.dp,
+                color = DoleBorder,
+                shape = roundedCornerShape20dp
+            )
             .padding(horizontal = 14.dp, vertical = 5.dp),
     ) {
-        Text(label, color = DoLe, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)
+        Text(
+            label,
+            color = DoLe,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold
+        )
     }
 }
 
 @Composable
 private fun SolarTermBadge(label: String) {
-    val shape = remember { RoundedCornerShape(20.dp) }
     Box(
         modifier = Modifier
-            .background(NgocBich.copy(alpha = 0.1f), shape)
-            .border(1.dp, NgocBich.copy(alpha = 0.4f), shape)
+            .background(color = NgocBichSubtle, shape = roundedCornerShape20dp)
+            .border(
+                width = 1.dp,
+                color = NgocBichBorder,
+                shape = roundedCornerShape20dp
+            )
             .padding(horizontal = 14.dp, vertical = 5.dp),
     ) {
-        Text(label, color = NgocBich, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+        Text(
+            label,
+            color = NgocBich,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
 @Composable
-private fun CanChiCard(canChi: CanChi, solarTerm: String?) {
+private fun CanChiCard(
+    canChi: CanChi,
+    solarTerm: String?,
+) {
     AppCard {
         Column(
             modifier = Modifier.padding(24.dp),
@@ -307,18 +359,41 @@ private fun CanChiCard(canChi: CanChi, solarTerm: String?) {
                 letterSpacing = 1.5.sp,
             )
             Spacer(Modifier.height(2.dp))
-            CanChiRow("Năm", can = canChi.canNam, chi = canChi.chiNam)
-            CanChiRow("Tháng", can = canChi.canThang, chi = canChi.chiThang)
-            CanChiRow("Ngày", can = canChi.canNgay, chi = canChi.chiNgay)
+            CanChiRow(
+                "Năm",
+                can = canChi.canNam,
+                chi = canChi.chiNam
+            )
+            CanChiRow(
+                "Tháng",
+                can = canChi.canThang,
+                chi = canChi.chiThang
+            )
+            CanChiRow(
+                "Ngày",
+                can = canChi.canNgay,
+                chi = canChi.chiNgay
+            )
             AnimatedVisibility(
                 visible = solarTerm != null,
-                enter = fadeIn(tween(220)) + slideInVertically(tween(220)) { it / 2 },
-                exit = fadeOut(tween(180)) + slideOutVertically(tween(180)) { it / 2 },
+                enter = fadeIn(tween(220))
+                        + slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180))
+                        + slideOutVertically(tween(180)) { it / 2 },
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text("Tiết khí: ", color = NauAm.copy(alpha = 0.6f), fontSize = 13.sp)
+                    Text(
+                        "Tiết khí: ",
+                        color = NauAmMuted,
+                        fontSize = 13.sp
+                    )
                     solarTerm?.let {
-                        Text(it, color = NgocBich, fontSize = 13.sp, fontWeight = FontWeight.Medium)
+                        Text(
+                            it,
+                            color = NgocBich,
+                            fontSize = 13.sp,
+                            fontWeight = FontWeight.Medium
+                        )
                     }
                 }
             }
@@ -327,15 +402,27 @@ private fun CanChiCard(canChi: CanChi, solarTerm: String?) {
 }
 
 @Composable
-private fun CanChiRow(label: String, can: String, chi: String) {
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+private fun CanChiRow(
+    label: String,
+    can: String,
+    chi: String,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
         Text(
             "$label:",
-            color = NauAm.copy(alpha = 0.55f),
+            color = NauAmSoft,
             fontSize = 13.sp,
             modifier = Modifier.width(52.dp),
         )
-        Text("$can $chi", color = MucDen, fontSize = 14.sp, fontWeight = FontWeight.Medium)
+        Text(
+            "$can $chi",
+            color = MucDen,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Medium
+        )
     }
 }
 
@@ -374,21 +461,27 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
 @Composable
 private fun HourChip(hour: HourInfoUiModel) {
     val bgColor = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBich.copy(alpha = 0.12f) else Color.Transparent
+        if (hour.isAuspicious) NgocBichHint else Color.Transparent
     }
     val borderColor = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBichLight.copy(alpha = 0.5f) else Color.Transparent
+        if (hour.isAuspicious) NgocBichLightBorder else Color.Transparent
     }
     val textColor = remember(hour.isAuspicious) {
         if (hour.isAuspicious) NgocBich else XamMo
     }
-    val shape = remember { RoundedCornerShape(6.dp) }
+    val textColorMuted = remember(hour.isAuspicious) {
+        if (hour.isAuspicious) NgocBichMuted else XamMoMuted
+    }
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(bgColor, shape)
-            .border(1.dp, borderColor, shape)
+            .background(color = bgColor, shape = roundedCornerShape6dp)
+            .border(
+                width = 1.dp,
+                color = borderColor,
+                shape = roundedCornerShape6dp
+            )
             .padding(horizontal = 6.dp, vertical = 4.dp),
     ) {
         Column {
@@ -398,7 +491,11 @@ private fun HourChip(hour: HourInfoUiModel) {
                 fontSize = 11.sp,
                 fontWeight = if (hour.isAuspicious) FontWeight.SemiBold else FontWeight.Normal,
             )
-            Text(hour.timeRange, color = textColor.copy(alpha = 0.7f), fontSize = 9.sp)
+            Text(
+                hour.timeRange,
+                color = textColorMuted,
+                fontSize = 9.sp
+            )
         }
     }
 }

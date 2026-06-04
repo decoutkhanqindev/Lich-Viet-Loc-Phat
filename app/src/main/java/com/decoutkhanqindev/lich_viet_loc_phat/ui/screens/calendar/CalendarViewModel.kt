@@ -28,7 +28,7 @@ class CalendarViewModel(
 
     companion object {
         private const val KEY_SHOW_CAN_CHI_ON_CELL = "show_can_chi_on_cell"
-        private const val DELAY = 150L
+        private const val DELAY = 250L
     }
 
     private val initDate = SolarDate.today()
@@ -103,6 +103,24 @@ class CalendarViewModel(
                     )
                 }
                 loadMonth(now.year, now.month)
+            }
+
+            is CalendarIntent.ShowMonthYearPicker ->
+                _state.update { it.copy(showMonthYearPicker = true) }
+
+            is CalendarIntent.DismissMonthYearPicker ->
+                _state.update { it.copy(showMonthYearPicker = false) }
+
+            is CalendarIntent.ConfirmMonthYear -> {
+                _state.update {
+                    it.copy(
+                        showMonthYearPicker = false,
+                        displayedYear = intent.year,
+                        displayedMonth = intent.month,
+                    )
+                }
+                loadMonth(intent.year, intent.month)
+                updateTodayButtonVisibility(intent.year, intent.month)
             }
         }
     }

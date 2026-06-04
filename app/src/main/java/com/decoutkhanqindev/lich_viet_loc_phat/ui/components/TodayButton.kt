@@ -30,7 +30,7 @@ fun TodayButton(
                 Icons.Default.Today,
                 contentDescription = "Hôm nay",
                 tint = VangDong,
-                modifier = Modifier.Companion
+                modifier = Modifier
                     .onClick { onClick() }
                     .size(28.dp),
             )

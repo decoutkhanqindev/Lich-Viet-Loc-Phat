@@ -1,10 +1,8 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.widget
 
 import android.annotation.SuppressLint
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
@@ -35,11 +33,21 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSon
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenFaded
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatFaded
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFg
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgMuted
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgSecondary
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgTertiary
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAccent
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSoft
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DayCellUiModel
 import kotlinx.collections.immutable.ImmutableList
 
@@ -59,8 +67,11 @@ fun CalendarWidgetContent(
             .fillMaxSize()
             .appWidgetBackground()
             .background(ColorProvider(GiayDoMid))
-            .clickable(onClick = actionStartActivity<MainActivity>()),
+            .clickable {
+                actionStartActivity<MainActivity>()
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         CalendarMonthHeader(
             displayedMonth = displayedMonth,
@@ -69,7 +80,7 @@ fun CalendarWidgetContent(
             lunarMonthLabel = lunarMonthLabel,
         )
 
-        val weekdays = remember { listOf("T2", "T3", "T4", "T5", "T6", "T7", "CN") }
+        val weekdays = remember { CalendarProperties.weekdaysMonFirst }
 
         Column(
             modifier = GlanceModifier
@@ -139,12 +150,7 @@ private fun CalendarMonthHeader(
     lunarYearLabel: String?,
     lunarMonthLabel: String?,
 ) {
-    val monthNames = remember {
-        listOf(
-            "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6",
-            "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12",
-        )
-    }
+    val monthNames = remember { CalendarProperties.months }
 
     Row(
         modifier = GlanceModifier
@@ -168,7 +174,7 @@ private fun CalendarMonthHeader(
                 Text(
                     "Năm $lunarYearLabel · Tháng $lunarMonthLabel",
                     style = TextStyle(
-                        color = ColorProvider(VangDong.copy(alpha = 0.75f)),
+                        color = ColorProvider(VangDongSoft),
                         fontSize = 11.sp,
                         textAlign = TextAlign.Center,
                     ),
@@ -208,51 +214,50 @@ private fun DayCell(
     showCanChi: Boolean,
     modifier: GlanceModifier = GlanceModifier,
 ) {
-    val todayOnRed = Color.White
-
     val solarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> ColorProvider(MucDen.copy(alpha = 0.25f))
-            cell.isToday -> ColorProvider(todayOnRed)
+            !cell.isCurrentMonth -> ColorProvider(MucDenFaded)
+            cell.isToday -> ColorProvider(TodayCellFg)
             else -> ColorProvider(MucDen)
         }
     }
     val lunarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> ColorProvider(NauNhat.copy(alpha = 0.4f))
-            cell.isToday -> ColorProvider(todayOnRed.copy(alpha = 0.85f))
-            else -> ColorProvider(NauAm.copy(alpha = 0.7f))
+            !cell.isCurrentMonth -> ColorProvider(NauNhatFaded)
+            cell.isToday -> ColorProvider(TodayCellFgSecondary)
+            else -> ColorProvider(NauAmFaded)
         }
     }
     val canChiTextColor = remember(cell.isCurrentMonth, cell.isToday) {
         when {
-            !cell.isCurrentMonth -> ColorProvider(VangDong.copy(alpha = 0.2f))
-            cell.isToday -> ColorProvider(todayOnRed.copy(alpha = 0.8f))
-            else -> ColorProvider(VangDong.copy(alpha = 0.7f))
+            !cell.isCurrentMonth -> ColorProvider(VangDongSubtle)
+            cell.isToday -> ColorProvider(TodayCellFgTertiary)
+            else -> ColorProvider(VangDongAccent)
         }
     }
     val holidayTextColor = remember(cell.isToday) {
-        if (cell.isToday) ColorProvider(todayOnRed) else ColorProvider(DoLe)
+        if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(DoLe)
     }
     val solarTermTextColor = remember(cell.isToday) {
-        if (cell.isToday) ColorProvider(todayOnRed) else ColorProvider(NgocBich)
+        if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(NgocBich)
     }
     val lunarDotColor = remember(cell.isToday) {
-        if (cell.isToday) ColorProvider(todayOnRed.copy(alpha = 0.7f))
-        else ColorProvider(VangDong.copy(alpha = 0.7f))
+        if (cell.isToday) ColorProvider(TodayCellFgMuted)
+        else ColorProvider(VangDongAccent)
+    }
+    val modifier = remember(cell.isToday) {
+        if (cell.isToday) {
+            modifier
+                .padding(1.dp)
+                .background(ColorProvider(DoSon))
+                .cornerRadius(10.dp)
+        } else {
+            modifier.padding(1.dp)
+        }
     }
 
     Box(
-        modifier = modifier.then(
-            if (cell.isToday) {
-                GlanceModifier
-                    .padding(1.dp)
-                    .background(ColorProvider(DoSon))
-                    .cornerRadius(10.dp)
-            } else {
-                GlanceModifier.padding(1.dp)
-            }
-        ),
+        modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         Column(

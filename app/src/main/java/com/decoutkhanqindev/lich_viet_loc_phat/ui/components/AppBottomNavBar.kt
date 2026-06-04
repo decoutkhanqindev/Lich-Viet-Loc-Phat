@@ -14,11 +14,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,7 +35,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.CalendarDestination
-import com.decoutkhanqindev.lich_viet_loc_phat.navigation.ConverterDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.TodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.navigateToTab
@@ -45,7 +42,10 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLight
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongHint
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightBorder
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape12dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape16dp
 
 @Immutable
 private data class Tab(
@@ -58,7 +58,6 @@ private data class Tab(
             listOf(
                 Tab(TodayDestination(), Icons.Default.Today, "Hôm Nay"),
                 Tab(CalendarDestination, Icons.Default.CalendarMonth, "Lịch"),
-                Tab(ConverterDestination, Icons.Default.SwapHoriz, "Đổi Ngày"),
                 Tab(SettingsDestination, Icons.Default.Settings, "Cài Đặt"),
             )
         }
@@ -90,7 +89,9 @@ fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
                 NavItem(
                     tab = tab,
                     selected = selected,
-                    onClick = { backStack.navigateToTab(tab.destination) },
+                    onClick = {
+                        backStack.navigateToTab(tab.destination)
+                    },
                 )
             }
         }
@@ -114,21 +115,23 @@ private fun NavItem(
         label = "NavLabelColor",
     )
     val pillBg by animateColorAsState(
-        targetValue = if (selected) VangDong.copy(alpha = 0.12f) else Color.Transparent,
+        targetValue = if (selected) VangDongHint else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBg",
     )
     val pillBorder by animateColorAsState(
-        targetValue = if (selected) VangDongLight.copy(alpha = 0.5f) else Color.Transparent,
+        targetValue = if (selected) VangDongLightBorder else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBorder",
     )
 
     Column(
         modifier = Modifier.onClick(
-            shape = RoundedCornerShape(12.dp),
+            shape = roundedCornerShape12dp,
             ripple = false,
-        ) { onClick() },
+        ) {
+            onClick()
+        },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -136,8 +139,12 @@ private fun NavItem(
             modifier = Modifier
                 .width(52.dp)
                 .height(32.dp)
-                .background(pillBg, RoundedCornerShape(16.dp))
-                .border(1.dp, pillBorder, RoundedCornerShape(16.dp)),
+                .background(color = pillBg, shape = roundedCornerShape16dp)
+                .border(
+                    width = 1.dp,
+                    color = pillBorder,
+                    shape = roundedCornerShape16dp
+                ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(

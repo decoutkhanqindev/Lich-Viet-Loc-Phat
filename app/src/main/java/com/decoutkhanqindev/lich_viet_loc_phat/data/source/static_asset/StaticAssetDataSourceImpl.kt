@@ -7,7 +7,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 class StaticAssetDataSourceImpl : StaticAssetDataSource {
 
     override fun getSolarTerm(solar: SolarDate): String? {
-        val jd = LunarMath.jdFromDate(solar.day, solar.month, solar.year)
+        val jd = LunarMath.jdFromDate(
+            dd = solar.day,
+            mm = solar.month,
+            yyyy = solar.year
+        )
         val longToday = LunarMath.sunLongitudeDeg(jd - 0.5 - VN_TZ / 24.0)
         val longYesterday = LunarMath.sunLongitudeDeg(jd - 1.0 - 0.5 - VN_TZ / 24.0)
         val zoneToday = (longToday / 15.0).toInt()

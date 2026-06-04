@@ -14,9 +14,6 @@ data class TodayDestination(val day: Int = 0, val month: Int = 0, val year: Int 
 data object CalendarDestination : NavKey
 
 @Serializable
-data object ConverterDestination : NavKey
-
-@Serializable
 data object SettingsDestination : NavKey
 
 fun SolarDate.toTodayDestination() = TodayDestination(day, month, year)

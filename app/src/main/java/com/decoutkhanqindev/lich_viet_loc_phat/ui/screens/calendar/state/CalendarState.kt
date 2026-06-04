@@ -18,4 +18,5 @@ data class CalendarState(
     val showCanChiOnCell: Boolean = true,
     val lunarYearLabel: String? = null,
     val lunarMonthLabel: String? = null,
+    val showMonthYearPicker: Boolean = false,
 )

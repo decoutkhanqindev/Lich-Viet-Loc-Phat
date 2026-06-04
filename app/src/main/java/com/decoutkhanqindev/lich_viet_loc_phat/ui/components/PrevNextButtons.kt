@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenMuted
 
 @Composable
 fun PrevNextButtons(
@@ -27,16 +27,16 @@ fun PrevNextButtons(
         Icon(
             Icons.Default.ChevronLeft,
             contentDescription = "Trước",
-            tint = MucDen.copy(alpha = 0.5f),
-            modifier = Modifier.Companion
+            tint = MucDenMuted,
+            modifier = Modifier
                 .onClick { onPrev() }
                 .size(32.dp),
         )
         Icon(
             Icons.Default.ChevronRight,
             contentDescription = "Sau",
-            tint = MucDen.copy(alpha = 0.5f),
-            modifier = Modifier.Companion
+            tint = MucDenMuted,
+            modifier = Modifier
                 .onClick { onNext() }
                 .size(32.dp),
         )

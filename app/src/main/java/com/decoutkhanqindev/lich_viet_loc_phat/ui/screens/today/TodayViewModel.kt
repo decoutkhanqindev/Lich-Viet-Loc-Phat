@@ -8,7 +8,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.toUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.state.TodayState
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

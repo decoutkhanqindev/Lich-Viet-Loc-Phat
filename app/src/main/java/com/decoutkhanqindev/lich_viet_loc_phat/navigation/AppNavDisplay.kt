@@ -10,7 +10,6 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.CalendarScreen
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.converter.ConverterScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.SettingsScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.TodayScreen
 
@@ -30,12 +29,17 @@ fun AppNavDisplay(
                 entry<TodayDestination> { key ->
                     TodayScreen(initialDate = key.toSolarDate())
                 }
-                entry<CalendarDestination> { CalendarScreen(backStack) }
-                entry<ConverterDestination> { ConverterScreen() }
-                entry<SettingsDestination> { SettingsScreen() }
+                entry<CalendarDestination> {
+                    CalendarScreen(backStack)
+                }
+                entry<SettingsDestination> {
+                    SettingsScreen()
+                }
             },
         ),
         modifier = modifier,
-        onBack = { backStack.removeLastOrNull() },
+        onBack = {
+            backStack.removeLastOrNull()
+        },
     )
 }

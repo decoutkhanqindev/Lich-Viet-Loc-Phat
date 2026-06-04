@@ -50,13 +50,13 @@ fun Modifier.onClick(
         }
         .then(
             if (ripple) {
-                Modifier.clickable(
+                this.clickable(
                     interactionSource = interactionSource,
                     indication = ripple(),
                     onClick = action,
                 )
             } else {
-                Modifier.clickable(
+                this.clickable(
                     interactionSource = null,
                     indication = null,
                     onClick = action,

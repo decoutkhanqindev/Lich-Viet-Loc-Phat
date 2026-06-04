@@ -39,7 +39,9 @@
       "Bash(./gradlew assembleDebug --quiet)",
       "Bash(./gradlew installDebug --quiet)",
       "Bash(./gradlew compileDebugKotlin --stacktrace)",
-      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"vietnamese lunar calendar lifestyle meditation spiritual daily ritual dark elegant\" --design-system -p \"Lich Viet Loc Phat\" -f markdown)"
+      "Bash(python3 .claude/skills/ui-ux-pro-max/scripts/search.py \"vietnamese lunar calendar lifestyle meditation spiritual daily ritual dark elegant\" --design-system -p \"Lich Viet Loc Phat\" -f markdown)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Android Development\\\\lich_viet_loc_phat\" -Recurse -Directory | Where-Object { $_.Name -imatch \"converter\" } | Select-Object -ExpandProperty FullName)",
+      "Bash(Remove-Item *)"
     ]
   }
 }

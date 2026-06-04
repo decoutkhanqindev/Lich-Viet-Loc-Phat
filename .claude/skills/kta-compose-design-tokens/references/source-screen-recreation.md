@@ -44,7 +44,7 @@ s) the user provided as production-ready Compose code using generated tokens.
 3. **Map Figma concepts to Compose**:
 
    | Figma | Compose |
-                     |-------|---------|
+                           |-------|---------|
    | Frame with auto layout (vertical) | `Column(verticalArrangement = ...)` |
    | Frame with auto layout (horizontal) | `Row(horizontalArrangement = ...)` |
    | Fixed size frame | `Box(modifier = Modifier.size(w, h))` |
@@ -66,7 +66,7 @@ s) the user provided as production-ready Compose code using generated tokens.
 3. **Translate HTML/CSS → Compose**:
 
    | HTML/CSS | Compose |
-                     |----------|---------|
+                           |----------|---------|
    | `<div style="display: flex; flex-direction: column">` | `Column` |
    | `<div style="display: flex; flex-direction: row">` | `Row` |
    | `<div style="display: grid">` | `LazyVerticalGrid` or nested Row/Column |
@@ -98,8 +98,10 @@ When source has multiple screens:
  * Source: {Figma frame name | Stitch screen ID | Claude Design spec path}
  */
 @Composable
-fun {Prefix}{ScreenName}Recreation(
-    modifier: Modifier = Modifier,
+fun {
+    Prefix
+}{ ScreenName } Recreation (
+        modifier: Modifier = Modifier,
 ) {
     // Use Scaffold if source has top bar / bottom bar
     // Use Column/LazyColumn for scrollable content
@@ -109,17 +111,21 @@ fun {Prefix}{ScreenName}Recreation(
 
 @Preview(name = "Light", showBackground = true)
 @Composable
-private fun {ScreenName}RecreationLight() {
-    {Prefix}Theme(darkTheme = false) {
-        {Prefix}{ScreenName}Recreation()
+private fun {
+    ScreenName
+}RecreationLight() {
+    { Prefix } Theme (darkTheme = false) {
+        { Prefix }{ ScreenName } Recreation ()
     }
 }
 
 @Preview(name = "Dark", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun {ScreenName}RecreationDark() {
-    {Prefix}Theme(darkTheme = true) {
-        {Prefix}{ScreenName}Recreation()
+private fun {
+    ScreenName
+}RecreationDark() {
+    { Prefix } Theme (darkTheme = true) {
+        { Prefix }{ ScreenName } Recreation ()
     }
 }
 ```
