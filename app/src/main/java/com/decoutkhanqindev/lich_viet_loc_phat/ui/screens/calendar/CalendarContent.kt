@@ -1,9 +1,13 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -23,11 +27,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +44,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -101,10 +105,13 @@ fun CalendarContent(
     state: CalendarState,
     onIntent: (CalendarIntent) -> Unit,
 ) {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(GiayDoBrush),
+            .background(GiayDoBrush)
+            .verticalScroll(scrollState),
     ) {
         CalendarMonthHeader(
             displayedMonth = state.displayedMonth,
@@ -126,15 +133,13 @@ fun CalendarContent(
             },
         )
 
-        val weekdays = remember { CalendarProperties.weekdaysMonFirst }
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
                 .padding(bottom = 4.dp)
         ) {
-            weekdays.forEachIndexed { idx, label ->
+            CalendarProperties.weekdaysMonFirst.forEachIndexed { idx, label ->
                 Text(
                     label,
                     modifier = Modifier.weight(1f),
@@ -205,7 +210,9 @@ private fun CalendarMonthHeader(
     onNext: () -> Unit,
     onShowPicker: () -> Unit,
 ) {
-    val monthNames = remember { CalendarProperties.months }
+    val monthNames = remember {
+        CalendarProperties.months.toImmutableList()
+    }
 
     Row(
         modifier = Modifier
@@ -304,22 +311,27 @@ private fun CalendarGrid(
                 )
             }
 
-            AnimationContentKey.Content -> LazyVerticalGrid(
-                columns = GridCells.Fixed(7),
-                modifier = Modifier.fillMaxWidth(),
-                userScrollEnabled = false,
-                horizontalArrangement = Arrangement.spacedBy(3.dp),
-                verticalArrangement = Arrangement.spacedBy(3.dp),
-            ) {
-                items(
-                    items = days,
-                    key = { "${it.solar.year}-${it.solar.month}-${it.solar.day}" },
-                ) { cell ->
-                    DayCell(
-                        cell = cell,
-                        showCanChi = showCanChiOnCell,
-                        onClick = { onDayClick(cell.solar) },
-                    )
+            AnimationContentKey.Content -> {
+                val weeks = remember(days) { days.chunked(7) }
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(3.dp),
+                ) {
+                    weeks.forEach { week ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.spacedBy(3.dp),
+                        ) {
+                            week.forEach { cell ->
+                                DayCell(
+                                    cell = cell,
+                                    showCanChi = showCanChiOnCell,
+                                    onClick = { onDayClick(cell.solar) },
+                                    modifier = Modifier.weight(1f),
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -333,52 +345,44 @@ private fun DayCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val solarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> MucDenFaded
-            cell.isToday -> TodayCellFg
-            else -> MucDen
-        }
+    val solarTextColor = when {
+        !cell.isCurrentMonth -> MucDenFaded
+        cell.isToday -> TodayCellFg
+        else -> MucDen
     }
-    val lunarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> NauNhatFaded
-            cell.isToday -> TodayCellFgSecondary
-            else -> NauAmFaded
-        }
+    val lunarTextColor = when {
+        !cell.isCurrentMonth -> NauNhatFaded
+        cell.isToday -> TodayCellFgSecondary
+        else -> NauAmFaded
     }
-    val canChiTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> VangDongSubtle
-            cell.isToday -> TodayCellFgTertiary
-            else -> VangDongAccent
-        }
+    val canChiTextColor = when {
+        !cell.isCurrentMonth -> VangDongSubtle
+        cell.isToday -> TodayCellFgTertiary
+        else -> VangDongAccent
     }
-    val holidayTextColor = remember(cell.isToday) {
-        if (cell.isToday) TodayCellFg else DoLe
-    }
-    val solarTermTextColor = remember(cell.isToday) {
-        if (cell.isToday) TodayCellFg else NgocBich
-    }
-    val lunarDotColor = remember(cell.isToday) {
-        if (cell.isToday) TodayCellFgMuted else VangDongAccent
-    }
+    val holidayTextColor = if (cell.isToday) TodayCellFg else DoLe
+    val solarTermTextColor = if (cell.isToday) TodayCellFg else NgocBich
+    val lunarDotColor = if (cell.isToday) TodayCellFgMuted else VangDongAccent
+
+    val selectionBorderColor by animateColorAsState(
+        targetValue = if (cell.isSelected) VangDongSelected else Color.Transparent,
+        animationSpec = tween(200),
+        label = "DayCellSelectionBorder",
+    )
 
     Box(
         modifier = modifier
             .onClick(roundedCornerShape10dp) { onClick() }
             .clip(roundedCornerShape10dp)
             .then(
-                when {
-                    cell.isToday -> Modifier.background(TodayCellBrush)
-
-                    cell.isSelected -> Modifier.border(
+                if (cell.isToday) {
+                    Modifier.background(TodayCellBrush)
+                } else {
+                    Modifier.border(
                         1.5.dp,
-                        VangDongSelected,
+                        selectionBorderColor,
                         roundedCornerShape10dp
                     )
-
-                    else -> Modifier
                 }
             ),
         contentAlignment = Alignment.Center,
@@ -410,40 +414,59 @@ private fun DayCell(
                 )
             }
             if (cell.isCurrentMonth) {
-                when {
-                    cell.holiday != null -> {
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            text = cell.holiday,
-                            color = holidayTextColor,
-                            fontSize = 6.sp,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-
-                    cell.solarTerm != null -> {
-                        Spacer(Modifier.height(2.dp))
-                        Text(
-                            text = cell.solarTerm,
-                            color = solarTermTextColor,
-                            fontSize = 6.sp,
-                            textAlign = TextAlign.Center,
-                            maxLines = 1,
-                        )
-                    }
-
-                    cell.lunar.day == 1 || cell.lunar.day == 15 -> {
-                        Spacer(Modifier.height(3.dp))
-                        Box(
-                            modifier = Modifier
-                                .size(4.dp)
-                                .background(lunarDotColor, CircleShape),
-                        )
-                    }
-                }
+                DayCellMarker(
+                    holiday = cell.holiday,
+                    solarTerm = cell.solarTerm,
+                    lunarDay = cell.lunar.day,
+                    holidayTextColor = holidayTextColor,
+                    solarTermTextColor = solarTermTextColor,
+                    lunarDotColor = lunarDotColor,
+                )
             }
+        }
+    }
+}
+
+@Composable
+private fun DayCellMarker(
+    holiday: String?,
+    solarTerm: String?,
+    lunarDay: Int,
+    holidayTextColor: Color,
+    solarTermTextColor: Color,
+    lunarDotColor: Color,
+) {
+    when {
+        holiday != null -> {
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = holiday,
+                color = holidayTextColor,
+                fontSize = 6.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        solarTerm != null -> {
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = solarTerm,
+                color = solarTermTextColor,
+                fontSize = 6.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+        }
+
+        lunarDay == 1 || lunarDay == 15 -> {
+            Spacer(Modifier.height(3.dp))
+            Box(
+                modifier = Modifier
+                    .size(4.dp)
+                    .background(lunarDotColor, CircleShape),
+            )
         }
     }
 }
@@ -466,145 +489,179 @@ private fun MonthYearPickerDialog(
     val itemHeight = 44.dp
     val visibleCount = 5
 
+    val transitionState = remember { MutableTransitionState(false) }
+    LaunchedEffect(Unit) { transitionState.targetState = true }
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(usePlatformDefaultWidth = false),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth(0.88f)
-                .background(
-                    color = SurfaceCard,
-                    shape = roundedCornerShape20dp
-                )
-                .border(
-                    width = 1.dp,
-                    color = BorderWarm,
-                    shape = roundedCornerShape20dp
-                )
-                .padding(20.dp),
+        AnimatedVisibility(
+            visibleState = transitionState,
+            enter = scaleIn() + fadeIn(),
         ) {
-            Text(
-                text = "Chọn Tháng & Năm",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                color = MucDen,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.SemiBold,
-                letterSpacing = 0.3.sp,
-            )
-
-            Box(modifier = Modifier.fillMaxWidth()) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.Center)
-                        .fillMaxWidth()
-                        .height(itemHeight)
-                        .background(
-                            color = VangDongFaint,
-                            shape = roundedCornerShape10dp
-                        )
-                        .border(
-                            width = 0.5.dp,
-                            color = VangDongBorder,
-                            shape = roundedCornerShape10dp
-                        )
-                )
-
-                Row(modifier = Modifier.fillMaxWidth()) {
-                    PickerColumn(
-                        items = monthLabels,
-                        initialIndex = initialMonth - 1,
-                        onItemSelected = {
-                            pickerMonth = it + 1
-                        },
-                        modifier = Modifier.weight(1f),
-                        itemHeight = itemHeight,
-                        visibleCount = visibleCount,
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(0.88f)
+                    .background(
+                        color = SurfaceCard,
+                        shape = roundedCornerShape20dp
                     )
-
-                    Box(
-                        modifier = Modifier
-                            .size(
-                                width = 1.dp,
-                                height = itemHeight * visibleCount
-                            )
-                            .background(PickerSeparatorBrush)
+                    .border(
+                        width = 1.dp,
+                        color = BorderWarm,
+                        shape = roundedCornerShape20dp
                     )
-
-                    PickerColumn(
-                        items = yearLabels,
-                        initialIndex = initialYear - CalendarProperties.PICKER_YEAR_MIN,
-                        onItemSelected = {
-                            pickerYear = CalendarProperties.PICKER_YEAR_MIN + it
-                        },
-                        modifier = Modifier.weight(1f),
-                        itemHeight = itemHeight,
-                        visibleCount = visibleCount,
-                    )
-                }
-
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .fillMaxWidth()
-                        .height(itemHeight * 2)
-                        .background(PickerFadeTopBrush)
-                )
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.BottomCenter)
-                        .fillMaxWidth()
-                        .height(itemHeight * 2)
-                        .background(PickerFadeBottomBrush)
-                )
-            }
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    .padding(20.dp),
             ) {
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .onClick(roundedCornerShape12dp) {
-                            onDismiss()
-                        }
-                        .border(
-                            width = 1.dp,
-                            color = BorderWarm,
-                            shape = roundedCornerShape12dp
-                        )
-                        .background(color = SurfaceCard, shape = roundedCornerShape12dp)
-                        .padding(vertical = 13.dp),
-                    contentAlignment = Alignment.Center,
+                Text(
+                    text = "Chọn Tháng & Năm",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    color = MucDen,
+                    fontSize = 17.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    letterSpacing = 0.3.sp,
+                )
+
+                PickerWheels(
+                    monthLabels = monthLabels,
+                    yearLabels = yearLabels,
+                    initialMonthIndex = initialMonth - 1,
+                    initialYearIndex = initialYear - CalendarProperties.PICKER_YEAR_MIN,
+                    onMonthSelected = { pickerMonth = it + 1 },
+                    onYearSelected = { pickerYear = CalendarProperties.PICKER_YEAR_MIN + it },
+                    itemHeight = itemHeight,
+                    visibleCount = visibleCount,
+                )
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    Text(
-                        "Đóng",
-                        color = NauNhat,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium
+                    DialogButton(
+                        text = "Đóng",
+                        onClick = onDismiss,
+                        isPrimary = false,
+                        modifier = Modifier.weight(1f),
                     )
-                }
-                Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .onClick(roundedCornerShape12dp) {
-                            onConfirm(pickerYear, pickerMonth)
-                        }
-                        .background(color = VangDong, shape = roundedCornerShape12dp)
-                        .padding(vertical = 13.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        "Xác nhận",
-                        color = TodayCellFg,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold
+                    DialogButton(
+                        text = "Xác nhận",
+                        onClick = { onConfirm(pickerYear, pickerMonth) },
+                        isPrimary = true,
+                        modifier = Modifier.weight(1f),
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun PickerWheels(
+    monthLabels: ImmutableList<String>,
+    yearLabels: ImmutableList<String>,
+    initialMonthIndex: Int,
+    initialYearIndex: Int,
+    onMonthSelected: (Int) -> Unit,
+    onYearSelected: (Int) -> Unit,
+    itemHeight: Dp,
+    visibleCount: Int,
+) {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth()
+                .height(itemHeight)
+                .background(
+                    color = VangDongFaint,
+                    shape = roundedCornerShape10dp
+                )
+                .border(
+                    width = 0.5.dp,
+                    color = VangDongBorder,
+                    shape = roundedCornerShape10dp
+                )
+        )
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            PickerColumn(
+                items = monthLabels,
+                initialIndex = initialMonthIndex,
+                onItemSelected = onMonthSelected,
+                modifier = Modifier.weight(1f),
+                itemHeight = itemHeight,
+                visibleCount = visibleCount,
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(
+                        width = 1.dp,
+                        height = itemHeight * visibleCount
+                    )
+                    .background(PickerSeparatorBrush)
+            )
+
+            PickerColumn(
+                items = yearLabels,
+                initialIndex = initialYearIndex,
+                onItemSelected = onYearSelected,
+                modifier = Modifier.weight(1f),
+                itemHeight = itemHeight,
+                visibleCount = visibleCount,
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .height(itemHeight * 2)
+                .background(PickerFadeTopBrush)
+        )
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .fillMaxWidth()
+                .height(itemHeight * 2)
+                .background(PickerFadeBottomBrush)
+        )
+    }
+}
+
+@Composable
+private fun DialogButton(
+    text: String,
+    onClick: () -> Unit,
+    isPrimary: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    val baseModifier = modifier.onClick(roundedCornerShape12dp) { onClick() }
+    Box(
+        modifier = if (isPrimary) {
+            baseModifier
+                .background(color = VangDong, shape = roundedCornerShape12dp)
+                .padding(vertical = 13.dp)
+        } else {
+            baseModifier
+                .border(
+                    width = 1.dp,
+                    color = BorderWarm,
+                    shape = roundedCornerShape12dp
+                )
+                .background(color = SurfaceCard, shape = roundedCornerShape12dp)
+                .padding(vertical = 13.dp)
+        },
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = text,
+            color = if (isPrimary) TodayCellFg else NauNhat,
+            fontSize = 14.sp,
+            fontWeight = if (isPrimary) FontWeight.SemiBold else FontWeight.Medium,
+        )
     }
 }
 
@@ -621,11 +678,9 @@ private fun PickerColumn(
 ) {
     val loopMultiplier = 1000
     val count = items.size
-    val totalCount = remember(count) { count * loopMultiplier }
-    val halfCount = remember(visibleCount) { visibleCount / 2 }
-    val startIndex = remember(initialIndex, count) {
-        (loopMultiplier / 2) * count + initialIndex
-    }
+    val totalCount = count * loopMultiplier
+    val halfCount = visibleCount / 2
+    val startIndex = (loopMultiplier / 2) * count + initialIndex
 
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
@@ -655,35 +710,46 @@ private fun PickerColumn(
     ) {
         items(
             count = totalCount,
-            key = { it % count }
+            key = { it }
         ) { virtualIndex ->
-            val realIndex = remember(virtualIndex) { virtualIndex % count }
-            val distFromCenter = remember(virtualIndex, centerVirtualIndex) {
-                abs(virtualIndex - centerVirtualIndex)
-            }
+            val realIndex = virtualIndex % count
+            val distFromCenter = abs(virtualIndex - centerVirtualIndex)
 
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(itemHeight),
-                contentAlignment = Alignment.Center,
-            ) {
-                Text(
-                    text = items[realIndex],
-                    color = when (distFromCenter) {
-                        0 -> MucDen
-                        1 -> NauAmMedium
-                        else -> NauAmSubtle
-                    },
-                    fontSize = when (distFromCenter) {
-                        0 -> 16.sp
-                        1 -> 14.sp
-                        else -> 13.sp
-                    },
-                    fontWeight = if (distFromCenter == 0) FontWeight.SemiBold else FontWeight.Normal,
-                    textAlign = TextAlign.Center,
-                )
-            }
+            PickerItem(
+                label = items[realIndex],
+                distFromCenter = distFromCenter,
+                itemHeight = itemHeight,
+            )
         }
+    }
+}
+
+@Composable
+private fun PickerItem(
+    label: String,
+    distFromCenter: Int,
+    itemHeight: Dp,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(itemHeight),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = label,
+            color = when (distFromCenter) {
+                0 -> MucDen
+                1 -> NauAmMedium
+                else -> NauAmSubtle
+            },
+            fontSize = when (distFromCenter) {
+                0 -> 16.sp
+                1 -> 14.sp
+                else -> 13.sp
+            },
+            fontWeight = if (distFromCenter == 0) FontWeight.SemiBold else FontWeight.Normal,
+            textAlign = TextAlign.Center,
+        )
     }
 }

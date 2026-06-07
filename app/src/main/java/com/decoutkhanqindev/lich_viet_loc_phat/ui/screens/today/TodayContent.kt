@@ -162,8 +162,6 @@ private fun DateNavigationHeader(
     onNext: () -> Unit,
     onToday: () -> Unit,
 ) {
-    val weekdays = remember { CalendarProperties.weekdaysSunFirst }
-
     AppCard(modifier = Modifier.fillMaxWidth()) {
         Column(
             modifier = Modifier
@@ -235,7 +233,7 @@ private fun DateNavigationHeader(
                             fontSize = 13.sp,
                         )
                         Text(
-                            weekdays[dayOfWeek],
+                            CalendarProperties.weekdaysSunFirst[dayOfWeek],
                             color = VangDong,
                             fontSize = 14.sp,
                             fontWeight = FontWeight.SemiBold,
@@ -265,9 +263,8 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.ExtraLight,
                             lineHeight = 62.sp,
                         )
-                        val leapNote = remember(lunar.isLeapMonth) {
-                            if (lunar.isLeapMonth) " (Nhuận)" else ""
-                        }
+                        val leapNote = if (lunar.isLeapMonth) " (Nhuận)" else ""
+
                         Text(
                             "Tháng ${lunar.month}$leapNote · ${lunar.year}",
                             color = NauAmFaded,
@@ -460,18 +457,11 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
 
 @Composable
 private fun HourChip(hour: HourInfoUiModel) {
-    val bgColor = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBichHint else Color.Transparent
-    }
-    val borderColor = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBichLightBorder else Color.Transparent
-    }
-    val textColor = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBich else XamMo
-    }
-    val textColorMuted = remember(hour.isAuspicious) {
-        if (hour.isAuspicious) NgocBichMuted else XamMoMuted
-    }
+    val bgColor = if (hour.isAuspicious) NgocBichHint else Color.Transparent
+    val borderColor = if (hour.isAuspicious) NgocBichLightBorder else Color.Transparent
+    val textColor = if (hour.isAuspicious) NgocBich else XamMo
+    val textColorMuted = if (hour.isAuspicious) NgocBichMuted else XamMoMuted
+    val fontWeight = if (hour.isAuspicious) FontWeight.SemiBold else FontWeight.Normal
 
     Box(
         modifier = Modifier
@@ -489,7 +479,7 @@ private fun HourChip(hour: HourInfoUiModel) {
                 hour.name,
                 color = textColor,
                 fontSize = 11.sp,
-                fontWeight = if (hour.isAuspicious) FontWeight.SemiBold else FontWeight.Normal,
+                fontWeight = fontWeight,
             )
             Text(
                 hour.timeRange,

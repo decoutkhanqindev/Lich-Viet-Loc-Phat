@@ -1,8 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
 }
+
+val testBannerAdId = "ca-app-pub-3940256099942544/9214589741"
+
+val releaseBannerAdId: String = Properties().apply {
+    val file = rootProject.file("local.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}.getProperty("admob.banner.id").orEmpty().ifEmpty { testBannerAdId }
 
 android {
     namespace = "com.decoutkhanqindev.lich_viet_loc_phat"
@@ -16,12 +25,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"$testBannerAdId\"")
+        }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            buildConfigField("String", "ADMOB_BANNER_ID", "\"$releaseBannerAdId\"")
         }
     }
     compileOptions {
@@ -105,4 +119,7 @@ dependencies {
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
     implementation(libs.androidx.startup.runtime)
+
+    // AdMob
+    implementation(libs.play.services.ads)
 }

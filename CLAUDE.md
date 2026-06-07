@@ -1,193 +1,188 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this
-repository.
-
 ## Android CLI Commands
 
-`minSdk 26`, `compileSdk 36`, `targetSdk 36`, JDK 17. Uses the `android` CLI tool (not raw `adb`).
+Dùng skill `/android-cli` để xem đầy đủ các lệnh.
 
-```bash
-# Build + deploy debug APK to connected device
-./gradlew assembleDebug && android run --apks=app/build/outputs/apk/debug/app-debug.apk
+## Android Gradle Commands
+Dùng skill `/android-gradle` để xem đầy đủ các lệnh.
 
-# Run with specific activity
-android run --apks=app/build/outputs/apk/debug/app-debug.apk --activity=.MainActivity
+## Git
 
-# Capture screenshot to file
-android screen capture --output=screenshot.png
+Không được tự ý chạy các lệnh sau khi chưa được phép:
+- `git push` / `git push --force`
+- `git reset --hard`
+- `git rebase`
+- `git merge`
+- `git branch -D`
+- `git commit` (chỉ commit khi user yêu cầu rõ ràng)
 
-# Inspect live UI layout as JSON (faster than screenshot for debugging UI)
-android layout --pretty
+## Project Description
 
-# Inspect layout and save to file
-android layout --pretty --output=layout.json
+**Lịch Việt Lộc Phát** — Ứng dụng lịch âm Việt Nam trên Android.
 
-# Show only layout changes since last call
-android layout --diff
+- Package: `com.decoutkhanqindev.lich_viet_loc_phat`
+- minSdk: 26 · compileSdk/targetSdk: 36 · Kotlin 2.3.21 · AGP 9.2.1
+- Single module: `:app`
 
-# Manage emulators
-android emulator list
-android emulator create --name=Pixel9 --sdk=34
-android emulator start <avd-name>
-android emulator stop <avd-name>
-
-# Search Android documentation
-android docs search "Navigation3 NavBackStack"
-android docs search "Compose recomposition stability"
-
-# List installed SDK packages
-android sdk list
-
-# Install SDK package
-android sdk install platforms/android-36
-```
-
-### Gradle (not covered by android CLI)
-
-```bash
-# Run unit tests
-./gradlew testDebugUnitTest
-
-# Clean build cache
-./gradlew clean
-
-# Stop Gradle daemon (if build hangs)
-./gradlew --stop
-```
-
-### ADB fallback (for operations not covered by android CLI)
-
-```bash
-# Stream logcat filtered to this app
-adb logcat --pid=$(adb shell pidof -s com.decoutkhanqindev.lich_viet_loc_phat)
-
-# Clear app data (reset SharedPreferences)
-adb shell pm clear com.decoutkhanqindev.lich_viet_loc_phat
-
-# Print current SharedPreferences (app_settings)
-adb shell run-as com.decoutkhanqindev.lich_viet_loc_phat cat shared_prefs/app_settings.xml
-```
+**Tính năng hiện tại:**
+- Xem thông tin lịch âm hôm nay (can chi, tiết khí, giờ hoàng đạo, ngày lễ)
+- Lịch tháng dạng grid
+- Glance App Widget hiển thị ngày âm
+- Cài đặt (hiện/ẩn can chi trên ô ngày)
 
 ## Architecture
 
-**Clean Architecture + MVI** in a single `:app` module.
+**Clean Architecture + MVI**, một module `:app`.
 
-### Layer Structure
-
-```
-domain/          — pure Kotlin, no Android deps
-  model/         — SolarDate, LunarDate, CanChi, DayCell, DailyMetadata, HourInfo
-  repository/    — CalendarRepository interface
-  usecase/       — one class per operation, delegates to CalendarRepository
-
-data/
-  source/lunar_math_algorithm/   — LunarMathAlgorithmDataSourceImpl: pure math (solar↔lunar conversion, can-chi, auspicious hours)
-  source/static_asset/           — StaticAssetDataSourceImpl: lookup tables (solar terms, holidays)
-  repository/                    — CalendarRepositoryImpl: composes both sources, runs on Dispatchers.Default
-
-ui/
-  model/         — UiModel wrappers (@Immutable data classes, ImmutableList for Compose stability)
-  screens/{screen}/
-    state/       — {Screen}State, {Screen}Intent, {Screen}Effect
-    {Screen}ViewModel.kt
-    {Screen}Screen.kt   — thin: gets VM, calls LaunchedEffect, passes to Content
-    {Screen}Content.kt  — all Compose UI, receives state + onIntent lambda
-  components/    — shared composables (AppBottomNavBar, AppTopBar, AppCard, Common)
-  AppScaffold.kt — root: creates backStack, hosts Scaffold + NavDisplay
-
-navigation/
-  AppDestinations.kt  — NavKey sealed hierarchy
-  AppNavDisplay.kt    — NavDisplay with entry decorators
-  NavExtensions.kt    — navigateToTab()
-
-di/
-  AppModule.kt   — single Koin module for everything
-```
-
-### Data Flow
+### Cấu trúc package
 
 ```
-StaticAssetDataSourceImpl ─┐
-                           ├→ CalendarRepositoryImpl → UseCase → ViewModel → UiModel → Composable
-LunarMathAlgorithmDataSourceImpl ─┘
+com.decoutkhanqindev.lich_viet_loc_phat/
+├── domain/
+│   ├── model/          # SolarDate, LunarDate, DailyMetadata, ...
+│   ├── repository/     # CalendarRepository, SettingsRepository (interfaces)
+│   └── usecase/        # GetDailyMetadataUseCase, ObserveShowCanChiOnCellUseCase, ...
+├── data/
+│   ├── source/         # LunarMathAlgorithmDataSource, StaticAssetDataSource + Impls
+│   └── repository/     # CalendarRepositoryImpl, SettingsRepositoryImpl
+├── ui/
+│   ├── base/           # BaseViewModel<S, I, E>
+│   ├── model/          # DayCellUiModel, DailyMetadataUiModel, ...
+│   ├── screens/        # {today,calendar,settings}/ — Screen + Content + ViewModel + state/
+│   └── components/     # AppTopBar, AppBottomNavBar, ...
+├── navigation/         # AppDestinations, AppNavDisplay
+├── theme/              # Color, Shape, Type, Brush, Theme
+├── di/                 # AppModule
+├── widget/             # CalendarWidget (Glance)
+├── App.kt
+└── MainActivity.kt
 ```
 
-`CalendarRepository` wraps all coroutine dispatching — data sources are pure synchronous functions.
+### Tech Stack
 
-### Navigation
-
-Uses **Navigation 3** (`androidx.navigation3`). The backstack is
-`rememberNavBackStack(TodayDestination())` created in `AppScaffold`.
-
-- `TodayDestination(day, month, year)` — **data class**, carries an optional date (`day==0` means
-  today)
-- `CalendarDestination`, `ConverterDestination`, `SettingsDestination` — **data objects**
-
-**`navigateToTab`** pops back to the existing tab entry without destroying root. Never use
-`clear()` + `add(root)` — that would kill the Today entry and recreate its ViewModel.
-
-### ViewModel Scoping
-
-All 4 tab ViewModels are **Activity-scoped** via `koinActivityViewModel()` to survive tab
-navigation. None are ever recreated on tab switch.
-
-`TodayScreen` additionally uses `LaunchedEffect(initialDate)` to call
-`viewModel.setInitialDate(date)` when navigated from Calendar with a specific date — only fires when
-`initialDate` changes.
+| Thư viện | Version | Vai trò |
+|---|---|---|
+| Jetpack Compose BOM | 2026.05.01 | UI framework |
+| Navigation 3 | 1.1.2 | Navigation |
+| Koin | 4.2.1 | Dependency Injection |
+| Coroutines | 1.11.0 | Async |
+| kotlinx.collections.immutable | 0.4.0 | ImmutableList cho Compose stability |
+| Timber | 5.0.1 | Logging |
+| Glance | 1.1.1 | App Widget |
+| Material3 | BOM | UI components |
 
 ### MVI Pattern
 
-Each screen has:
+**State** — `@Immutable data class`, default values, list dùng `ImmutableList`:
+```kotlin
+@Immutable
+data class XxxState(
+    val isLoading: Boolean = true,
+    val error: String? = null,
+    val items: ImmutableList<ItemUiModel> = persistentListOf(),
+)
+```
 
-- `State` — `@Immutable data class`, default `isLoading=true`
-- `Intent` — sealed interface or class of user actions
-- `Effect` — one-shot events sent via `Channel<Effect>`, collected via `ObserveOnLifecycleOwner` in
-  the Screen composable (not Content)
+**Intent** — `sealed interface`:
+```kotlin
+sealed interface XxxIntent {
+    data object DoSomething : XxxIntent
+    data class SelectItem(val id: Int) : XxxIntent
+}
+```
 
-### Settings Persistence
+**Effect** (one-time events) — `sealed interface`, phát qua `Channel<Effect>` hoặc `SharedFlow<Effect>`:
+```kotlin
+sealed interface XxxEffect {
+    data class NavigateTo(val destination: NavKey) : XxxEffect
+}
+```
 
-`CalendarViewModel` reads/writes `SharedPreferences("app_settings")` directly and registers a
-listener for live updates. The key `show_can_chi_on_cell` controls whether can-chi labels appear in
-calendar grid cells.
+**ViewModel** — extend `BaseViewModel<S, I, E>`, truyền `initialState` qua constructor:
+```kotlin
+class XxxViewModel(
+    private val getSomething: GetSomethingUseCase,
+) : BaseViewModel<XxxState, XxxIntent, XxxEffect>(
+    initialState = XxxState(value = getSomething().getOrDefault(defaultValue))
+) {
+    override fun onIntent(intent: XxxIntent) { ... }
+    // dùng updateState { copy(...) } và sendEffect(XxxEffect.Something)
+}
+```
 
-## UI / Theme
+`BaseViewModel` cung cấp sẵn: `state`, `effect`, `updateState { }`, `sendEffect()`, `onCleared()`.
 
-Theme: **Giấy Dó** (light, warm Vietnamese palette) — `GiayDo` → `GiayDoMid` → `GiayDoDark`
-gradient background, `VangDong` (bronze gold) for active/auspicious, `MucDen` for body text.
+### Screens vs Content
 
-Key colors in `theme/Color.kt`:
+- `XxxScreen.kt` — lấy ViewModel qua `koinActivityViewModel()` hoặc `koinViewModel()`, collect state, gọi Content
+- `XxxContent.kt` — pure composable, nhận `state` + `onIntent`, không biết ViewModel
 
-- `GiayDo` / `GiayDoMid` / `GiayDoDark` — background gradient (cream → warm beige)
-- `SurfaceCard` — white card surfaces
-- `SurfaceElevated` — slightly warm elevated surface
-- `BorderWarm` / `BorderStrong` — card and input borders
-- `MucDen` — primary text (near-black ink)
-- `NauAm` — secondary text (warm brown)
-- `NauNhat` — tertiary/muted text
-- `VangDong` / `VangDongLight` — active tab, auspicious hours, section labels (bronze gold)
-- `DoSon` / `DoSonLight` — today cell highlight, CTA button (vermilion red)
-- `DoLe` — holiday text (red)
-- `CuoiTuan` — Saturday/Sunday labels (red)
-- `NgocBich` / `NgocBichLight` — solar term text, auspicious hour chips (jade green)
-- `XamMo` — inauspicious hour chips (muted brown)
+```kotlin
+// Screen
+@Composable
+fun TodayScreen() {
+    val viewModel: TodayViewModel = koinActivityViewModel()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    TodayContent(state = state, onIntent = viewModel::onIntent)
+}
+```
 
-Calendar cell indicator priority (when `isCurrentMonth`): **holiday name** > **solar term name** >
-**lunar 1st/15th dot**.
+### Navigation 3
 
-### Shared Composables
+Destinations là `@Serializable data class/object : NavKey` trong `navigation/AppDestinations.kt`.
+`AppNavDisplay` dùng `NavDisplay` + `rememberDecoratedNavEntries` với 2 decorators:
+- `rememberSaveableStateHolderNavEntryDecorator()`
+- `rememberViewModelStoreNavEntryDecorator()`
 
-- `Modifier.onClick(shape, ripple)` — scale-down press animation (85%), use instead of raw
-  `clickable` for interactive elements
-- `ObserveOnLifecycleOwner` — collect a Flow (usually effects) scoped to lifecycle STARTED state
-- `AppCard` — solid white card with `BorderWarm` border + 12dp radius
-- `TodayButton` — animated `VangDong` today icon (fade in/out based on `visible`)
-- `PrevNextButtons` — prev/next chevron row, `MucDen` tint
+`NavBackStack` được tạo và quản lý ở `AppScaffold`.
 
-## Key Domain Notes
+### Dependency Injection (Koin)
 
-- `SolarDate.today()` uses `Asia/Ho_Chi_Minh` timezone
-- `DayCell` grid is always 42 cells (6 rows × 7 cols); overflow days from adjacent months have
-  `isCurrentMonth = false`
-- `LunarDate.isLeapMonth` is respected in `getHoliday()` — leap months never match lunar holidays
-- `CanChi` carries: `canNgay/chiNgay` (day), `canThang/chiThang` (month), `canNam/chiNam` (year)
+Một module duy nhất `appModule` trong `di/AppModule.kt`:
+- `viewModel { XxxViewModel(get()) }` — ViewModels
+- `single<Interface> { Impl() }` — DataSources, Repository
+- `factory { XxxUseCase(get()) }` — Use Cases
+
+Khởi tạo trong `App.kt` qua `startKoin { androidContext(this@App); modules(appModule) }`.
+
+### Data Layer
+
+- CPU-bound work phải dùng `withContext(Dispatchers.Default)` trong Repository
+- **Suspend UseCases** (calendar, algorithm) — `suspend operator fun invoke(): Result<T>` via `runCatching`
+- **Non-suspend UseCases** (settings — sync SharedPreferences) — `operator fun invoke(): Result<T>` via `runCatching`
+- **Observe UseCases** — trả về `Flow<T>` trực tiếp, không wrap `Result` (Flow tự handle error)
+- ViewModel xử lý `onSuccess / onFailure` hoặc `.getOrDefault(value)`
+
+`SettingsRepository` dùng `callbackFlow` + `SharedPreferences.OnSharedPreferenceChangeListener` để expose `Flow<Boolean>`, listener tự unregister qua `awaitClose`.
+
+## UI Conventions
+
+### remember & derivedStateOf
+
+- `remember { }` — cache giá trị tính toán qua recomposition, tránh tính lại mỗi lần compose.
+- `remember(key) { }` — recompute khi `key` thay đổi; dùng khi input là tham số composable.
+- `derivedStateOf { }` — dùng khi input là **Compose `State` objects** (`mutableStateOf`, `collectAsStateWithLifecycle`, ...) và chỉ muốn recompose khi kết quả thực sự thay đổi.
+
+```kotlin
+// ✅ Đúng: count là mutableStateOf → derivedStateOf observe được
+var count by remember { mutableStateOf(0) }
+val isVisible by remember { derivedStateOf { count > 0 } }
+
+// ❌ Sai: items là tham số bình thường → dùng remember(items) thay thế
+val isVisible by remember { derivedStateOf { items.isNotEmpty() } }
+val isVisible = remember(items) { items.isNotEmpty() } // ✅
+```
+
+### Composable Stability
+
+- List trong State phải là `ImmutableList<T>` (từ `kotlinx.collections.immutable`)
+- State class phải có annotation `@Immutable`
+- UiModel classes nên là `@Immutable data class`
+
+### Observing Effects
+
+Dùng `ObserveOnLifecycleOwner` để collect effect trong Screen:
+```kotlin
+ObserveOnLifecycleOwner { viewModel.effect.collect { effect -> ... } }
+```

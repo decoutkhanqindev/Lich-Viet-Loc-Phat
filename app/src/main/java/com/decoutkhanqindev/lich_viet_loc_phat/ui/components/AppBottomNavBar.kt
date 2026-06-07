@@ -24,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -46,6 +45,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongHint
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightBorder
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape12dp
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape16dp
+import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.ads.BannerAd
 
 @Immutable
 private data class Tab(
@@ -72,20 +72,20 @@ fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
         modifier = Modifier
             .fillMaxWidth()
             .background(SurfaceCard),
+        verticalArrangement = Arrangement.Bottom,
     ) {
         HorizontalDivider(color = BorderWarm, thickness = 1.dp)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .navigationBarsPadding()
-                .padding(vertical = 8.dp),
+                .padding(top = 24.dp),
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Tab.default.forEach { tab ->
-                val selected = remember(currentDestination) {
+                val selected =
                     currentDestination?.let { it::class == tab.destination::class } ?: false
-                }
                 NavItem(
                     tab = tab,
                     selected = selected,
@@ -95,6 +95,7 @@ fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
                 )
             }
         }
+        BannerAd()
     }
 }
 
@@ -104,15 +105,10 @@ private fun NavItem(
     selected: Boolean,
     onClick: () -> Unit,
 ) {
-    val iconColor by animateColorAsState(
+    val contentColor by animateColorAsState(
         targetValue = if (selected) VangDong else NauNhat,
         animationSpec = tween(200),
-        label = "NavIconColor",
-    )
-    val labelColor by animateColorAsState(
-        targetValue = if (selected) VangDong else NauNhat,
-        animationSpec = tween(200),
-        label = "NavLabelColor",
+        label = "NavContentColor",
     )
     val pillBg by animateColorAsState(
         targetValue = if (selected) VangDongHint else Color.Transparent,
@@ -133,7 +129,7 @@ private fun NavItem(
             onClick()
         },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(4.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
     ) {
         Box(
             modifier = Modifier
@@ -150,13 +146,13 @@ private fun NavItem(
             Icon(
                 imageVector = tab.icon,
                 contentDescription = tab.label,
-                tint = iconColor,
+                tint = contentColor,
                 modifier = Modifier.size(22.dp),
             )
         }
         Text(
             text = tab.label,
-            color = labelColor,
+            color = contentColor,
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
         )

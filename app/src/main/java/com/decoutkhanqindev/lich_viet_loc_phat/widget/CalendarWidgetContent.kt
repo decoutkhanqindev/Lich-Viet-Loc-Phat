@@ -2,7 +2,6 @@ package com.decoutkhanqindev.lich_viet_loc_phat.widget
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
@@ -80,8 +79,6 @@ fun CalendarWidgetContent(
             lunarMonthLabel = lunarMonthLabel,
         )
 
-        val weekdays = remember { CalendarProperties.weekdaysMonFirst }
-
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -93,7 +90,7 @@ fun CalendarWidgetContent(
                     .padding(horizontal = 8.dp)
                     .padding(bottom = 4.dp),
             ) {
-                weekdays.forEachIndexed { idx, label ->
+                CalendarProperties.weekdaysMonFirst.forEachIndexed { idx, label ->
                     Text(
                         label,
                         modifier = GlanceModifier.defaultWeight(),
@@ -150,8 +147,6 @@ private fun CalendarMonthHeader(
     lunarYearLabel: String?,
     lunarMonthLabel: String?,
 ) {
-    val monthNames = remember { CalendarProperties.months }
-
     Row(
         modifier = GlanceModifier
             .fillMaxWidth()
@@ -162,7 +157,7 @@ private fun CalendarMonthHeader(
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                "${monthNames[displayedMonth - 1]} · $displayedYear",
+                "${CalendarProperties.months[displayedMonth - 1]} · $displayedYear",
                 style = TextStyle(
                     color = ColorProvider(MucDen),
                     fontSize = 18.sp,
@@ -214,46 +209,35 @@ private fun DayCell(
     showCanChi: Boolean,
     modifier: GlanceModifier = GlanceModifier,
 ) {
-    val solarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> ColorProvider(MucDenFaded)
-            cell.isToday -> ColorProvider(TodayCellFg)
-            else -> ColorProvider(MucDen)
-        }
+    val solarTextColor = when {
+        !cell.isCurrentMonth -> ColorProvider(MucDenFaded)
+        cell.isToday -> ColorProvider(TodayCellFg)
+        else -> ColorProvider(MucDen)
     }
-    val lunarTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> ColorProvider(NauNhatFaded)
-            cell.isToday -> ColorProvider(TodayCellFgSecondary)
-            else -> ColorProvider(NauAmFaded)
-        }
+    val lunarTextColor = when {
+        !cell.isCurrentMonth -> ColorProvider(NauNhatFaded)
+        cell.isToday -> ColorProvider(TodayCellFgSecondary)
+        else -> ColorProvider(NauAmFaded)
     }
-    val canChiTextColor = remember(cell.isCurrentMonth, cell.isToday) {
-        when {
-            !cell.isCurrentMonth -> ColorProvider(VangDongSubtle)
-            cell.isToday -> ColorProvider(TodayCellFgTertiary)
-            else -> ColorProvider(VangDongAccent)
-        }
+    val canChiTextColor = when {
+        !cell.isCurrentMonth -> ColorProvider(VangDongSubtle)
+        cell.isToday -> ColorProvider(TodayCellFgTertiary)
+        else -> ColorProvider(VangDongAccent)
     }
-    val holidayTextColor = remember(cell.isToday) {
+    val holidayTextColor =
         if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(DoLe)
-    }
-    val solarTermTextColor = remember(cell.isToday) {
+    val solarTermTextColor =
         if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(NgocBich)
-    }
-    val lunarDotColor = remember(cell.isToday) {
+    val lunarDotColor =
         if (cell.isToday) ColorProvider(TodayCellFgMuted)
         else ColorProvider(VangDongAccent)
-    }
-    val modifier = remember(cell.isToday) {
-        if (cell.isToday) {
-            modifier
-                .padding(1.dp)
-                .background(ColorProvider(DoSon))
-                .cornerRadius(10.dp)
-        } else {
-            modifier.padding(1.dp)
-        }
+    val modifier = if (cell.isToday) {
+        modifier
+            .padding(1.dp)
+            .background(ColorProvider(DoSon))
+            .cornerRadius(10.dp)
+    } else {
+        modifier.padding(1.dp)
     }
 
     Box(
