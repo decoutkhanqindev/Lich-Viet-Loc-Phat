@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
+import androidx.glance.LocalContext
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.appWidgetBackground
@@ -26,26 +27,27 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.decoutkhanqindev.lich_viet_loc_phat.MainActivity
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.CuoiTuan
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoSon
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenAlpha25
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmFaded
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatAlpha40
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFg
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgMuted
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgSecondary
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgTertiary
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha85
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha80
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSoft
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha75
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha20
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.model.DayCellUiModel
 import kotlinx.collections.immutable.ImmutableList
@@ -127,7 +129,7 @@ fun CalendarWidgetContent(
         }
 
         Text(
-            "Lịch Việt Lộc Phát",
+            LocalContext.current.getString(R.string.app_name),
             style = TextStyle(
                 color = ColorProvider(VangDong),
                 fontSize = 18.sp,
@@ -169,7 +171,7 @@ private fun CalendarMonthHeader(
                 Text(
                     "Năm $lunarYearLabel · Tháng $lunarMonthLabel",
                     style = TextStyle(
-                        color = ColorProvider(VangDongSoft),
+                        color = ColorProvider(VangDongAlpha75),
                         fontSize = 11.sp,
                         textAlign = TextAlign.Center,
                     ),
@@ -210,27 +212,27 @@ private fun DayCell(
     modifier: GlanceModifier = GlanceModifier,
 ) {
     val solarTextColor = when {
-        !cell.isCurrentMonth -> ColorProvider(MucDenFaded)
+        !cell.isCurrentMonth -> ColorProvider(MucDenAlpha25)
         cell.isToday -> ColorProvider(TodayCellFg)
         else -> ColorProvider(MucDen)
     }
     val lunarTextColor = when {
-        !cell.isCurrentMonth -> ColorProvider(NauNhatFaded)
-        cell.isToday -> ColorProvider(TodayCellFgSecondary)
-        else -> ColorProvider(NauAmFaded)
+        !cell.isCurrentMonth -> ColorProvider(NauNhatAlpha40)
+        cell.isToday -> ColorProvider(TodayCellFgAlpha85)
+        else -> ColorProvider(NauAmAlpha70)
     }
     val canChiTextColor = when {
-        !cell.isCurrentMonth -> ColorProvider(VangDongSubtle)
-        cell.isToday -> ColorProvider(TodayCellFgTertiary)
-        else -> ColorProvider(VangDongAccent)
+        !cell.isCurrentMonth -> ColorProvider(VangDongAlpha20)
+        cell.isToday -> ColorProvider(TodayCellFgAlpha80)
+        else -> ColorProvider(VangDongAlpha70)
     }
     val holidayTextColor =
         if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(DoLe)
     val solarTermTextColor =
         if (cell.isToday) ColorProvider(TodayCellFg) else ColorProvider(NgocBich)
     val lunarDotColor =
-        if (cell.isToday) ColorProvider(TodayCellFgMuted)
-        else ColorProvider(VangDongAccent)
+        if (cell.isToday) ColorProvider(TodayCellFgAlpha70)
+        else ColorProvider(VangDongAlpha70)
     val modifier = if (cell.isToday) {
         modifier
             .padding(1.dp)

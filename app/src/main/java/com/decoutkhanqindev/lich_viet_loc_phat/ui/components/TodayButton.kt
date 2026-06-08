@@ -11,7 +11,9 @@ import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
 
 @Composable
@@ -28,7 +30,7 @@ fun TodayButton(
         ) {
             Icon(
                 Icons.Default.Today,
-                contentDescription = "Hôm nay",
+                contentDescription = stringResource(R.string.cd_today),
                 tint = VangDong,
                 modifier = Modifier
                     .onClick { onClick() }

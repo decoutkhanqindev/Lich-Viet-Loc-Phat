@@ -12,10 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.AppNavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.TodayDestination
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDo
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoBrush
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoDark
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoMid
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppBottomNavBar
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppTopBar
 

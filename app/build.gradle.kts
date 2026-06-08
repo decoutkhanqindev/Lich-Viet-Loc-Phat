@@ -122,4 +122,7 @@ dependencies {
 
     // AdMob
     implementation(libs.play.services.ads)
+
+    // Shimmer
+    implementation(libs.compose.shimmer)
 }

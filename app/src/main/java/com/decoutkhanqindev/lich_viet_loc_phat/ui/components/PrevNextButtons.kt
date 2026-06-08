@@ -10,8 +10,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenMuted
+import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenAlpha50
 
 @Composable
 fun PrevNextButtons(
@@ -26,16 +28,16 @@ fun PrevNextButtons(
     ) {
         Icon(
             Icons.Default.ChevronLeft,
-            contentDescription = "Trước",
-            tint = MucDenMuted,
+            contentDescription = stringResource(R.string.cd_prev_day),
+            tint = MucDenAlpha50,
             modifier = Modifier
                 .onClick { onPrev() }
                 .size(32.dp),
         )
         Icon(
             Icons.Default.ChevronRight,
-            contentDescription = "Sau",
-            tint = MucDenMuted,
+            contentDescription = stringResource(R.string.cd_next_day),
+            tint = MucDenAlpha50,
             modifier = Modifier
                 .onClick { onNext() }
                 .size(32.dp),

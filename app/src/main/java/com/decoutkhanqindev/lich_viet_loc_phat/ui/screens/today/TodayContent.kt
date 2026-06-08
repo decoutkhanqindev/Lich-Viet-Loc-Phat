@@ -29,35 +29,37 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.CanChi
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.LunarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DateSeparatorBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLeSubtle
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoleBorder
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLeAlpha10
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLeAlpha45
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmFaded
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmMuted
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmSoft
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha60
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha55
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichHint
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichLightBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichMuted
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichAlpha40
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichAlpha12
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichLightAlpha50
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBichAlpha10
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongDim
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha80
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.XamMo
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.XamMoMuted
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape20dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape6dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.XamMoAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape20dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape6dp
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.TodayButton
@@ -214,8 +216,8 @@ private fun DateNavigationHeader(
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
-                            "DƯƠNG LỊCH",
-                            color = VangDongDim,
+                            stringResource(R.string.today_solar_label),
+                            color = VangDongAlpha80,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
@@ -228,7 +230,11 @@ private fun DateNavigationHeader(
                             lineHeight = 68.sp,
                         )
                         Text(
-                            "Tháng ${displaySolar.month} · ${displaySolar.year}",
+                            stringResource(
+                                R.string.month_year_format,
+                                displaySolar.month,
+                                displaySolar.year
+                            ),
                             color = NauAm,
                             fontSize = 13.sp,
                         )
@@ -250,8 +256,8 @@ private fun DateNavigationHeader(
                         modifier = Modifier.weight(1f),
                     ) {
                         Text(
-                            "ÂM LỊCH",
-                            color = VangDongDim,
+                            stringResource(R.string.today_lunar_label),
+                            color = VangDongAlpha80,
                             fontSize = 10.sp,
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
@@ -263,11 +269,17 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.ExtraLight,
                             lineHeight = 62.sp,
                         )
-                        val leapNote = if (lunar.isLeapMonth) " (Nhuận)" else ""
+                        val leapNote =
+                            if (lunar.isLeapMonth) stringResource(R.string.lunar_leap_suffix) else ""
 
                         Text(
-                            "Tháng ${lunar.month}$leapNote · ${lunar.year}",
-                            color = NauAmFaded,
+                            stringResource(
+                                R.string.lunar_month_year_format,
+                                lunar.month,
+                                leapNote,
+                                lunar.year
+                            ),
+                            color = NauAmAlpha70,
                             fontSize = 13.sp,
                         )
                     }
@@ -300,11 +312,11 @@ private fun DateNavigationHeader(
 private fun HolidayBadge(label: String) {
     Box(
         modifier = Modifier
-            .background(color = DoLeSubtle, shape = roundedCornerShape20dp)
+            .background(color = DoLeAlpha10, shape = RoundedCornerShape20dp)
             .border(
                 width = 1.dp,
-                color = DoleBorder,
-                shape = roundedCornerShape20dp
+                color = DoLeAlpha45,
+                shape = RoundedCornerShape20dp
             )
             .padding(horizontal = 14.dp, vertical = 5.dp),
     ) {
@@ -321,11 +333,11 @@ private fun HolidayBadge(label: String) {
 private fun SolarTermBadge(label: String) {
     Box(
         modifier = Modifier
-            .background(color = NgocBichSubtle, shape = roundedCornerShape20dp)
+            .background(color = NgocBichAlpha10, shape = RoundedCornerShape20dp)
             .border(
                 width = 1.dp,
-                color = NgocBichBorder,
-                shape = roundedCornerShape20dp
+                color = NgocBichAlpha40,
+                shape = RoundedCornerShape20dp
             )
             .padding(horizontal = 14.dp, vertical = 5.dp),
     ) {
@@ -349,7 +361,7 @@ private fun CanChiCard(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                "CAN CHI",
+                stringResource(R.string.today_can_chi),
                 color = VangDong,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -357,17 +369,17 @@ private fun CanChiCard(
             )
             Spacer(Modifier.height(2.dp))
             CanChiRow(
-                "Năm",
+                stringResource(R.string.label_year),
                 can = canChi.canNam,
                 chi = canChi.chiNam
             )
             CanChiRow(
-                "Tháng",
+                stringResource(R.string.label_month),
                 can = canChi.canThang,
                 chi = canChi.chiThang
             )
             CanChiRow(
-                "Ngày",
+                stringResource(R.string.label_day),
                 can = canChi.canNgay,
                 chi = canChi.chiNgay
             )
@@ -380,8 +392,8 @@ private fun CanChiCard(
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(
-                        "Tiết khí: ",
-                        color = NauAmMuted,
+                        stringResource(R.string.today_solar_term_prefix),
+                        color = NauAmAlpha60,
                         fontSize = 13.sp
                     )
                     solarTerm?.let {
@@ -410,7 +422,7 @@ private fun CanChiRow(
     ) {
         Text(
             "$label:",
-            color = NauAmSoft,
+            color = NauAmAlpha55,
             fontSize = 13.sp,
             modifier = Modifier.width(52.dp),
         )
@@ -431,7 +443,7 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(
-                "GIỜ HOÀNG ĐẠO / HẮC ĐẠO",
+                stringResource(R.string.today_auspicious_hours),
                 color = VangDong,
                 fontSize = 10.sp,
                 fontWeight = FontWeight.SemiBold,
@@ -457,20 +469,20 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
 
 @Composable
 private fun HourChip(hour: HourInfoUiModel) {
-    val bgColor = if (hour.isAuspicious) NgocBichHint else Color.Transparent
-    val borderColor = if (hour.isAuspicious) NgocBichLightBorder else Color.Transparent
+    val bgColor = if (hour.isAuspicious) NgocBichAlpha12 else Color.Transparent
+    val borderColor = if (hour.isAuspicious) NgocBichLightAlpha50 else Color.Transparent
     val textColor = if (hour.isAuspicious) NgocBich else XamMo
-    val textColorMuted = if (hour.isAuspicious) NgocBichMuted else XamMoMuted
+    val textColorMuted = if (hour.isAuspicious) NgocBichAlpha70 else XamMoAlpha70
     val fontWeight = if (hour.isAuspicious) FontWeight.SemiBold else FontWeight.Normal
 
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = bgColor, shape = roundedCornerShape6dp)
+            .background(color = bgColor, shape = RoundedCornerShape6dp)
             .border(
                 width = 1.dp,
                 color = borderColor,
-                shape = roundedCornerShape6dp
+                shape = RoundedCornerShape6dp
             )
             .padding(horizontal = 6.dp, vertical = 4.dp),
     ) {

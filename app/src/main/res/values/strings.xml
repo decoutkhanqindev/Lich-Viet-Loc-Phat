@@ -3,4 +3,46 @@
   <string name="widget_description">
     Widget hiển thị lịch âm, dương, ngày tốt xấu, giờ hoàng đạo hằng ngày. Cập nhật tự động mỗi ngày.
   </string>
+
+  <!-- Bottom navigation -->
+  <string name="tab_today">Hôm Nay</string>
+  <string name="tab_calendar">Lịch</string>
+  <string name="tab_settings">Cài Đặt</string>
+
+  <!-- Content descriptions -->
+  <string name="cd_today">Hôm nay</string>
+  <string name="cd_prev_day">Trước</string>
+  <string name="cd_next_day">Sau</string>
+
+  <!-- Today screen -->
+  <string name="today_solar_label">DƯƠNG LỊCH</string>
+  <string name="today_lunar_label">ÂM LỊCH</string>
+  <string name="today_can_chi">CAN CHI</string>
+  <string name="today_auspicious_hours">GIỜ HOÀNG ĐẠO / HẮC ĐẠO</string>
+  <string name="today_solar_term_prefix">"Tiết khí: "</string>
+  <string name="label_year">Năm</string>
+  <string name="label_month">Tháng</string>
+  <string name="label_day">Ngày</string>
+  <string name="month_year_format">Tháng %1$d · %2$d</string>
+  <string name="lunar_month_year_format">Tháng %1$d%2$s · %3$d</string>
+  <string name="lunar_leap_suffix">" (Nhuận)"</string>
+
+  <!-- Settings screen -->
+  <string name="settings_group_display">Hiển Thị</string>
+  <string name="settings_can_chi_label">Hiển thị Can Chi trên ô lịch</string>
+  <string name="settings_can_chi_subtitle">Hiện Can Chi của mỗi ngày trong lưới lịch tháng</string>
+  <string name="settings_group_utilities">Tiện Ích</string>
+  <string name="settings_widget_label">Widget lịch</string>
+  <string name="settings_widget_subtitle">Hiển thị lịch tháng trên màn hình chính</string>
+  <string name="settings_group_about">Về Ứng Dụng</string>
+  <string name="settings_version">Phiên bản</string>
+  <string name="settings_algorithm">Thuật toán</string>
+  <string name="settings_algorithm_value">Hồ Ngọc Đức</string>
+
+  <!-- Calendar screen -->
+  <string name="calendar_month_year_format">%1$s · %2$d</string>
+  <string name="calendar_lunar_format">Năm %1$s · Tháng %2$s</string>
+  <string name="picker_title">Chọn Tháng &amp; Năm</string>
+  <string name="action_close">Đóng</string>
+  <string name="action_confirm">Xác nhận</string>
 </resources>

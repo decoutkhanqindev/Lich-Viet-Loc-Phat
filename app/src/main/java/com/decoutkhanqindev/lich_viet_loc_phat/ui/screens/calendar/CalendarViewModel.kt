@@ -107,7 +107,7 @@ class CalendarViewModel(
                     val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
                     val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
                     val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
-                    delay(DELAY)
+                    delay(250L)
                     updateState {
                         copy(
                             isLoading = false,
@@ -133,8 +133,4 @@ class CalendarViewModel(
 
     private fun nextMonth(year: Int, month: Int): Pair<Int, Int> =
         if (month == 12) year + 1 to 1 else year to month + 1
-
-    companion object {
-        private const val DELAY = 250L
-    }
 }

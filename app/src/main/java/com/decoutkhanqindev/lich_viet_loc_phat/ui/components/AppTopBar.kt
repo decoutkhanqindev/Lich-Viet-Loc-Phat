@@ -6,8 +6,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -16,7 +18,7 @@ fun AppTopBar() {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "Lịch Việt Lộc Phát",
+                text = stringResource(R.string.app_name),
                 color = VangDong,
                 fontSize = 17.sp,
                 fontWeight = FontWeight.SemiBold,

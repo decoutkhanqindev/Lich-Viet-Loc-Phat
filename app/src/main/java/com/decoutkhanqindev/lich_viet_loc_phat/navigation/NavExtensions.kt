@@ -7,10 +7,8 @@ fun NavBackStack<NavKey>.navigateToTab(destination: NavKey) {
     val existingIndex = indexOfFirst { it::class == destination::class }
 
     if (existingIndex >= 0) {
-        // Tab đã tồn tại → pop về đúng vị trí (giữ state tab)
         while (size > existingIndex + 1) removeLastOrNull()
     } else {
-        // Tab chưa có → reset về root rồi push tab mới
         val root = first()
         clear()
         add(root)

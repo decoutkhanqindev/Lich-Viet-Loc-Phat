@@ -19,18 +19,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatAlpha20
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLabel
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightTrack
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha85
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightAlpha35
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.state.SettingsIntent
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.state.SettingsState
@@ -52,28 +54,34 @@ fun SettingsContent(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            SettingsGroup(title = "Hiển Thị") {
+            SettingsGroup(title = stringResource(R.string.settings_group_display)) {
                 SettingsToggleRow(
-                    label = "Hiển thị Can Chi trên ô lịch",
-                    subtitle = "Hiện Can Chi của mỗi ngày trong lưới lịch tháng",
+                    label = stringResource(R.string.settings_can_chi_label),
+                    subtitle = stringResource(R.string.settings_can_chi_subtitle),
                     checked = state.showCanChiOnCell,
                     onCheckedChange = { onIntent(SettingsIntent.ToggleCanChiOnCell(it)) },
                 )
             }
 
-            SettingsGroup(title = "Tiện Ích") {
+            SettingsGroup(title = stringResource(R.string.settings_group_utilities)) {
                 SettingsToggleRow(
-                    label = "Widget lịch",
-                    subtitle = "Hiển thị lịch tháng trên màn hình chính",
+                    label = stringResource(R.string.settings_widget_label),
+                    subtitle = stringResource(R.string.settings_widget_subtitle),
                     checked = state.calendarWidgetEnabled,
                     onCheckedChange = { onIntent(SettingsIntent.ToggleCalendarWidget(it)) },
                 )
             }
 
-            SettingsGroup(title = "Về Ứng Dụng") {
-                SettingsInfoRow(label = "Phiên bản", value = state.appVersion)
+            SettingsGroup(title = stringResource(R.string.settings_group_about)) {
+                SettingsInfoRow(
+                    label = stringResource(R.string.settings_version),
+                    value = state.appVersion
+                )
                 HorizontalDivider(color = BorderWarm, modifier = Modifier.padding(vertical = 2.dp))
-                SettingsInfoRow(label = "Thuật toán", value = "Hồ Ngọc Đức")
+                SettingsInfoRow(
+                    label = stringResource(R.string.settings_algorithm),
+                    value = stringResource(R.string.settings_algorithm_value)
+                )
             }
 
             Spacer(Modifier.height(16.dp))
@@ -89,7 +97,7 @@ private fun SettingsGroup(
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
             title.uppercase(),
-            color = VangDongLabel,
+            color = VangDongAlpha85,
             fontSize = 10.sp,
             fontWeight = FontWeight.SemiBold,
             letterSpacing = 1.5.sp,
@@ -146,9 +154,9 @@ private fun SettingsToggleRow(
             onCheckedChange = onCheckedChange,
             colors = SwitchDefaults.colors(
                 checkedThumbColor = VangDong,
-                checkedTrackColor = VangDongLightTrack,
+                checkedTrackColor = VangDongLightAlpha35,
                 uncheckedThumbColor = NauNhat,
-                uncheckedTrackColor = NauNhatSubtle,
+                uncheckedTrackColor = NauNhatAlpha20,
             ),
         )
     }

@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -45,6 +46,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -53,19 +55,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.CuoiTuan
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.DoLe
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.GiayDoBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDen
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.MucDenAlpha25
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAm
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmFaded
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmMedium
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmSubtle
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha65
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauAmAlpha20
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatFaded
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhatAlpha40
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NgocBich
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.PickerFadeBottomBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.PickerFadeTopBrush
@@ -73,20 +76,20 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.PickerSeparatorBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFg
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgMuted
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgSecondary
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgTertiary
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha85
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.TodayCellFgAlpha80
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAccent
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongFaint
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSelected
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSoft
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongSubtle
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape10dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape12dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape20dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape8dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha25
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha8
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha50
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha75
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha20
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape10dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape12dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape20dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape8dp
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.TodayButton
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.onClick
@@ -159,9 +162,9 @@ fun CalendarContent(
                 .border(
                     width = 1.dp,
                     color = BorderWarm,
-                    shape = roundedCornerShape12dp
+                    shape = RoundedCornerShape12dp
                 )
-                .background(color = SurfaceCard, shape = roundedCornerShape12dp)
+                .background(color = SurfaceCard, shape = RoundedCornerShape12dp)
                 .padding(8.dp),
         ) {
             CalendarGrid(
@@ -236,7 +239,7 @@ private fun CalendarMonthHeader(
             ),
             modifier = Modifier
                 .weight(0.7f)
-                .onClick(roundedCornerShape8dp) {
+                .onClick(RoundedCornerShape8dp) {
                     onShowPicker()
                 },
             transitionSpec = {
@@ -247,7 +250,11 @@ private fun CalendarMonthHeader(
         ) { hs ->
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text(
-                    "${monthNames[hs.month - 1]} · ${hs.year}",
+                    stringResource(
+                        R.string.calendar_month_year_format,
+                        monthNames[hs.month - 1],
+                        hs.year
+                    ),
                     textAlign = TextAlign.Center,
                     color = MucDen,
                     fontSize = 18.sp,
@@ -255,9 +262,13 @@ private fun CalendarMonthHeader(
                 )
                 if (hs.lunarYear != null && hs.lunarMonth != null) {
                     Text(
-                        "Năm ${hs.lunarYear} · Tháng ${hs.lunarMonth}",
+                        stringResource(
+                            R.string.calendar_lunar_format,
+                            hs.lunarYear,
+                            hs.lunarMonth
+                        ),
                         textAlign = TextAlign.Center,
-                        color = VangDongSoft,
+                        color = VangDongAlpha75,
                         fontSize = 11.sp,
                         letterSpacing = 0.3.sp,
                     )
@@ -346,34 +357,34 @@ private fun DayCell(
     modifier: Modifier = Modifier,
 ) {
     val solarTextColor = when {
-        !cell.isCurrentMonth -> MucDenFaded
+        !cell.isCurrentMonth -> MucDenAlpha25
         cell.isToday -> TodayCellFg
         else -> MucDen
     }
     val lunarTextColor = when {
-        !cell.isCurrentMonth -> NauNhatFaded
-        cell.isToday -> TodayCellFgSecondary
-        else -> NauAmFaded
+        !cell.isCurrentMonth -> NauNhatAlpha40
+        cell.isToday -> TodayCellFgAlpha85
+        else -> NauAmAlpha70
     }
     val canChiTextColor = when {
-        !cell.isCurrentMonth -> VangDongSubtle
-        cell.isToday -> TodayCellFgTertiary
-        else -> VangDongAccent
+        !cell.isCurrentMonth -> VangDongAlpha20
+        cell.isToday -> TodayCellFgAlpha80
+        else -> VangDongAlpha70
     }
     val holidayTextColor = if (cell.isToday) TodayCellFg else DoLe
     val solarTermTextColor = if (cell.isToday) TodayCellFg else NgocBich
-    val lunarDotColor = if (cell.isToday) TodayCellFgMuted else VangDongAccent
+    val lunarDotColor = if (cell.isToday) TodayCellFgAlpha70 else VangDongAlpha70
 
     val selectionBorderColor by animateColorAsState(
-        targetValue = if (cell.isSelected) VangDongSelected else Color.Transparent,
+        targetValue = if (cell.isSelected) VangDongAlpha50 else Color.Transparent,
         animationSpec = tween(200),
         label = "DayCellSelectionBorder",
     )
 
     Box(
         modifier = modifier
-            .onClick(roundedCornerShape10dp) { onClick() }
-            .clip(roundedCornerShape10dp)
+            .onClick(RoundedCornerShape10dp) { onClick() }
+            .clip(RoundedCornerShape10dp)
             .then(
                 if (cell.isToday) {
                     Modifier.background(TodayCellBrush)
@@ -381,7 +392,7 @@ private fun DayCell(
                     Modifier.border(
                         1.5.dp,
                         selectionBorderColor,
-                        roundedCornerShape10dp
+                        RoundedCornerShape10dp
                     )
                 }
             ),
@@ -505,17 +516,17 @@ private fun MonthYearPickerDialog(
                     .fillMaxWidth(0.88f)
                     .background(
                         color = SurfaceCard,
-                        shape = roundedCornerShape20dp
+                        shape = RoundedCornerShape20dp
                     )
                     .border(
                         width = 1.dp,
                         color = BorderWarm,
-                        shape = roundedCornerShape20dp
+                        shape = RoundedCornerShape20dp
                     )
                     .padding(20.dp),
             ) {
                 Text(
-                    text = "Chọn Tháng & Năm",
+                    text = stringResource(R.string.picker_title),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     color = MucDen,
@@ -540,13 +551,13 @@ private fun MonthYearPickerDialog(
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     DialogButton(
-                        text = "Đóng",
+                        text = stringResource(R.string.action_close),
                         onClick = onDismiss,
                         isPrimary = false,
                         modifier = Modifier.weight(1f),
                     )
                     DialogButton(
-                        text = "Xác nhận",
+                        text = stringResource(R.string.action_confirm),
                         onClick = { onConfirm(pickerYear, pickerMonth) },
                         isPrimary = true,
                         modifier = Modifier.weight(1f),
@@ -575,13 +586,13 @@ private fun PickerWheels(
                 .fillMaxWidth()
                 .height(itemHeight)
                 .background(
-                    color = VangDongFaint,
-                    shape = roundedCornerShape10dp
+                    color = VangDongAlpha8,
+                    shape = RoundedCornerShape10dp
                 )
                 .border(
                     width = 0.5.dp,
-                    color = VangDongBorder,
-                    shape = roundedCornerShape10dp
+                    color = VangDongAlpha25,
+                    shape = RoundedCornerShape10dp
                 )
         )
 
@@ -638,20 +649,20 @@ private fun DialogButton(
     isPrimary: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val baseModifier = modifier.onClick(roundedCornerShape12dp) { onClick() }
+    val baseModifier = modifier.onClick(RoundedCornerShape12dp) { onClick() }
     Box(
         modifier = if (isPrimary) {
             baseModifier
-                .background(color = VangDong, shape = roundedCornerShape12dp)
+                .background(color = VangDong, shape = RoundedCornerShape12dp)
                 .padding(vertical = 13.dp)
         } else {
             baseModifier
                 .border(
                     width = 1.dp,
                     color = BorderWarm,
-                    shape = roundedCornerShape12dp
+                    shape = RoundedCornerShape12dp
                 )
-                .background(color = SurfaceCard, shape = roundedCornerShape12dp)
+                .background(color = SurfaceCard, shape = RoundedCornerShape12dp)
                 .padding(vertical = 13.dp)
         },
         contentAlignment = Alignment.Center,
@@ -740,8 +751,8 @@ private fun PickerItem(
             text = label,
             color = when (distFromCenter) {
                 0 -> MucDen
-                1 -> NauAmMedium
-                else -> NauAmSubtle
+                1 -> NauAmAlpha65
+                else -> NauAmAlpha20
             },
             fontSize = when (distFromCenter) {
                 0 -> 16.sp

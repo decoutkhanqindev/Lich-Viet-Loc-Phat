@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape12dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape12dp
 
 @Composable
 fun AppCard(
@@ -21,9 +21,9 @@ fun AppCard(
             .border(
                 width = 1.dp,
                 color = BorderWarm,
-                shape = roundedCornerShape12dp
+                shape = RoundedCornerShape12dp
             ),
-        shape = roundedCornerShape12dp,
+        shape = RoundedCornerShape12dp,
         color = SurfaceCard,
         tonalElevation = 0.dp,
         shadowElevation = 0.dp,

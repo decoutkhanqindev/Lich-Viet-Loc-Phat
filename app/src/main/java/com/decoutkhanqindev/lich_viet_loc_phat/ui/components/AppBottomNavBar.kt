@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Settings
@@ -28,11 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.navigation.TodayDestination
@@ -41,24 +44,24 @@ import com.decoutkhanqindev.lich_viet_loc_phat.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.NauNhat
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDong
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongHint
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightBorder
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape12dp
-import com.decoutkhanqindev.lich_viet_loc_phat.theme.roundedCornerShape16dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongAlpha12
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.VangDongLightAlpha50
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape12dp
+import com.decoutkhanqindev.lich_viet_loc_phat.theme.RoundedCornerShape16dp
 import com.decoutkhanqindev.lich_viet_loc_phat.ui.components.ads.BannerAd
 
 @Immutable
 private data class Tab(
     val destination: NavKey,
     val icon: ImageVector,
-    val label: String,
+    @StringRes val labelRes: Int,
 ) {
     companion object {
         val default by lazy {
             listOf(
-                Tab(TodayDestination(), Icons.Default.Today, "Hôm Nay"),
-                Tab(CalendarDestination, Icons.Default.CalendarMonth, "Lịch"),
-                Tab(SettingsDestination, Icons.Default.Settings, "Cài Đặt"),
+                Tab(TodayDestination(), Icons.Default.Today, R.string.tab_today),
+                Tab(CalendarDestination, Icons.Default.CalendarMonth, R.string.tab_calendar),
+                Tab(SettingsDestination, Icons.Default.Settings, R.string.tab_settings),
             )
         }
     }
@@ -111,19 +114,21 @@ private fun NavItem(
         label = "NavContentColor",
     )
     val pillBg by animateColorAsState(
-        targetValue = if (selected) VangDongHint else Color.Transparent,
+        targetValue = if (selected) VangDongAlpha12 else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBg",
     )
     val pillBorder by animateColorAsState(
-        targetValue = if (selected) VangDongLightBorder else Color.Transparent,
+        targetValue = if (selected) VangDongLightAlpha50 else Color.Transparent,
         animationSpec = tween(200),
         label = "NavPillBorder",
     )
 
+    val label = stringResource(tab.labelRes)
+
     Column(
         modifier = Modifier.onClick(
-            shape = roundedCornerShape12dp,
+            shape = RoundedCornerShape12dp,
             ripple = false,
         ) {
             onClick()
@@ -135,23 +140,23 @@ private fun NavItem(
             modifier = Modifier
                 .width(52.dp)
                 .height(32.dp)
-                .background(color = pillBg, shape = roundedCornerShape16dp)
+                .background(color = pillBg, shape = RoundedCornerShape16dp)
                 .border(
                     width = 1.dp,
                     color = pillBorder,
-                    shape = roundedCornerShape16dp
+                    shape = RoundedCornerShape16dp
                 ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = tab.icon,
-                contentDescription = tab.label,
+                contentDescription = label,
                 tint = contentColor,
                 modifier = Modifier.size(22.dp),
             )
         }
         Text(
-            text = tab.label,
+            text = label,
             color = contentColor,
             fontSize = 10.sp,
             fontWeight = FontWeight.Medium,
