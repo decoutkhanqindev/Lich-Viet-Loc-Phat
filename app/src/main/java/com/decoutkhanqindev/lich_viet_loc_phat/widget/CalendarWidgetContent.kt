@@ -149,6 +149,8 @@ private fun CalendarMonthHeader(
     lunarYearLabel: String?,
     lunarMonthLabel: String?,
 ) {
+    val context = LocalContext.current
+
     Row(
         modifier = GlanceModifier
             .fillMaxWidth()
@@ -159,7 +161,11 @@ private fun CalendarMonthHeader(
 
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
-                "${CalendarProperties.months[displayedMonth - 1]} · $displayedYear",
+                context.getString(
+                    R.string.calendar_month_year_format,
+                    CalendarProperties.months[displayedMonth - 1],
+                    displayedYear,
+                ),
                 style = TextStyle(
                     color = ColorProvider(MucDen),
                     fontSize = 18.sp,
@@ -169,7 +175,11 @@ private fun CalendarMonthHeader(
             )
             if (lunarYearLabel != null && lunarMonthLabel != null) {
                 Text(
-                    "Năm $lunarYearLabel · Tháng $lunarMonthLabel",
+                    context.getString(
+                        R.string.calendar_lunar_format,
+                        lunarYearLabel,
+                        lunarMonthLabel,
+                    ),
                     style = TextStyle(
                         color = ColorProvider(VangDongAlpha75),
                         fontSize = 11.sp,
