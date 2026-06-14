@@ -1,6 +1,6 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.components
 
-import androidx.annotation.DrawableRes
+import androidx.annotation.RawRes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -11,12 +11,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun AppLottie(
-    @DrawableRes resId: Int,
-    modifier: Modifier = Modifier
+    @RawRes resId: Int,
+    modifier: Modifier = Modifier,
 ) {
-    val composition by rememberLottieComposition(
-        LottieCompositionSpec.RawRes(resId)
-    )
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(resId))
 
     LottieAnimation(
         composition = composition,

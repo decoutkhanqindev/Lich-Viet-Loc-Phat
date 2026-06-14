@@ -39,6 +39,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.CanChi
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.LunarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppCard
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppLottie
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.TodayButton
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.AnimationContentKey
@@ -58,11 +59,16 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauAmAlpha60
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauAmAlpha70
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBich
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha10
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha12
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha40
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha70
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichLightAlpha50
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape20dp
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape6dp
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha80
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMo
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMoAlpha70
 import kotlinx.collections.immutable.ImmutableList
 import java.time.LocalDate
 
@@ -85,7 +91,8 @@ fun TodayContent(
         AnimatedContent(
             targetState = contentKey,
             transitionSpec = {
-                fadeIn(tween(220)) togetherWith fadeOut(tween(180))
+                fadeIn(tween(220)) togetherWith
+                        fadeOut(tween(180))
             },
             label = "TodayContentTransition",
         ) { key ->
@@ -134,10 +141,24 @@ fun TodayContent(
                                     onIntent(TodayIntent.RequestToday)
                                 },
                             )
-                            CanChiCard(
-                                canChi = state.dailyMetadata.canChi,
-                                solarTerm = state.dailyMetadata.solarTerm,
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                CanChiCard(
+                                    canChi = state.dailyMetadata.canChi,
+                                    solarTerm = state.dailyMetadata.solarTerm,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(end = 8.dp),
+                                )
+                                AppLottie(
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(bottom = 16.dp),
+                                    resId = R.raw.lich_bloc_loc_phat,
+                                )
+                            }
                             AuspiciousHoursCard(hours = state.dailyMetadata.auspiciousHours)
                             Spacer(Modifier.height(8.dp))
                         }
@@ -351,8 +372,9 @@ private fun SolarTermBadge(label: String) {
 private fun CanChiCard(
     canChi: CanChi,
     solarTerm: String?,
+    modifier: Modifier = Modifier,
 ) {
-    AppCard {
+    AppCard(modifier = modifier) {
         Column(
             modifier = Modifier.padding(24.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -466,10 +488,10 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
 
 @Composable
 private fun HourChip(hour: HourInfoUiModel) {
-    val bgColor = if (hour.isAuspicious) _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha12 else Color.Transparent
-    val borderColor = if (hour.isAuspicious) _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichLightAlpha50 else Color.Transparent
-    val textColor = if (hour.isAuspicious) _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBich else _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMo
-    val textColorMuted = if (hour.isAuspicious) _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NgocBichAlpha70 else _root_ide_package_.com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMoAlpha70
+    val bgColor = if (hour.isAuspicious) NgocBichAlpha12 else Color.Transparent
+    val borderColor = if (hour.isAuspicious) NgocBichLightAlpha50 else Color.Transparent
+    val textColor = if (hour.isAuspicious) NgocBich else XamMo
+    val textColorMuted = if (hour.isAuspicious) NgocBichAlpha70 else XamMoAlpha70
     val fontWeight = if (hour.isAuspicious) FontWeight.SemiBold else FontWeight.Normal
 
     Box(

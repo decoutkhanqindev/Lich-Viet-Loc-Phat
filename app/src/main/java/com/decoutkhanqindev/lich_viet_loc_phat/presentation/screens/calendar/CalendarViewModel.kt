@@ -34,8 +34,10 @@ class CalendarViewModel(
 
     init {
         viewModelScope.launch {
-            observeShowCanChiOnCell().collect { enabled ->
-                updateState { copy(showCanChiOnCell = enabled) }
+            observeShowCanChiOnCell().collect { result ->
+                result.onSuccess { show ->
+                    updateState { copy(showCanChiOnCell = show) }
+                }
             }
         }
         loadMonth(initDate.year, initDate.month)
