@@ -3,6 +3,7 @@ package com.decoutkhanqindev.lich_viet_loc_phat.ui.main
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainScreen
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

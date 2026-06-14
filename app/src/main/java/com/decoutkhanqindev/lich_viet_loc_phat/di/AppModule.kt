@@ -7,7 +7,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.LunarMathAlgorithmDataSourceImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSource
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSourceImpl
+import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.InternetHardware
+import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.InternetHardwareImpl
+import com.decoutkhanqindev.lich_viet_loc_phat.device.repository.DeviceRepositoryImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.CalendarRepository
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.DeviceRepository
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.SettingsRepository
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetCalendarWidgetEnabledUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDailyMetadataUseCase
@@ -15,12 +19,14 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDaysInMonthUseC
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetHourlyAuspiciousnessUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetShowCanChiOnCellUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetSolarTermUseCase
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveNetworkStatusUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveShowCanChiOnCellUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetCalendarWidgetEnabledUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetShowCanChiOnCellUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.calendar.CalendarViewModel
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.settings.SettingsViewModel
-import com.decoutkhanqindev.lich_viet_loc_phat.ui.screens.today.TodayViewModel
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.CalendarViewModel
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainViewModel
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsViewModel
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
@@ -31,9 +37,11 @@ val appModule = module {
 
     single<LunarMathAlgorithmDataSource> { LunarMathAlgorithmDataSourceImpl() }
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
+    single<InternetHardware> { InternetHardwareImpl(androidContext()) }
 
     single<CalendarRepository> { CalendarRepositoryImpl(get(), get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
+    single<DeviceRepository> { DeviceRepositoryImpl(get()) }
 
     factory { GetDailyMetadataUseCase(get()) }
     factory { GetDaysInMonthUseCase(get()) }
@@ -44,7 +52,9 @@ val appModule = module {
     factory { ObserveShowCanChiOnCellUseCase(get()) }
     factory { GetCalendarWidgetEnabledUseCase(get()) }
     factory { SetCalendarWidgetEnabledUseCase(get()) }
+    factory { ObserveNetworkStatusUseCase(get()) }
 
+    viewModel { MainViewModel(get()) }
     viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), androidApplication()) }

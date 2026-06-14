@@ -1,0 +1,10 @@
+package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.state
+
+import androidx.compose.runtime.Immutable
+
+@Immutable
+data class SettingsState(
+    val showCanChiOnCell: Boolean = true,
+    val calendarWidgetEnabled: Boolean = true,
+    val appVersion: String = "",
+)

@@ -125,4 +125,7 @@ dependencies {
 
     // Shimmer
     implementation(libs.compose.shimmer)
+
+    // Lottie
+    implementation(libs.lottie.compose)
 }
