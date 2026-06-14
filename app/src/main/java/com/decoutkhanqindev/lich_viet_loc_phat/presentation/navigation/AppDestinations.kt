@@ -4,6 +4,10 @@ import androidx.navigation3.runtime.NavKey
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import kotlinx.serialization.Serializable
 
+
+@Serializable
+data object SplashDestination : NavKey
+
 @Serializable
 data class TodayDestination(val day: Int = 0, val month: Int = 0, val year: Int = 0) : NavKey {
     fun toSolarDate(): SolarDate? = if (day == 0) null else SolarDate(day, month, year)

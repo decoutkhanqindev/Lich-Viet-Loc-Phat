@@ -4,6 +4,10 @@
     Widget hiển thị lịch âm, dương, ngày tốt xấu, giờ hoàng đạo hằng ngày. Cập nhật tự động mỗi ngày.
   </string>
 
+  <string name="loading">Đang tải</string>
+  <string name="vietnamese_calendar">Lịch Việt</string>
+  <string name="loc_phat">Lộc Phát</string>
+
   <!-- Bottom navigation -->
   <string name="tab_today">Hôm Nay</string>
   <string name="tab_calendar">Lịch</string>

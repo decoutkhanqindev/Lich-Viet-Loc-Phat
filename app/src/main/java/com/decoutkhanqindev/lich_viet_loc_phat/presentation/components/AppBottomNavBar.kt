@@ -39,7 +39,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.Banne
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.navigateToTab
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.navigateTo
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauNhat
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape12dp
@@ -86,12 +86,12 @@ fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
                     tab = tab,
                     selected = selected,
                     onClick = {
-                        backStack.navigateToTab(tab.destination)
+                        backStack.navigateTo(tab.destination)
                     },
                 )
             }
         }
-        BannerAd()
+        BannerAd(modifier = Modifier.fillMaxWidth())
     }
 }
 

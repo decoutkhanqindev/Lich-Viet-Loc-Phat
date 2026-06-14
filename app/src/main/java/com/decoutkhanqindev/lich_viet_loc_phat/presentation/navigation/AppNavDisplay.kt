@@ -18,6 +18,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.CalendarScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsScreen
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.splash.SplashScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayScreen
 
 @Composable
@@ -33,8 +34,15 @@ fun AppNavDisplay(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
+                entry<SplashDestination> {
+                    SplashScreen(
+                        onNavigateToToday = {
+                            backStack.navigateTo(TodayDestination(), false)
+                        }
+                    )
+                }
                 entry<TodayDestination> { key -> TodayScreen(initialDate = key.toSolarDate()) }
-                entry<CalendarDestination> { CalendarScreen(backStack) }
+                entry<CalendarDestination> { CalendarScreen(onNavigateToTab = backStack::navigateTo) }
                 entry<SettingsDestination> { SettingsScreen() }
             },
         ),
@@ -48,22 +56,25 @@ fun AppNavDisplay(
         predictivePopTransitionSpec = {
             tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
         },
-        onBack = {
-            backStack.removeLastOrNull()
-        },
+        onBack = { if (backStack.size > 1) backStack.removeLastOrNull() },
     )
 }
 
-fun NavBackStack<NavKey>.navigateToTab(destination: NavKey) {
+fun NavBackStack<NavKey>.navigateTo(destination: NavKey, preserveState: Boolean = true) {
     val existingIndex = indexOfFirst { it::class == destination::class }
 
-    if (existingIndex >= 0) {
-        while (size > existingIndex + 1) removeLastOrNull()
+    if (preserveState) {
+        if (existingIndex >= 0) {
+            while (size > existingIndex + 1) removeLastOrNull()
+        } else {
+            val root = first()
+            clear()
+            add(root)
+            if (destination::class != root::class) add(destination)
+        }
     } else {
-        val root = first()
         clear()
-        add(root)
-        if (destination::class != root::class) add(destination)
+        add(destination)
     }
 }
 
@@ -74,6 +85,7 @@ private fun tabIndexOf(sceneKey: Any): Int = when {
 }
 
 private fun tabSlide(forward: Boolean): ContentTransform =
-    (slideInHorizontally(tween(300)) { full -> if (forward) full else -full } + fadeIn(tween(300))) togetherWith (slideOutHorizontally(
-        tween(300)
-    ) { full -> if (forward) -full else full } + fadeOut(tween(300)))
+    (slideInHorizontally(tween(300)) { full -> if (forward) full else -full } + fadeIn(tween(300))) togetherWith (
+            slideOutHorizontally(tween(300)) { full -> if (forward) -full else full } + fadeOut(
+                tween(300)
+            ))

@@ -16,6 +16,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppTopBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.NoInternetDialog
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ObserveOnLifecycleOwner
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.AppNavDisplay
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.SplashDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.state.MainEffect
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.state.MainIntent
@@ -26,7 +27,7 @@ import org.koin.compose.viewmodel.koinActivityViewModel
 @Composable
 fun MainScreen(onOpenNetworkSettings: () -> Unit) {
     val viewModel: MainViewModel = koinActivityViewModel()
-    val backStack = rememberNavBackStack(TodayDestination())
+    val backStack = rememberNavBackStack(SplashDestination)
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ObserveOnLifecycleOwner {
@@ -46,11 +47,7 @@ fun MainScreen(onOpenNetworkSettings: () -> Unit) {
             modifier = Modifier.fillMaxSize(),
             containerColor = Color.Transparent,
             topBar = { AppTopBar() },
-            bottomBar = {
-                AppBottomNavBar(
-                    backStack = backStack
-                )
-            },
+            bottomBar = { AppBottomNavBar(backStack) },
         ) { innerPadding ->
             AppNavDisplay(
                 backStack = backStack,
