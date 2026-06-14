@@ -60,27 +60,17 @@ class CalendarRepositoryImpl(
         }
 
     override suspend fun convertSolarToLunar(solar: SolarDate): LunarDate =
-        withContext(Dispatchers.Default) {
-            algorithmSource.solarToLunar(solar)
-        }
+        withContext(Dispatchers.Default) { algorithmSource.solarToLunar(solar) }
 
     override suspend fun convertLunarToSolar(lunar: LunarDate): SolarDate =
-        withContext(Dispatchers.Default) {
-            algorithmSource.lunarToSolar(lunar)
-        }
+        withContext(Dispatchers.Default) { algorithmSource.lunarToSolar(lunar) }
 
     override suspend fun calculateCanChi(date: SolarDate): CanChi =
-        withContext(Dispatchers.Default) {
-            algorithmSource.calculateCanChi(date)
-        }
+        withContext(Dispatchers.Default) { algorithmSource.calculateCanChi(date) }
 
     override suspend fun getAuspiciousHours(date: SolarDate): List<HourInfo> =
-        withContext(Dispatchers.Default) {
-            algorithmSource.getAuspiciousHours(date)
-        }
+        withContext(Dispatchers.Default) { algorithmSource.getAuspiciousHours(date) }
 
     override suspend fun getSolarTerm(date: SolarDate): String? =
-        withContext(Dispatchers.Default) {
-            assetSource.getSolarTerm(date)
-        }
+        withContext(Dispatchers.Default) { assetSource.getSolarTerm(date) }
 }

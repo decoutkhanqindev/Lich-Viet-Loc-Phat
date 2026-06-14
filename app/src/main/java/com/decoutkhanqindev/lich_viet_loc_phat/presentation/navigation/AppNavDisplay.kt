@@ -33,19 +33,9 @@ fun AppNavDisplay(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
-                entry<TodayDestination> { key ->
-                    TodayScreen(
-                        initialDate = key.toSolarDate()
-                    )
-                }
-                entry<CalendarDestination> {
-                    CalendarScreen(
-                        backStack
-                    )
-                }
-                entry<SettingsDestination> {
-                    SettingsScreen()
-                }
+                entry<TodayDestination> { key -> TodayScreen(initialDate = key.toSolarDate()) }
+                entry<CalendarDestination> { CalendarScreen(backStack) }
+                entry<SettingsDestination> { SettingsScreen() }
             },
         ),
         modifier = modifier,
@@ -83,10 +73,7 @@ private fun tabIndexOf(sceneKey: Any): Int = when {
     else -> 0
 }
 
-private fun tabSlide(forward: Boolean): ContentTransform = (
-        slideInHorizontally(tween(300)) { full -> if (forward) full else -full } +
-                fadeIn(tween(300))
-        ) togetherWith (
-        slideOutHorizontally(tween(300)) { full -> if (forward) -full else full } +
-                fadeOut(tween(300))
-        )
+private fun tabSlide(forward: Boolean): ContentTransform =
+    (slideInHorizontally(tween(300)) { full -> if (forward) full else -full } + fadeIn(tween(300))) togetherWith (slideOutHorizontally(
+        tween(300)
+    ) { full -> if (forward) -full else full } + fadeOut(tween(300)))

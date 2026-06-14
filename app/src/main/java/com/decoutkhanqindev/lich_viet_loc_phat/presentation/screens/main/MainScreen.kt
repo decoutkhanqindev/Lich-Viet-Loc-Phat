@@ -61,11 +61,7 @@ fun MainScreen(onOpenNetworkSettings: () -> Unit) {
         }
 
         if (!state.isOnline) {
-            NoInternetDialog(
-                onOpenSettings = {
-                    viewModel.onIntent(MainIntent.OpenNetworkSettings)
-                },
-            )
+            NoInternetDialog(onOpenSettings = { viewModel.onIntent(MainIntent.OpenNetworkSettings) })
         }
     }
 }

@@ -131,15 +131,9 @@ fun TodayContent(
                                 holiday = state.dailyMetadata.holiday,
                                 solarTerm = state.dailyMetadata.solarTerm,
                                 showTodayButton = state.showTodayButton,
-                                onPrev = {
-                                    onIntent(TodayIntent.NavigateToPrevDay)
-                                },
-                                onNext = {
-                                    onIntent(TodayIntent.NavigateToNextDay)
-                                },
-                                onToday = {
-                                    onIntent(TodayIntent.RequestToday)
-                                },
+                                onPrev = { onIntent(TodayIntent.NavigateToPrevDay) },
+                                onNext = { onIntent(TodayIntent.NavigateToNextDay) },
+                                onToday = { onIntent(TodayIntent.RequestToday) },
                             )
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
@@ -224,6 +218,7 @@ private fun DateNavigationHeader(
                         displaySolar.day
                     ).dayOfWeek.value % 7
                 }
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceEvenly,
@@ -469,6 +464,7 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
                 letterSpacing = 1.5.sp,
             )
             val columns = remember(hours) { hours.chunked(6) }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),

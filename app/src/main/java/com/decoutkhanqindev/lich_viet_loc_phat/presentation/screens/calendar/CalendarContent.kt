@@ -107,13 +107,11 @@ fun CalendarContent(
     state: CalendarState,
     onIntent: (CalendarIntent) -> Unit,
 ) {
-    val scrollState = rememberScrollState()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(GiayDoBrush)
-            .verticalScroll(scrollState),
+            .verticalScroll(rememberScrollState()),
     ) {
         CalendarMonthHeader(
             displayedMonth = state.displayedMonth,
@@ -121,18 +119,10 @@ fun CalendarContent(
             lunarYearLabel = state.lunarYearLabel,
             lunarMonthLabel = state.lunarMonthLabel,
             showTodayButton = state.showTodayButton,
-            onToday = {
-                onIntent(CalendarIntent.RequestToday)
-            },
-            onPrev = {
-                onIntent(CalendarIntent.PrevMonth)
-            },
-            onNext = {
-                onIntent(CalendarIntent.NextMonth)
-            },
-            onShowPicker = {
-                onIntent(CalendarIntent.ShowMonthYearPicker)
-            },
+            onToday = { onIntent(CalendarIntent.RequestToday) },
+            onPrev = { onIntent(CalendarIntent.PrevMonth) },
+            onNext = { onIntent(CalendarIntent.NextMonth) },
+            onShowPicker = { onIntent(CalendarIntent.ShowMonthYearPicker) },
         )
 
         Row(
@@ -171,9 +161,7 @@ fun CalendarContent(
                 error = state.error,
                 days = state.days,
                 showCanChiOnCell = state.showCanChiOnCell,
-                onDayClick = {
-                    onIntent(CalendarIntent.SelectDay(it))
-                },
+                onDayClick = { onIntent(CalendarIntent.SelectDay(it)) },
             )
         }
     }
@@ -182,12 +170,8 @@ fun CalendarContent(
         MonthYearPickerDialog(
             initialMonth = state.displayedMonth,
             initialYear = state.displayedYear,
-            onDismiss = {
-                onIntent(CalendarIntent.DismissMonthYearPicker)
-            },
-            onConfirm = { y, m ->
-                onIntent(CalendarIntent.ConfirmMonthYear(y, m))
-            },
+            onDismiss = { onIntent(CalendarIntent.DismissMonthYearPicker) },
+            onConfirm = { y, m -> onIntent(CalendarIntent.ConfirmMonthYear(y, m)) },
         )
     }
 }
@@ -238,9 +222,7 @@ private fun CalendarMonthHeader(
             ),
             modifier = Modifier
                 .weight(0.7f)
-                .onClick(RoundedCornerShape8dp) {
-                    onShowPicker()
-                },
+                .onClick(RoundedCornerShape8dp) { onShowPicker() },
             transitionSpec = {
                 (slideInVertically { it / 3 } + fadeIn(tween(200))) togetherWith
                         (slideOutVertically { -it / 3 } + fadeOut(tween(150)))
@@ -295,7 +277,10 @@ private fun CalendarGrid(
 
     AnimatedContent(
         targetState = contentKey,
-        transitionSpec = { fadeIn(tween(220)) togetherWith fadeOut(tween(180)) },
+        transitionSpec = {
+            fadeIn(tween(220)) togetherWith
+                    fadeOut(tween(180))
+        },
         label = "CalendarGridTransition",
     ) { key ->
         when (key) {
@@ -323,6 +308,7 @@ private fun CalendarGrid(
 
             AnimationContentKey.Content -> {
                 val weeks = remember(days) { days.chunked(7) }
+
                 Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(3.dp),
@@ -649,6 +635,7 @@ private fun DialogButton(
     modifier: Modifier = Modifier,
 ) {
     val baseModifier = modifier.onClick(RoundedCornerShape12dp) { onClick() }
+
     Box(
         modifier = if (isPrimary) {
             baseModifier
@@ -706,9 +693,7 @@ private fun PickerColumn(
     }
 
     LaunchedEffect(listState.isScrollInProgress) {
-        if (!listState.isScrollInProgress) {
-            onItemSelected(centerVirtualIndex % count)
-        }
+        if (!listState.isScrollInProgress) onItemSelected(centerVirtualIndex % count)
     }
 
     LazyColumn(
