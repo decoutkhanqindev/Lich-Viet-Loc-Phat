@@ -60,6 +60,7 @@ val NgocBichLightAlpha50 = NgocBichLight.copy(alpha = 0.5f)
 
 val DoSonLightAlpha95 = DoSonLight.copy(alpha = 0.95f)
 val DoSonAlpha90 = DoSon.copy(alpha = 0.90f)
+val DoSonAlpha12 = DoSon.copy(alpha = 0.12f)
 
 val XamMoAlpha70 = XamMo.copy(alpha = 0.7f)
 

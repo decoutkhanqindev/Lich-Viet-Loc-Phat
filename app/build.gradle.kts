@@ -6,13 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 }
 
-val testBannerAdId = "ca-app-pub-3940256099942544/9214589741"
-
-val releaseBannerAdId: String = Properties().apply {
-    val file = rootProject.file("local.properties")
-    if (file.exists()) file.inputStream().use { load(it) }
-}.getProperty("admob.banner.id").orEmpty().ifEmpty { testBannerAdId }
-
 android {
     namespace = "com.decoutkhanqindev.lich_viet_loc_phat"
     compileSdk = 36
@@ -25,23 +18,31 @@ android {
     }
 
     buildTypes {
-        debug {
-            buildConfigField("String", "ADMOB_BANNER_ID", "\"$testBannerAdId\"")
+        val localProperties = Properties().apply {
+            val file = rootProject.file("local.properties")
+            if (file.exists()) file.inputStream().use { load(it) }
         }
+        fun releaseAdId(propertyId: String) = localProperties.getProperty(propertyId)
+
+        debug {
+            buildConfigField("String", "ADMOB_BANNER_SPLASH_ID", "\"${"ca-app-pub-3940256099942544/9214589741"}\"")
+            buildConfigField("String", "ADMOB_BANNER_HOME_ID", "\"${"ca-app-pub-3940256099942544/6300978111"}\"")
+        }
+
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            buildConfigField("String", "ADMOB_BANNER_ID", "\"$releaseBannerAdId\"")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            buildConfigField("String", "ADMOB_BANNER_SPLASH_ID", "\"${releaseAdId("admob.banner.splash.id")}\"")
+            buildConfigField("String", "ADMOB_BANNER_HOME_ID", "\"${releaseAdId("admob.banner.home.id")}\"")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     buildFeatures {
         compose = true
         aidl = false

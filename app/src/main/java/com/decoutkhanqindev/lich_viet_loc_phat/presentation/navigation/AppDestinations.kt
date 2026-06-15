@@ -9,6 +9,9 @@ import kotlinx.serialization.Serializable
 data object SplashDestination : NavKey
 
 @Serializable
+data object MainDestination : NavKey
+
+@Serializable
 data class TodayDestination(val day: Int = 0, val month: Int = 0, val year: Int = 0) : NavKey {
     fun toSolarDate(): SolarDate? = if (day == 0) null else SolarDate(day, month, year)
 }

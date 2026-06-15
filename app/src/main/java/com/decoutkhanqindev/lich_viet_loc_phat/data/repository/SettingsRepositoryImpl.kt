@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.callbackFlow
 class SettingsRepositoryImpl(private val prefs: SharedPreferences) : SettingsRepository {
 
     override fun getShowCanChiOnCell(): Boolean =
-        prefs.getBoolean(KEY_SHOW_CAN_CHI_ON_CELL, true)
+        prefs.getBoolean(KEY_SHOW_CAN_CHI_ON_CELL, false)
 
     override fun setShowCanChiOnCell(enabled: Boolean) =
         prefs.edit { putBoolean(KEY_SHOW_CAN_CHI_ON_CELL, enabled) }

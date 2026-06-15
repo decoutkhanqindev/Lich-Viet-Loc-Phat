@@ -4,6 +4,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.DeviceRepositor
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.toFlowResult
 import kotlinx.coroutines.flow.Flow
 
-class ObserveNetworkStatusUseCase(private val repository: DeviceRepository) {
-    operator fun invoke(): Flow<Result<Boolean>> = repository.observeNetworkStatus().toFlowResult()
+class ObserveNetworkAvailableUseCase(private val repository: DeviceRepository) {
+    operator fun invoke(): Flow<Result<Boolean>> = repository.observeNetworkAvailable().toFlowResult()
 }

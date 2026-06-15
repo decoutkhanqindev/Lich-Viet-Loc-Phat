@@ -49,4 +49,9 @@
   <string name="picker_title">Chọn Tháng &amp; Năm</string>
   <string name="action_close">Đóng</string>
   <string name="action_confirm">Xác nhận</string>
+
+  <!-- No internet dialog -->
+  <string name="no_internet_title">Không có kết nối mạng</string>
+  <string name="no_internet_message">Vui lòng kiểm tra kết nối internet và thử lại.</string>
+  <string name="no_internet_open_settings">Mở cài đặt</string>
 </resources>

@@ -32,14 +32,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
+import com.decoutkhanqindev.lich_viet_loc_phat.BuildConfig
 import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAd
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAdUnit
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.navigateTo
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauNhat
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape12dp
@@ -60,9 +60,11 @@ private enum class Tab(
 }
 
 @Composable
-fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
-    val currentDestination = backStack.lastOrNull()
-
+fun AppBottomNavBar(
+    networkAvailable: Boolean,
+    currentDestination: NavKey?,
+    onNavigateTo: (NavKey) -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -85,13 +87,17 @@ fun AppBottomNavBar(backStack: NavBackStack<NavKey>) {
                 NavItem(
                     tab = tab,
                     selected = selected,
-                    onClick = {
-                        backStack.navigateTo(tab.destination)
-                    },
+                    onClick = { onNavigateTo(tab.destination) },
                 )
             }
         }
-        BannerAd(modifier = Modifier.fillMaxWidth())
+        BannerAd(
+            adUnit = BannerAdUnit(
+                id = BuildConfig.ADMOB_BANNER_HOME_ID,
+                networkAvailable = networkAvailable,
+            ),
+            modifier = Modifier.fillMaxWidth()
+        )
     }
 }
 

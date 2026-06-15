@@ -17,7 +17,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleResumeEffect
-import com.decoutkhanqindev.lich_viet_loc_phat.BuildConfig
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmer
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.ShimmerBg
 import com.google.android.gms.ads.AdListener
@@ -26,60 +25,82 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 @Immutable
-private enum class AdLoadState { Loading, Loaded, Failed, Impression }
+private enum class AdUnitState { Loading, Loaded, Failed, Impression }
+
+@Immutable
+data class BannerAdUnit(
+    val id: String,
+    val networkAvailable: Boolean = true,
+    val onLoadFailed: () -> Unit = {},
+    val onImpression: () -> Unit = {},
+)
 
 @Composable
 fun BannerAd(
-    onImpression: () -> Unit = {},
+    adUnit: BannerAdUnit,
     modifier: Modifier = Modifier,
 ) {
     if (LocalInspectionMode.current) return
+    if (!adUnit.networkAvailable) return
 
     val context = LocalContext.current
-
-    var adState by remember { mutableStateOf(AdLoadState.Loading) }
+    var adState by remember { mutableStateOf(AdUnitState.Loading) }
     val adSize = remember {
         AdSize.getLargePortraitAnchoredAdaptiveBannerAdSize(context, AdSize.FULL_WIDTH)
     }
+    val adRequest = remember { AdRequest.Builder().build() }
 
     val adView = remember {
         AdView(context).apply {
             setAdSize(adSize)
-            adUnitId = BuildConfig.ADMOB_BANNER_ID
+            adUnitId = adUnit.id
             adListener = object : AdListener() {
                 override fun onAdLoaded() {
-                    adState = AdLoadState.Loaded
+                    Timber.tag("AdUnit").d("BannerAd - $adUnitId - Loaded")
+                    adState = AdUnitState.Loaded
                 }
 
                 override fun onAdFailedToLoad(error: LoadAdError) {
-                    adState = AdLoadState.Failed
+                    Timber.tag("AdUnit").d("BannerAd - $adUnitId - Failed: ${error.message}")
+                    adState = AdUnitState.Failed
                 }
 
                 override fun onAdImpression() {
-                    adState = AdLoadState.Impression
+                    Timber.tag("AdUnit").d("BannerAd - $adUnitId - Impression")
+                    adState = AdUnitState.Impression
                 }
             }
-            loadAd(AdRequest.Builder().build())
+            loadAd(adRequest)
         }
     }
 
     LaunchedEffect(adState) {
-        if (adState == AdLoadState.Impression) {
-            delay(2000L)
-            onImpression()
+        when (adState) {
+            AdUnitState.Loading -> Timber.tag("AdUnit").d("BannerAd - ${adView.adUnitId} - Loading")
+            AdUnitState.Failed -> {
+                delay(1500L)
+                adUnit.onLoadFailed()
+            }
+            AdUnitState.Impression -> {
+                delay(2500L)
+                adUnit.onImpression()
+            }
+
+            else -> Unit
         }
     }
 
     LifecycleResumeEffect(adState) {
-        if (adState == AdLoadState.Loaded || adState == AdLoadState.Impression) adView.resume()
+        if (adState == AdUnitState.Loaded || adState == AdUnitState.Impression) adView.resume()
         onPauseOrDispose {
-            if (adState == AdLoadState.Loaded || adState == AdLoadState.Impression) adView.pause()
+            if (adState == AdUnitState.Loaded || adState == AdUnitState.Impression) adView.pause()
         }
     }
 
-    if (adState == AdLoadState.Failed) return
+    if (adState == AdUnitState.Failed) return
 
     Box(
         modifier = modifier
@@ -92,7 +113,7 @@ fun BannerAd(
             onRelease = { view -> view.destroy() }
         )
 
-        if (adState == AdLoadState.Loading) {
+        if (adState == AdUnitState.Loading) {
             Box(
                 modifier = Modifier
                     .matchParentSize()

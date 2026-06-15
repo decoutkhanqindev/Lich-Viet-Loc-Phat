@@ -1,36 +1,26 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavBackStack
+import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberDecoratedNavEntries
-import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.common.NetworkViewModel
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.NoInternetDialog
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainScreen
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.splash.SplashScreen
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.CalendarScreen
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsScreen
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabIndexOf
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabSlide
-import org.koin.compose.viewmodel.koinActivityViewModel
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun AppNavDisplay(
-    onOpenWifiSettings: () -> Unit,
+fun MainNavDisplay(
+    backStack: NavBackStack<NavKey>,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: NetworkViewModel = koinViewModel()
-    val networkAvailable by viewModel.available.collectAsStateWithLifecycle()
-    val backStack = rememberNavBackStack(SplashDestination)
-
-    if (!networkAvailable) NoInternetDialog(onOpenWifiSettings)
-
     NavDisplay(
         entries = rememberDecoratedNavEntries(
             backStack = backStack,
@@ -39,18 +29,11 @@ fun AppNavDisplay(
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
-                entry<SplashDestination> {
-                    SplashScreen(
-                        networkAvailable = networkAvailable,
-                        onAdLoadFailed = {
-                            if (networkAvailable) backStack.navigateTo(MainDestination, false)
-                        },
-                        onAdImpression = {
-                            backStack.navigateTo(MainDestination, false)
-                        },
-                    )
+                entry<TodayDestination> { dest ->
+                    TodayScreen(initialDate = dest.toSolarDate())
                 }
-                entry<MainDestination> { MainScreen(networkAvailable) }
+                entry<CalendarDestination> { CalendarScreen(onNavigateToTab = backStack::navigateTo) }
+                entry<SettingsDestination> { SettingsScreen() }
             },
         ),
         modifier = modifier,

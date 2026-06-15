@@ -7,8 +7,8 @@ import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.LunarMathAlgorithmDataSourceImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSource
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSourceImpl
-import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.InternetHardware
-import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.InternetHardwareImpl
+import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.NetworkManager
+import com.decoutkhanqindev.lich_viet_loc_phat.device.hardware.NetworkManagerImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.device.repository.DeviceRepositoryImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.CalendarRepository
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.repository.DeviceRepository
@@ -19,12 +19,12 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDaysInMonthUseC
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetHourlyAuspiciousnessUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetShowCanChiOnCellUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetSolarTermUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveNetworkStatusUseCase
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveNetworkAvailableUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveShowCanChiOnCellUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetCalendarWidgetEnabledUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetShowCanChiOnCellUseCase
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.common.NetworkViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.CalendarViewModel
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -37,7 +37,7 @@ val appModule = module {
 
     single<LunarMathAlgorithmDataSource> { LunarMathAlgorithmDataSourceImpl() }
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
-    single<InternetHardware> { InternetHardwareImpl(androidContext()) }
+    single<NetworkManager> { NetworkManagerImpl(androidContext()) }
 
     single<CalendarRepository> { CalendarRepositoryImpl(get(), get()) }
     single<SettingsRepository> { SettingsRepositoryImpl(get()) }
@@ -49,12 +49,12 @@ val appModule = module {
     factory { GetSolarTermUseCase(get()) }
     factory { GetShowCanChiOnCellUseCase(get()) }
     factory { SetShowCanChiOnCellUseCase(get()) }
+    factory { ObserveNetworkAvailableUseCase(get()) }
     factory { ObserveShowCanChiOnCellUseCase(get()) }
     factory { GetCalendarWidgetEnabledUseCase(get()) }
     factory { SetCalendarWidgetEnabledUseCase(get()) }
-    factory { ObserveNetworkStatusUseCase(get()) }
 
-    viewModel { MainViewModel(get()) }
+    viewModel { NetworkViewModel(get()) }
     viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get(), get()) }
     viewModel { SettingsViewModel(get(), get(), get(), get(), androidApplication()) }

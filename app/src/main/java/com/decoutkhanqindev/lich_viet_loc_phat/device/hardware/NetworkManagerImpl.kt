@@ -7,8 +7,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class InternetHardwareImpl(private val context: Context) : InternetHardware {
-    override fun observeNetworkStatus(): Flow<Boolean> = callbackFlow {
+class NetworkManagerImpl(private val context: Context) : NetworkManager {
+
+    override fun observeNetworkAvailable(): Flow<Boolean> = callbackFlow {
         val connectivityManager =
             context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
