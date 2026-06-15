@@ -13,8 +13,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.Cal
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabIndexOf
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabSlide
 
 @Composable
 fun MainNavDisplay(
@@ -37,15 +35,6 @@ fun MainNavDisplay(
             },
         ),
         modifier = modifier,
-        transitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
-        popTransitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
-        predictivePopTransitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
         onBack = { if (backStack.size > 1) backStack.removeLastOrNull() },
     )
 }

@@ -3,6 +3,7 @@ package com.decoutkhanqindev.lich_viet_loc_phat
 import android.app.Application
 import com.decoutkhanqindev.lich_viet_loc_phat.di.appModule
 import com.google.android.gms.ads.MobileAds
+import com.google.android.gms.ads.RequestConfiguration
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,6 +35,12 @@ class App : Application() {
     }
 
     private fun initAdMob() {
+        // remove this in production
+        MobileAds.setRequestConfiguration(
+            RequestConfiguration.Builder()
+                .setTestDeviceIds(listOf("5B9A6B9AE0D81DDFBC4AA92424953A94"))
+                .build()
+        )
         scope.launch {
             MobileAds.initialize(this@App) { status ->
                 Timber.d("AdMob initialized: ${status.adapterStatusMap}")

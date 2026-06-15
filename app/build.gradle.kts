@@ -14,14 +14,24 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0"
+        versionName = "v1.0.1"
+    }
+
+    val localProperties = Properties().apply {
+        val file = rootProject.file("local.properties")
+        if (file.exists()) file.inputStream().use { load(it) }
+    }
+
+    signingConfigs {
+        create("release") {
+            localProperties.getProperty("signing.store.file")?.let { storeFile = file(it) }
+            storePassword = localProperties.getProperty("signing.store.password")
+            keyAlias = localProperties.getProperty("signing.key.alias")
+            keyPassword = localProperties.getProperty("signing.key.password")
+        }
     }
 
     buildTypes {
-        val localProperties = Properties().apply {
-            val file = rootProject.file("local.properties")
-            if (file.exists()) file.inputStream().use { load(it) }
-        }
         fun releaseAdId(propertyId: String) = localProperties.getProperty(propertyId)
 
         debug {
@@ -30,6 +40,7 @@ android {
         }
 
         release {
+            signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")

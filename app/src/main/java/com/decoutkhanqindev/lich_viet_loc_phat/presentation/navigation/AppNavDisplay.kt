@@ -15,9 +15,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.NoInterne
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.splash.SplashScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabIndexOf
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.tabSlide
-import org.koin.compose.viewmodel.koinActivityViewModel
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -54,15 +51,6 @@ fun AppNavDisplay(
             },
         ),
         modifier = modifier,
-        transitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
-        popTransitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
-        predictivePopTransitionSpec = {
-            tabSlide(tabIndexOf(targetState.key) >= tabIndexOf(initialState.key))
-        },
         onBack = { if (backStack.size > 1) backStack.removeLastOrNull() },
     )
 }
