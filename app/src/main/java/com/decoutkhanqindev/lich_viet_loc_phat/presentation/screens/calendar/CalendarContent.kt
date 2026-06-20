@@ -241,6 +241,7 @@ private fun CalendarMonthHeader(
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                 )
+
                 if (hs.lunarYear != null && hs.lunarMonth != null) {
                     Text(
                         stringResource(
@@ -359,7 +360,6 @@ private fun DayCell(
     val holidayTextColor = if (cell.isToday) TodayCellFg else DoLe
     val solarTermTextColor = if (cell.isToday) TodayCellFg else NgocBich
     val lunarDotColor = if (cell.isToday) TodayCellFgAlpha70 else VangDongAlpha70
-
     val selectionBorderColor by animateColorAsState(
         targetValue = if (cell.isSelected) VangDongAlpha50 else Color.Transparent,
         animationSpec = tween(200),
@@ -372,12 +372,12 @@ private fun DayCell(
             .clip(RoundedCornerShape10dp)
             .then(
                 if (cell.isToday) {
-                    Modifier.Companion.background(TodayCellBrush)
+                    Modifier.background(TodayCellBrush)
                 } else {
                     Modifier.border(
-                        1.5.dp,
-                        selectionBorderColor,
-                        RoundedCornerShape10dp
+                        width = 1.5.dp,
+                        color = selectionBorderColor,
+                        shape = RoundedCornerShape10dp
                     )
                 }
             ),
@@ -394,12 +394,14 @@ private fun DayCell(
                 fontWeight = if (cell.isToday) FontWeight.Bold else FontWeight.Normal,
                 textAlign = TextAlign.Center,
             )
+
             Text(
                 text = if (cell.lunar.day == 1) "1/${cell.lunar.month}" else "${cell.lunar.day}",
                 color = lunarTextColor,
                 fontSize = 9.sp,
                 textAlign = TextAlign.Center,
             )
+
             if (showCanChi) {
                 Text(
                     text = cell.canChiLabel,
@@ -484,9 +486,11 @@ private fun MonthYearPickerDialog(
     }
     val itemHeight = 44.dp
     val visibleCount = 5
-
     val transitionState = remember { MutableTransitionState(false) }
-    LaunchedEffect(Unit) { transitionState.targetState = true }
+
+    LaunchedEffect(Unit) {
+        transitionState.targetState = true
+    }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -541,6 +545,7 @@ private fun MonthYearPickerDialog(
                         isPrimary = false,
                         modifier = Modifier.weight(1f),
                     )
+
                     DialogButton(
                         text = stringResource(R.string.action_confirm),
                         onClick = { onConfirm(pickerYear, pickerMonth) },
@@ -617,6 +622,7 @@ private fun PickerWheels(
                 .height(itemHeight * 2)
                 .background(PickerFadeTopBrush)
         )
+
         Box(
             modifier = Modifier
                 .align(Alignment.BottomCenter)

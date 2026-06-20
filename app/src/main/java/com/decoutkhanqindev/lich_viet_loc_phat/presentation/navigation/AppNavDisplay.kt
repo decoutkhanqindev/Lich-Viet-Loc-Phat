@@ -22,9 +22,10 @@ fun AppNavDisplay(
     onOpenWifiSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val backStack = rememberNavBackStack(SplashDestination)
+
     val networkManager: NetworkManager = koinInject()
     val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
-    val backStack = rememberNavBackStack(SplashDestination)
 
     if (!networkAvailable) NoInternetDialog(onOpenWifiSettings)
 

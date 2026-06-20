@@ -40,6 +40,7 @@ class CalendarViewModel(
                 }
             }
         }
+
         loadMonth(initDate.year, initDate.month)
     }
 
@@ -49,16 +50,20 @@ class CalendarViewModel(
                 val date = intent.date
                 val isOverflow =
                     date.month != state.value.displayedMonth || date.year != state.value.displayedYear
+
                 updateState { copy(selectedDate = date) }
+
                 if (isOverflow) {
                     updateState { copy(displayedYear = date.year, displayedMonth = date.month) }
                     loadMonth(date.year, date.month)
                 }
+
                 viewModelScope.launch { sendEffect(CalendarEffect.NavigateToToday(date)) }
             }
 
             is CalendarIntent.PrevMonth -> {
                 val (y, m) = prevMonth(state.value.displayedYear, state.value.displayedMonth)
+
                 updateState { copy(displayedYear = y, displayedMonth = m) }
                 loadMonth(y, m)
                 updateTodayButtonVisibility(y, m)
@@ -66,6 +71,7 @@ class CalendarViewModel(
 
             is CalendarIntent.NextMonth -> {
                 val (y, m) = nextMonth(state.value.displayedYear, state.value.displayedMonth)
+
                 updateState { copy(displayedYear = y, displayedMonth = m) }
                 loadMonth(y, m)
                 updateTodayButtonVisibility(y, m)
@@ -73,6 +79,7 @@ class CalendarViewModel(
 
             is CalendarIntent.RequestToday -> {
                 val now = SolarDate.today()
+
                 updateState {
                     copy(displayedYear = now.year, displayedMonth = now.month, showTodayButton = false)
                 }
@@ -109,7 +116,7 @@ class CalendarViewModel(
                     val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
                     val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
                     val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
-                    delay(250L)
+
                     updateState {
                         copy(
                             isLoading = false,

@@ -35,7 +35,6 @@ fun Modifier.onClick(
 ): Modifier = composed {
     var isPressed by remember { mutableStateOf(false) }
     val interactionSource = remember { MutableInteractionSource() }
-
     val scale by animateFloatAsState(
         targetValue = if (isPressed) 0.85f else 1f,
         animationSpec = tween(durationMillis = 100),

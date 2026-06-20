@@ -1,8 +1,9 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.ads
 
 import android.content.Context
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.AdUnit
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.AdUnitState
+import android.util.DisplayMetrics
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnit
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
@@ -16,7 +17,10 @@ class BannerAdUnit(id: String, name: String) : AdUnit(id, name) {
 
     override fun load(context: Context) {
         if (_adView == null) {
-            val adSize = AdSize.getLargePortraitAnchoredAdaptiveBannerAdSize(context, AdSize.FULL_WIDTH)
+            val displayMetrics: DisplayMetrics = context.resources.displayMetrics
+            val screenWidthDp = (displayMetrics.widthPixels / displayMetrics.density).toInt()
+            val adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, screenWidthDp)
+
             _adView = AdView(context).also { view ->
                 view.adUnitId = id
                 view.setAdSize(adSize)
@@ -38,8 +42,10 @@ class BannerAdUnit(id: String, name: String) : AdUnit(id, name) {
                 }
             }
         }
+
         _state.value = AdUnitState.LOADING
         Timber.tag("BannerAdUnit").d("$name - Loading")
+
         _adView?.loadAd(AdRequest.Builder().build())
     }
 

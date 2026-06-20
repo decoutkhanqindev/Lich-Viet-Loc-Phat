@@ -77,7 +77,9 @@ fun SettingsContent(
                     label = stringResource(R.string.settings_version),
                     value = state.appVersion
                 )
+
                 HorizontalDivider(color = BorderWarm, modifier = Modifier.padding(vertical = 2.dp))
+
                 SettingsInfoRow(
                     label = stringResource(R.string.settings_algorithm),
                     value = stringResource(R.string.settings_algorithm_value)
@@ -109,9 +111,7 @@ private fun SettingsGroup(
                     horizontal = 16.dp,
                     vertical = 4.dp
                 )
-            ) {
-                content()
-            }
+            ) { content() }
         }
     }
 }
@@ -140,6 +140,7 @@ private fun SettingsToggleRow(
                 color = MucDen,
                 fontSize = 14.sp
             )
+
             if (subtitle != null) {
                 Spacer(Modifier.height(2.dp))
                 Text(
@@ -149,6 +150,7 @@ private fun SettingsToggleRow(
                 )
             }
         }
+
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
@@ -179,6 +181,7 @@ private fun SettingsInfoRow(
             color = MucDen,
             fontSize = 14.sp
         )
+
         Text(
             value,
             color = NauAm,

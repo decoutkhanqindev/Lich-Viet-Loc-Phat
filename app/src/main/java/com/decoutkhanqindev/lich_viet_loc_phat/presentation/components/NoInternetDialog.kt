@@ -55,20 +55,26 @@ fun NoInternetDialog(onOpenWifiSettings: () -> Unit) {
                         modifier = Modifier.size(36.dp),
                     )
                 }
+
                 Spacer(modifier = Modifier.height(16.dp))
+
                 Text(
                     text = stringResource(R.string.no_internet_title),
                     color = MucDen,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                 )
+
                 Spacer(modifier = Modifier.height(8.dp))
+
                 Text(
                     text = stringResource(R.string.no_internet_message),
                     color = NauAmAlpha70,
                     textAlign = TextAlign.Center,
                 )
+
                 Spacer(modifier = Modifier.height(24.dp))
+
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()

@@ -1,4 +1,4 @@
-package com.decoutkhanqindev.lich_viet_loc_phat.domain.model
+package com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads
 
 import android.content.Context
 import kotlinx.coroutines.flow.MutableStateFlow

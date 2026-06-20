@@ -74,6 +74,7 @@ fun AppBottomNavBar(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         HorizontalDivider(color = BorderWarm, thickness = 1.dp)
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -92,6 +93,7 @@ fun AppBottomNavBar(
                 )
             }
         }
+
         BannerAd(
             adUnit = adsManager.bannerHome,
             modifier = Modifier.fillMaxWidth(),
@@ -120,16 +122,13 @@ private fun NavItem(
         animationSpec = tween(200),
         label = "NavPillBorder",
     )
-
     val label = stringResource(tab.labelRes)
 
     Column(
         modifier = Modifier.onClick(
             shape = RoundedCornerShape12dp,
             ripple = false,
-        ) {
-            onClick()
-        },
+        ) { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically),
     ) {
@@ -151,6 +150,7 @@ private fun NavItem(
                 modifier = Modifier.size(24.dp),
             )
         }
+
         Text(
             text = label,
             color = contentColor,

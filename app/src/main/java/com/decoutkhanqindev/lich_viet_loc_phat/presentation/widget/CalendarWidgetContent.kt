@@ -173,6 +173,7 @@ private fun CalendarMonthHeader(
                     textAlign = TextAlign.Center,
                 ),
             )
+
             if (lunarYearLabel != null && lunarMonthLabel != null) {
                 Text(
                     context.getString(
@@ -269,6 +270,7 @@ private fun DayCell(
                     textAlign = TextAlign.Center,
                 ),
             )
+
             Text(
                 text = if (cell.lunar.day == 1) "1/${cell.lunar.month}" else "${cell.lunar.day}",
                 style = TextStyle(
@@ -277,6 +279,7 @@ private fun DayCell(
                     textAlign = TextAlign.Center,
                 ),
             )
+
             if (showCanChi) {
                 Text(
                     text = cell.canChiLabel,
@@ -288,6 +291,7 @@ private fun DayCell(
                     maxLines = 1,
                 )
             }
+
             if (cell.isCurrentMonth) {
                 when {
                     cell.holiday != null -> {

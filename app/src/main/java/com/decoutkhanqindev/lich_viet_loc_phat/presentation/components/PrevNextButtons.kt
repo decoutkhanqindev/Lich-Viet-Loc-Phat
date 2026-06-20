@@ -34,6 +34,7 @@ fun PrevNextButtons(
                 .onClick { onPrev() }
                 .size(32.dp),
         )
+
         Icon(
             Icons.Default.ChevronRight,
             contentDescription = stringResource(R.string.cd_next_day),

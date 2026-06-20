@@ -135,6 +135,7 @@ fun TodayContent(
                                 onNext = { onIntent(TodayIntent.NavigateToNextDay) },
                                 onToday = { onIntent(TodayIntent.RequestToday) },
                             )
+
                             Row(
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically,
@@ -146,6 +147,7 @@ fun TodayContent(
                                         .weight(1f)
                                         .padding(end = 8.dp),
                                 )
+
                                 AppLottie(
                                     modifier = Modifier
                                         .weight(1f)
@@ -153,7 +155,9 @@ fun TodayContent(
                                     resId = R.raw.lich_bloc_loc_phat,
                                 )
                             }
+
                             AuspiciousHoursCard(hours = state.dailyMetadata.auspiciousHours)
+
                             Spacer(Modifier.height(8.dp))
                         }
                     }
@@ -192,13 +196,17 @@ private fun DateNavigationHeader(
                     visible = showTodayButton,
                     onClick = onToday
                 )
+
                 Spacer(Modifier.weight(1f))
+
                 PrevNextButtons(
                     onPrev = onPrev,
                     onNext = onNext
                 )
             }
+
             Spacer(Modifier.height(8.dp))
+
             AnimatedContent(
                 targetState = solar,
                 transitionSpec = {
@@ -235,6 +243,7 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
                         )
+
                         Text(
                             "${displaySolar.day}",
                             color = MucDen,
@@ -242,6 +251,7 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.Light,
                             lineHeight = 68.sp,
                         )
+
                         Text(
                             stringResource(
                                 R.string.month_year_format,
@@ -251,6 +261,7 @@ private fun DateNavigationHeader(
                             color = NauAm,
                             fontSize = 13.sp,
                         )
+
                         Text(
                             CalendarProperties.weekdaysSunFirst[dayOfWeek],
                             color = VangDong,
@@ -258,12 +269,14 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.SemiBold,
                         )
                     }
+
                     Box(
                         modifier = Modifier
                             .height(96.dp)
                             .width(1.dp)
                             .background(DateSeparatorBrush),
                     )
+
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
                         modifier = Modifier.weight(1f),
@@ -275,6 +288,7 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.Medium,
                             letterSpacing = 1.5.sp,
                         )
+
                         Text(
                             "${lunar.day}",
                             color = NauAm,
@@ -282,8 +296,7 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.ExtraLight,
                             lineHeight = 62.sp,
                         )
-                        val leapNote =
-                            if (lunar.isLeapMonth) stringResource(R.string.lunar_leap_suffix) else ""
+                        val leapNote = if (lunar.isLeapMonth) stringResource(R.string.lunar_leap_suffix) else ""
 
                         Text(
                             stringResource(
@@ -307,6 +320,7 @@ private fun DateNavigationHeader(
                         + slideOutVertically(tween(180)) { it / 2 },
             ) {
                 Spacer(Modifier.height(4.dp))
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
@@ -381,22 +395,27 @@ private fun CanChiCard(
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.5.sp,
             )
+
             Spacer(Modifier.height(2.dp))
+
             CanChiRow(
                 stringResource(R.string.label_year),
                 can = canChi.canNam,
                 chi = canChi.chiNam
             )
+
             CanChiRow(
                 stringResource(R.string.label_month),
                 can = canChi.canThang,
                 chi = canChi.chiThang
             )
+
             CanChiRow(
                 stringResource(R.string.label_day),
                 can = canChi.canNgay,
                 chi = canChi.chiNgay
             )
+
             AnimatedVisibility(
                 visible = solarTerm != null,
                 enter = fadeIn(tween(220))
@@ -410,6 +429,7 @@ private fun CanChiCard(
                         color = NauAmAlpha60,
                         fontSize = 13.sp
                     )
+
                     solarTerm?.let {
                         Text(
                             it,
@@ -440,6 +460,7 @@ private fun CanChiRow(
             fontSize = 13.sp,
             modifier = Modifier.width(52.dp),
         )
+
         Text(
             "$can $chi",
             color = MucDen,
@@ -463,6 +484,7 @@ private fun AuspiciousHoursCard(hours: ImmutableList<HourInfoUiModel>) {
                 fontWeight = FontWeight.SemiBold,
                 letterSpacing = 1.5.sp,
             )
+
             val columns = remember(hours) { hours.chunked(6) }
 
             Row(
@@ -508,6 +530,7 @@ private fun HourChip(hour: HourInfoUiModel) {
                 fontSize = 11.sp,
                 fontWeight = fontWeight,
             )
+
             Text(
                 hour.timeRange,
                 color = textColorMuted,
