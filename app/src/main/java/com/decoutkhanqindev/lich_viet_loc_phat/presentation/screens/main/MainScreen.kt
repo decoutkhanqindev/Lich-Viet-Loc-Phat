@@ -13,11 +13,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppBottom
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppTopBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.MainNavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoBrush
+import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
 
 @Composable
-fun MainScreen(networkAvailable: Boolean) {
+fun MainScreen() {
     val backStack = rememberNavBackStack(TodayDestination())
 
     Box(
@@ -31,9 +31,8 @@ fun MainScreen(networkAvailable: Boolean) {
             topBar = { AppTopBar() },
             bottomBar = {
                 AppBottomNavBar(
-                    networkAvailable = networkAvailable,
                     currentDestination = backStack.lastOrNull(),
-                    onNavigateTo = backStack::navigateTo
+                    onNavigateTo = backStack::navigateTo,
                 )
             },
         ) { innerPadding ->

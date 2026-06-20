@@ -71,4 +71,4 @@ val TodayCellFgAlpha70 = Color.White.copy(alpha = 0.7f)
 
 val BorderWarmAlpha50 = BorderWarm.copy(alpha = 0.5f)
 
-val ShimmerBg = Color(0xFFB0B0B0)
+val ShimmerBg = Color(0xADB0B0B0)

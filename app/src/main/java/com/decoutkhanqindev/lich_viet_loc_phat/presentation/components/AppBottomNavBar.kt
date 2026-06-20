@@ -33,10 +33,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation3.runtime.NavKey
-import com.decoutkhanqindev.lich_viet_loc_phat.BuildConfig
 import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAd
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAdUnit
+import org.koin.compose.koinInject
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
@@ -61,10 +61,11 @@ private enum class Tab(
 
 @Composable
 fun AppBottomNavBar(
-    networkAvailable: Boolean,
     currentDestination: NavKey?,
     onNavigateTo: (NavKey) -> Unit,
 ) {
+    val adsManager: AdsManager = koinInject()
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -92,11 +93,8 @@ fun AppBottomNavBar(
             }
         }
         BannerAd(
-            adUnit = BannerAdUnit(
-                id = BuildConfig.ADMOB_BANNER_HOME_ID,
-                networkAvailable = networkAvailable,
-            ),
-            modifier = Modifier.fillMaxWidth()
+            adUnit = adsManager.bannerHome,
+            modifier = Modifier.fillMaxWidth(),
         )
     }
 }

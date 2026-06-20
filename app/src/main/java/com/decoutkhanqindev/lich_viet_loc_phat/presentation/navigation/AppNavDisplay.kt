@@ -10,20 +10,20 @@ import androidx.navigation3.runtime.rememberDecoratedNavEntries
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.common.NetworkViewModel
+import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.NoInternetDialog
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main.MainScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.splash.SplashScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
 fun AppNavDisplay(
     onOpenWifiSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val viewModel: NetworkViewModel = koinViewModel()
-    val networkAvailable by viewModel.available.collectAsStateWithLifecycle()
+    val networkManager: NetworkManager = koinInject()
+    val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
     val backStack = rememberNavBackStack(SplashDestination)
 
     if (!networkAvailable) NoInternetDialog(onOpenWifiSettings)
@@ -38,16 +38,12 @@ fun AppNavDisplay(
             entryProvider = entryProvider {
                 entry<SplashDestination> {
                     SplashScreen(
-                        networkAvailable = networkAvailable,
-                        onAdLoadFailed = {
-                            if (networkAvailable) backStack.navigateTo(MainDestination, false)
-                        },
-                        onAdImpression = {
+                        onNavigateToMain = {
                             backStack.navigateTo(MainDestination, false)
-                        },
+                        }
                     )
                 }
-                entry<MainDestination> { MainScreen(networkAvailable) }
+                entry<MainDestination> { MainScreen() }
             },
         ),
         modifier = modifier,

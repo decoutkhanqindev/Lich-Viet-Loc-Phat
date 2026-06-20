@@ -16,20 +16,24 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.decoutkhanqindev.lich_viet_loc_phat.BuildConfig
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
+import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.AdUnitState
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppLottie
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAd
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAdUnit
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.MucDen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauAmAlpha70
@@ -37,13 +41,45 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha20
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import org.koin.compose.koinInject
 
 @Composable
-fun SplashScreen(
-    networkAvailable: Boolean,
-    onAdLoadFailed: () -> Unit,
-    onAdImpression: () -> Unit,
-) {
+fun SplashScreen(onNavigateToMain: () -> Unit) {
+    val context = LocalContext.current
+
+    val networkManager: NetworkManager = koinInject()
+    val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
+
+    val adsManager: AdsManager = koinInject()
+    val bannerSplashState by adsManager.bannerSplash.state.collectAsStateWithLifecycle()
+    val bannerHomeState by adsManager.bannerHome.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(networkAvailable) {
+        if (networkAvailable && bannerSplashState == AdUnitState.NONE) {
+            adsManager.bannerSplash.load(context)
+        }
+
+        if (networkAvailable && bannerHomeState == AdUnitState.NONE) {
+            adsManager.bannerHome.load(context)
+        }
+    }
+
+    LaunchedEffect(bannerSplashState, bannerHomeState, networkAvailable) {
+        when (bannerSplashState) {
+            AdUnitState.FAILED -> {
+                delay(AdUnitState.FAILED_DELAY_DURATION)
+                if (networkAvailable) onNavigateToMain()
+            }
+
+            AdUnitState.IMPRESSION -> {
+                delay(AdUnitState.IMPRESSION_DELAY_DURATION)
+                onNavigateToMain()
+            }
+
+            else -> Unit
+        }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -71,12 +107,7 @@ fun SplashScreen(
                 trackColor = VangDongAlpha20,
             )
             BannerAd(
-                adUnit = BannerAdUnit(
-                    id = BuildConfig.ADMOB_BANNER_SPLASH_ID,
-                    networkAvailable = networkAvailable,
-                    onLoadFailed = onAdLoadFailed,
-                    onImpression = onAdImpression,
-                ),
+                adUnit = adsManager.bannerSplash,
                 modifier = Modifier.fillMaxWidth(),
             )
         }
@@ -146,10 +177,10 @@ private fun LogoAndSlogan(modifier: Modifier = Modifier) {
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(horizontal = 32.dp)
-                .graphicsLayer(
-                    alpha = appNameAlpha.value,
-                    translationY = appNameOffsetY.value,
-                ),
+                .graphicsLayer {
+                    alpha = appNameAlpha.value
+                    translationY = appNameOffsetY.value
+                },
         )
     }
 }
