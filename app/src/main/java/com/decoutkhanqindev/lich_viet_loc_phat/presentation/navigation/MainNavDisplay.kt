@@ -30,7 +30,13 @@ fun MainNavDisplay(
                 entry<TodayDestination> { dest ->
                     TodayScreen(initialDate = dest.toSolarDate())
                 }
-                entry<CalendarDestination> { CalendarScreen(onNavigateToTab = backStack::navigateTo) }
+                entry<CalendarDestination> {
+                    CalendarScreen(
+                        onNavigateToToday = { date ->
+                            backStack.navigateTo(date.toTodayDestination())
+                        }
+                    )
+                }
                 entry<SettingsDestination> { SettingsScreen() }
             },
         ),

@@ -35,17 +35,56 @@ android {
         fun releaseAdId(propertyId: String) = localProperties.getProperty(propertyId)
 
         debug {
-            buildConfigField("String", "ADMOB_BANNER_SPLASH_ID", "\"${"ca-app-pub-3940256099942544/9214589741"}\"")
-            buildConfigField("String", "ADMOB_BANNER_HOME_ID", "\"${"ca-app-pub-3940256099942544/6300978111"}\"")
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_SPLASH_ID",
+                "\"${"ca-app-pub-3940256099942544/9214589741"}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_HOME_ID",
+                "\"${"ca-app-pub-3940256099942544/6300978111"}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_TODAY_ID",
+                "\"${"ca-app-pub-3940256099942544/2247696110"}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_CALENDAR_ID",
+                "\"${"ca-app-pub-3940256099942544/2247696110"}\""
+            )
         }
 
         release {
             signingConfig = signingConfigs.getByName("release")
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            buildConfigField("String", "ADMOB_BANNER_SPLASH_ID", "\"${releaseAdId("admob.banner.splash.id")}\"")
-            buildConfigField("String", "ADMOB_BANNER_HOME_ID", "\"${releaseAdId("admob.banner.home.id")}\"")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_SPLASH_ID",
+                "\"${releaseAdId("admob.banner.splash.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_HOME_ID",
+                "\"${releaseAdId("admob.banner.home.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_TODAY_ID",
+                "\"${releaseAdId("admob.native.today.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_CALENDAR_ID",
+                "\"${releaseAdId("admob.native.calendar.id")}\""
+            )
         }
     }
 
@@ -140,4 +179,7 @@ dependencies {
 
     // Lottie
     implementation(libs.lottie.compose)
+
+    // ConstraintLayout (XML native ad layouts)
+    implementation(libs.androidx.constraintlayout)
 }

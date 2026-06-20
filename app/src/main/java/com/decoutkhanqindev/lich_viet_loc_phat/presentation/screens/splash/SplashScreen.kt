@@ -14,25 +14,19 @@ import org.koin.compose.koinInject
 @Composable
 fun SplashScreen(onNavigateToMain: () -> Unit) {
     val context = LocalContext.current
-
     val networkManager: NetworkManager = koinInject()
     val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
-
     val adsManager: AdsManager = koinInject()
     val bannerSplashState by adsManager.bannerSplash.state.collectAsStateWithLifecycle()
     val bannerHomeState by adsManager.bannerHome.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(networkAvailable) {
-        if (networkAvailable && bannerSplashState == AdUnitState.NONE) {
-            adsManager.bannerSplash.load(context)
-        }
-
-        if (networkAvailable && bannerHomeState == AdUnitState.NONE) {
-            adsManager.bannerHome.load(context)
-        }
+        if (!networkAvailable) return@LaunchedEffect
+        if (bannerSplashState == AdUnitState.NONE) adsManager.bannerSplash.load(context)
+        if (bannerHomeState == AdUnitState.NONE) adsManager.bannerHome.load(context)
     }
 
-    LaunchedEffect(bannerSplashState, bannerHomeState, networkAvailable) {
+    LaunchedEffect(bannerSplashState, networkAvailable) {
         when (bannerSplashState) {
             AdUnitState.FAILED -> {
                 delay(AdUnitState.FAILED_DELAY_DURATION)

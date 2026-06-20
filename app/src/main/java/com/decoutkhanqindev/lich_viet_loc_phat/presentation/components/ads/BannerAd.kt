@@ -32,9 +32,8 @@ fun BannerAd(
 
     if (preview) return
     if (!networkAvailable) return
-    if (adState == AdUnitState.NONE) return
+    if (adState == AdUnitState.NONE || adState == AdUnitState.FAILED) return
     if (adView == null) return
-    if (adState == AdUnitState.FAILED) return
 
     val adHeight = adView.adSize?.height ?: 50
 
@@ -53,7 +52,6 @@ fun BannerAd(
         AndroidView(
             factory = { adView },
             modifier = Modifier.fillMaxWidth(),
-            onRelease = { adUnit.destroy() },
         )
 
         if (adState == AdUnitState.LOADING) {

@@ -58,7 +58,10 @@ import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.TodayButton
+import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.NativeMedia169Ad
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.onClick
+import org.koin.compose.koinInject
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.AnimationContentKey
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.DayCellUiModel
@@ -107,6 +110,8 @@ fun CalendarContent(
     state: CalendarState,
     onIntent: (CalendarIntent) -> Unit,
 ) {
+    val adsManager: AdsManager = koinInject()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -164,6 +169,13 @@ fun CalendarContent(
                 onDayClick = { onIntent(CalendarIntent.SelectDay(it)) },
             )
         }
+
+        NativeMedia169Ad(
+            adUnit = adsManager.nativeCalendar,
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .padding(top = 8.dp, bottom = 8.dp),
+        )
     }
 
     if (state.showMonthYearPicker) {

@@ -50,6 +50,9 @@
   <string name="action_close">Đóng</string>
   <string name="action_confirm">Xác nhận</string>
 
+  <!-- Ads -->
+  <string name="ad_label">QC</string>
+
   <!-- No internet dialog -->
   <string name="no_internet_title">Không có kết nối mạng</string>
   <string name="no_internet_message">Vui lòng kiểm tra kết nối internet và thử lại.</string>

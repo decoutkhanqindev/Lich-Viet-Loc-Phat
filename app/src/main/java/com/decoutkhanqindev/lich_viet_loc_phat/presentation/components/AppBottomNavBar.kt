@@ -84,8 +84,7 @@ fun AppBottomNavBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Tab.entries.forEach { tab ->
-                val selected =
-                    currentDestination?.let { it::class == tab.destination::class } ?: false
+                val selected = currentDestination?.let { it::class == tab.destination::class } ?: false
                 NavItem(
                     tab = tab,
                     selected = selected,

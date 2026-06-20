@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.CanChi
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.LunarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
@@ -42,6 +43,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppLottie
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.TodayButton
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.NativeMedia43Ad
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.AnimationContentKey
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.HourInfoUiModel
@@ -70,6 +72,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha8
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMo
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.XamMoAlpha70
 import kotlinx.collections.immutable.ImmutableList
+import org.koin.compose.koinInject
 import java.time.LocalDate
 
 @Composable
@@ -77,6 +80,8 @@ fun TodayContent(
     state: TodayState,
     onIntent: (TodayIntent) -> Unit,
 ) {
+    val adsManager: AdsManager = koinInject()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -91,22 +96,19 @@ fun TodayContent(
         AnimatedContent(
             targetState = contentKey,
             transitionSpec = {
-                fadeIn(tween(220)) togetherWith
-                        fadeOut(tween(180))
+                fadeIn(tween(220)) togetherWith fadeOut(tween(180))
             },
             label = "TodayContentTransition",
         ) { key ->
             when (key) {
                 AnimationContentKey.Loading -> Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(color = VangDong)
                 }
 
                 AnimationContentKey.Error -> Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
+                    Modifier.fillMaxSize(), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = state.error ?: "",
@@ -134,6 +136,11 @@ fun TodayContent(
                                 onPrev = { onIntent(TodayIntent.NavigateToPrevDay) },
                                 onNext = { onIntent(TodayIntent.NavigateToNextDay) },
                                 onToday = { onIntent(TodayIntent.RequestToday) },
+                            )
+
+                            NativeMedia43Ad(
+                                adUnit = adsManager.nativeToday,
+                                modifier = Modifier.padding(top = 12.dp)
                             )
 
                             Row(
@@ -192,17 +199,11 @@ private fun DateNavigationHeader(
                     .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                TodayButton(
-                    visible = showTodayButton,
-                    onClick = onToday
-                )
+                TodayButton(visible = showTodayButton, onClick = onToday)
 
                 Spacer(Modifier.weight(1f))
 
-                PrevNextButtons(
-                    onPrev = onPrev,
-                    onNext = onNext
-                )
+                PrevNextButtons(onPrev = onPrev, onNext = onNext)
             }
 
             Spacer(Modifier.height(8.dp))
@@ -216,14 +217,10 @@ private fun DateNavigationHeader(
                 label = "DateTransition",
             ) { displaySolar ->
                 val dayOfWeek = remember(
-                    displaySolar.year,
-                    displaySolar.month,
-                    displaySolar.day
+                    displaySolar.year, displaySolar.month, displaySolar.day
                 ) {
                     LocalDate.of(
-                        displaySolar.year,
-                        displaySolar.month,
-                        displaySolar.day
+                        displaySolar.year, displaySolar.month, displaySolar.day
                     ).dayOfWeek.value % 7
                 }
 
@@ -296,7 +293,8 @@ private fun DateNavigationHeader(
                             fontWeight = FontWeight.ExtraLight,
                             lineHeight = 62.sp,
                         )
-                        val leapNote = if (lunar.isLeapMonth) stringResource(R.string.lunar_leap_suffix) else ""
+                        val leapNote =
+                            if (lunar.isLeapMonth) stringResource(R.string.lunar_leap_suffix) else ""
 
                         Text(
                             stringResource(
@@ -314,10 +312,10 @@ private fun DateNavigationHeader(
 
             AnimatedVisibility(
                 visible = holiday != null || solarTerm != null,
-                enter = fadeIn(tween(220))
-                        + slideInVertically(tween(220)) { it / 2 },
-                exit = fadeOut(tween(180))
-                        + slideOutVertically(tween(180)) { it / 2 },
+                enter = fadeIn(tween(220)) +
+                        slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180)) +
+                        slideOutVertically(tween(180)) { it / 2 },
             ) {
                 Spacer(Modifier.height(4.dp))
 
@@ -418,10 +416,10 @@ private fun CanChiCard(
 
             AnimatedVisibility(
                 visible = solarTerm != null,
-                enter = fadeIn(tween(220))
-                        + slideInVertically(tween(220)) { it / 2 },
-                exit = fadeOut(tween(180))
-                        + slideOutVertically(tween(180)) { it / 2 },
+                enter = fadeIn(tween(220)) +
+                        slideInVertically(tween(220)) { it / 2 },
+                exit = fadeOut(tween(180)) +
+                        slideOutVertically(tween(180)) { it / 2 },
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Text(

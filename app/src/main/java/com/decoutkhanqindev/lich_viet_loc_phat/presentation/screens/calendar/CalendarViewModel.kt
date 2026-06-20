@@ -117,6 +117,8 @@ class CalendarViewModel(
                     val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
                     val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
 
+                    delay(200L)
+
                     updateState {
                         copy(
                             isLoading = false,
