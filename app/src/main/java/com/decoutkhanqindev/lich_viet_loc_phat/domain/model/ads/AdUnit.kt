@@ -10,7 +10,5 @@ abstract class AdUnit(val id: String, val name: String) {
     val state: StateFlow<AdUnitState> = _state.asStateFlow()
 
     abstract fun load(context: Context)
-    abstract fun pause()
-    abstract fun resume()
     abstract fun destroy()
 }

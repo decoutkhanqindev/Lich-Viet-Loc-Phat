@@ -26,7 +26,7 @@ val appModule = module {
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
     single { NetworkManager(androidContext()) }
     single { SharedPrefsManager(androidContext()) }
-    single { AdsManager() }
+    single { AdsManager(get()) }
 
     single<CalendarRepository> { CalendarRepositoryImpl(get(), get()) }
 

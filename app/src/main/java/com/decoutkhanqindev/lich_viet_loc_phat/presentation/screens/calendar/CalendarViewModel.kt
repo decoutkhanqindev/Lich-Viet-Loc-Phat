@@ -1,8 +1,8 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar
 
 import androidx.lifecycle.viewModelScope
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.device.SharedPrefsManager
+import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDaysInMonthUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.base.BaseViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.toUiModel
@@ -12,7 +12,6 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.sta
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CalendarViewModel(
@@ -33,7 +32,7 @@ class CalendarViewModel(
 
     init {
         viewModelScope.launch {
-            sharedPrefs.showCanChiOnCellFlow.collectLatest { show ->
+            sharedPrefs.showCanChiOnCellFlow.collect { show ->
                 updateState { copy(showCanChiOnCell = show) }
             }
         }

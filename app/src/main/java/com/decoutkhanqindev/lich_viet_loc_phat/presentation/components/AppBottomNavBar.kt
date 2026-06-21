@@ -36,7 +36,6 @@ import androidx.navigation3.runtime.NavKey
 import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.BannerAd
-import org.koin.compose.koinInject
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.SettingsDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
@@ -47,6 +46,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha12
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongLightAlpha50
+import org.koin.compose.koinInject
 
 @Immutable
 private enum class Tab(
@@ -84,11 +84,12 @@ fun AppBottomNavBar(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Tab.entries.forEach { tab ->
-                val selected = currentDestination?.let { it::class == tab.destination::class } ?: false
+                val selected =
+                    currentDestination?.let { it::class == tab.destination::class } ?: false
                 NavItem(
                     tab = tab,
                     selected = selected,
-                    onClick = { onNavigateTo(tab.destination) },
+                    onClick = { if (!selected) onNavigateTo(tab.destination) },
                 )
             }
         }

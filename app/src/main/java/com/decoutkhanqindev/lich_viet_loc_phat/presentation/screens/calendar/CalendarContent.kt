@@ -55,13 +55,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.TodayButton
-import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.NativeMedia169Ad
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.onClick
-import org.koin.compose.koinInject
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.AnimationContentKey
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.DayCellUiModel
@@ -102,6 +101,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha7
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDongAlpha8
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.compose.koinInject
 import kotlin.math.abs
 
 

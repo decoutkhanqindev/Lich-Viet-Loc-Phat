@@ -1,7 +1,6 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings
 
 import android.app.Application
-import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.viewModelScope
