@@ -52,6 +52,7 @@
 
   <!-- Ads -->
   <string name="ad_label">QC</string>
+  <string name="ad_loading">Đang tải quảng cáo…</string>
 
   <!-- No internet dialog -->
   <string name="no_internet_title">Không có kết nối mạng</string>

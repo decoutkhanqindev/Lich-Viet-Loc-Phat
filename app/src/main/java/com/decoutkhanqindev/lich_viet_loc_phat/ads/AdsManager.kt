@@ -7,11 +7,13 @@ class AdsManager {
     val bannerHome = BannerAdUnit(id = BuildConfig.ADMOB_BANNER_HOME_ID, name = "banner_home")
     val nativeToday = NativeAdUnit(id = BuildConfig.ADMOB_NATIVE_TODAY_ID, name = "native_today")
     val nativeCalendar = NativeAdUnit(id = BuildConfig.ADMOB_NATIVE_CALENDAR_ID, name = "native_calendar")
+    val interHome = InterstitialAdUnit(id = BuildConfig.ADMOB_INTER_HOME_ID, name = "inter_home")
 
     fun destroyAll() {
         bannerSplash.destroy()
         bannerHome.destroy()
         nativeToday.destroy()
         nativeCalendar.destroy()
+        interHome.destroy()
     }
 }

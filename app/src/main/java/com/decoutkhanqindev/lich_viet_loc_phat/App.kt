@@ -14,7 +14,8 @@ import timber.log.Timber
 
 class App : Application() {
 
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
 
     override fun onCreate() {
         super.onCreate()
@@ -46,5 +47,10 @@ class App : Application() {
                 Timber.d("AdMob initialized: ${status.adapterStatusMap}")
             }
         }
+    }
+
+    override fun onTerminate() {
+        job.cancel()
+        super.onTerminate()
     }
 }

@@ -1,14 +1,12 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings
 
 import android.app.Application
+import android.content.Context
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.viewModelScope
 import com.decoutkhanqindev.lich_viet_loc_phat.BuildConfig
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetCalendarWidgetEnabledUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetShowCanChiOnCellUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetCalendarWidgetEnabledUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.SetShowCanChiOnCellUseCase
+import com.decoutkhanqindev.lich_viet_loc_phat.device.SharedPrefsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.base.BaseViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.state.SettingsEffect
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.state.SettingsIntent
@@ -18,15 +16,12 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.widget.CalendarWidge
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    getShowCanChiOnCell: GetShowCanChiOnCellUseCase,
-    getCalendarWidgetEnabled: GetCalendarWidgetEnabledUseCase,
-    private val setShowCanChiOnCell: SetShowCanChiOnCellUseCase,
-    private val setCalendarWidgetEnabled: SetCalendarWidgetEnabledUseCase,
     private val context: Application,
+    private val sharedPrefs: SharedPrefsManager,
 ) : BaseViewModel<SettingsState, SettingsIntent, SettingsEffect>(
     initialState = SettingsState(
-        showCanChiOnCell = getShowCanChiOnCell().getOrDefault(false),
-        calendarWidgetEnabled = getCalendarWidgetEnabled().getOrDefault(false),
+        showCanChiOnCell = sharedPrefs.showCanChiOnCell,
+        calendarWidgetEnabled = sharedPrefs.calendarWidgetEnabled,
         appVersion = BuildConfig.VERSION_NAME,
     )
 ) {
@@ -35,7 +30,7 @@ class SettingsViewModel(
         when (intent) {
             is SettingsIntent.ToggleCanChiOnCell -> {
                 updateState { copy(showCanChiOnCell = intent.enabled) }
-                setShowCanChiOnCell(intent.enabled).onFailure { updateState { copy(showCanChiOnCell = !intent.enabled) } }
+                sharedPrefs.showCanChiOnCell = intent.enabled
                 refreshWidget()
             }
 
@@ -54,10 +49,11 @@ class SettingsViewModel(
                     preview = CalendarWidget(),
                 )
             }.onSuccess {
-                setCalendarWidgetEnabled(true)
+                sharedPrefs.calendarWidgetEnabled = true
                 sendEffect(SettingsEffect.ShowMessage("Thêm widget thành công!"))
             }.onFailure {
-                setCalendarWidgetEnabled(false)
+                sharedPrefs.calendarWidgetEnabled = false
+                updateState { copy(calendarWidgetEnabled = false) }
                 sendEffect(SettingsEffect.ShowMessage("Không thể thêm widget. Vui lòng thử lại."))
             }
         }

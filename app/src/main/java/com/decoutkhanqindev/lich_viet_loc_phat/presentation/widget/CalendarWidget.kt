@@ -7,11 +7,13 @@ import androidx.glance.appwidget.provideContent
 import com.decoutkhanqindev.lich_viet_loc_phat.data.repository.CalendarRepositoryImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.lunar_math_algorithm.LunarMathAlgorithmDataSourceImpl
 import com.decoutkhanqindev.lich_viet_loc_phat.data.source.static_asset.StaticAssetDataSourceImpl
+import com.decoutkhanqindev.lich_viet_loc_phat.device.SharedPrefsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDailyMetadataUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDaysInMonthUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.toUiModel
 import kotlinx.collections.immutable.toImmutableList
+import org.koin.core.context.GlobalContext
 
 class CalendarWidget : GlanceAppWidget() {
 
@@ -21,10 +23,9 @@ class CalendarWidget : GlanceAppWidget() {
     private val getDaysInMonth by lazy { GetDaysInMonthUseCase(repo) }
     private val getDailyMetadata by lazy { GetDailyMetadataUseCase(repo) }
 
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val prefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE)
-        val showCanChi = prefs.getBoolean("show_can_chi_on_cell", false)
+    private val sharedPrefs by lazy { GlobalContext.get().get<SharedPrefsManager>() }
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
         val today = SolarDate.today()
         val days = getDaysInMonth(today.year, today.month)
             .getOrElse { emptyList() }
@@ -34,6 +35,8 @@ class CalendarWidget : GlanceAppWidget() {
 
         val lunarYearLabel = metadata?.canChi?.let { "${it.canNam} ${it.chiNam}" }
         val lunarMonthLabel = metadata?.canChi?.let { "${it.canThang} ${it.chiThang}" }
+
+        val showCanChi = sharedPrefs.showCanChiOnCell
 
         provideContent {
             CalendarWidgetContent(

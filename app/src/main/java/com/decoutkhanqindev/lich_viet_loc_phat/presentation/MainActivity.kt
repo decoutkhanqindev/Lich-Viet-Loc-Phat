@@ -8,11 +8,14 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
+import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.AppNavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.LichVietLocPhatTheme
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+
+    private val networkManager: NetworkManager by inject()
     private val adsManager: AdsManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,6 +34,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onDestroy() {
+        networkManager.destroy()
         adsManager.destroyAll()
         super.onDestroy()
     }

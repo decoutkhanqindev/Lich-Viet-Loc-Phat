@@ -2,9 +2,8 @@ package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar
 
 import androidx.lifecycle.viewModelScope
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
+import com.decoutkhanqindev.lich_viet_loc_phat.device.SharedPrefsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetDaysInMonthUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.GetShowCanChiOnCellUseCase
-import com.decoutkhanqindev.lich_viet_loc_phat.domain.usecase.ObserveShowCanChiOnCellUseCase
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.base.BaseViewModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.toUiModel
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.state.CalendarEffect
@@ -13,18 +12,18 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.sta
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class CalendarViewModel(
     private val getDaysInMonth: GetDaysInMonthUseCase,
-    private val getShowCanChiOnCell: GetShowCanChiOnCellUseCase,
-    private val observeShowCanChiOnCell: ObserveShowCanChiOnCellUseCase,
+    private val sharedPrefs: SharedPrefsManager,
 ) : BaseViewModel<CalendarState, CalendarIntent, CalendarEffect>(
     initialState = SolarDate.today().let { today ->
         CalendarState(
             displayedYear = today.year,
             displayedMonth = today.month,
-            showCanChiOnCell = getShowCanChiOnCell().getOrDefault(true),
+            showCanChiOnCell = sharedPrefs.showCanChiOnCell,
         )
     }
 ) {
@@ -34,10 +33,8 @@ class CalendarViewModel(
 
     init {
         viewModelScope.launch {
-            observeShowCanChiOnCell().collect { result ->
-                result.onSuccess { show ->
-                    updateState { copy(showCanChiOnCell = show) }
-                }
+            sharedPrefs.showCanChiOnCellFlow.collectLatest { show ->
+                updateState { copy(showCanChiOnCell = show) }
             }
         }
 
@@ -81,16 +78,18 @@ class CalendarViewModel(
                 val now = SolarDate.today()
 
                 updateState {
-                    copy(displayedYear = now.year, displayedMonth = now.month, showTodayButton = false)
+                    copy(
+                        displayedYear = now.year,
+                        displayedMonth = now.month,
+                        showTodayButton = false
+                    )
                 }
                 loadMonth(now.year, now.month)
             }
 
-            is CalendarIntent.ShowMonthYearPicker ->
-                updateState { copy(showMonthYearPicker = true) }
+            is CalendarIntent.ShowMonthYearPicker -> updateState { copy(showMonthYearPicker = true) }
 
-            is CalendarIntent.DismissMonthYearPicker ->
-                updateState { copy(showMonthYearPicker = false) }
+            is CalendarIntent.DismissMonthYearPicker -> updateState { copy(showMonthYearPicker = false) }
 
             is CalendarIntent.ConfirmMonthYear -> {
                 updateState {
@@ -111,26 +110,29 @@ class CalendarViewModel(
         loadMonthJob = viewModelScope.launch {
             updateState { copy(isLoading = true, error = null) }
             val selected = state.value.selectedDate
-            getDaysInMonth(year, month)
-                .onSuccess { cells ->
-                    val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
-                    val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
-                    val lunarMonthLabel = firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
+            getDaysInMonth(year, month).onSuccess { cells ->
+                val firstCurrent = cells.firstOrNull { it.isCurrentMonth }
+                val lunarYearLabel = firstCurrent?.canChi?.let { "${it.canNam} ${it.chiNam}" }
+                val lunarMonthLabel =
+                    firstCurrent?.canChi?.let { "${it.canThang} ${it.chiThang}" }
 
-                    delay(200L)
+                delay(LOAD_MONTH_DEBOUNCE_DURATION)
 
-                    updateState {
-                        copy(
-                            isLoading = false,
-                            days = cells.map { c -> c.toUiModel(selected) }.toImmutableList(),
-                            lunarYearLabel = lunarYearLabel,
-                            lunarMonthLabel = lunarMonthLabel,
-                        )
-                    }
+                updateState {
+                    copy(
+                        isLoading = false,
+                        days = cells.map { c -> c.toUiModel(selected) }.toImmutableList(),
+                        lunarYearLabel = lunarYearLabel,
+                        lunarMonthLabel = lunarMonthLabel,
+                    )
                 }
-                .onFailure { err ->
-                    updateState { copy(isLoading = false, error = err.message ?: "Không tải được lịch") }
+            }.onFailure { err ->
+                updateState {
+                    copy(
+                        isLoading = false, error = err.message ?: "Không tải được lịch"
+                    )
                 }
+            }
         }
     }
 
@@ -144,4 +146,8 @@ class CalendarViewModel(
 
     private fun nextMonth(year: Int, month: Int): Pair<Int, Int> =
         if (month == 12) year + 1 to 1 else year to month + 1
+
+    companion object {
+        private const val LOAD_MONTH_DEBOUNCE_DURATION = 300L
+    }
 }

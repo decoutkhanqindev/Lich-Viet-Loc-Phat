@@ -174,7 +174,7 @@ fun CalendarContent(
             adUnit = adsManager.nativeCalendar,
             modifier = Modifier
                 .padding(horizontal = 8.dp)
-                .padding(top = 8.dp, bottom = 8.dp),
+                .padding(top = 12.dp, bottom = 8.dp),
         )
     }
 

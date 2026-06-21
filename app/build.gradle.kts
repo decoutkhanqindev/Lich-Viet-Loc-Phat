@@ -55,6 +55,11 @@ android {
                 "ADMOB_NATIVE_CALENDAR_ID",
                 "\"${"ca-app-pub-3940256099942544/2247696110"}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_INTER_HOME_ID",
+                "\"${"ca-app-pub-3940256099942544/1033173712"}\""
+            )
         }
 
         release {
@@ -84,6 +89,11 @@ android {
                 "String",
                 "ADMOB_NATIVE_CALENDAR_ID",
                 "\"${releaseAdId("admob.native.calendar.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_INTER_HOME_ID",
+                "\"${releaseAdId("admob.inter.home.id")}\""
             )
         }
     }

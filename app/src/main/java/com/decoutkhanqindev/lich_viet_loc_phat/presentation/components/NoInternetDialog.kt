@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoSon
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoSonAlpha12
@@ -33,7 +34,10 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 
 @Composable
 fun NoInternetDialog(onOpenWifiSettings: () -> Unit) {
-    Dialog(onDismissRequest = {}) {
+    Dialog(
+        onDismissRequest = {},
+        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false)
+    ) {
         AppCard {
             Column(
                 modifier = Modifier

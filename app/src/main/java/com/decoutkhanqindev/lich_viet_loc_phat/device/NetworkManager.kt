@@ -14,9 +14,12 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
 
 class NetworkManager(context: Context) {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
+
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
     private val isConnected: Boolean
         get() = connectivityManager.activeNetworkInfo?.isConnected == true
 
@@ -37,7 +40,11 @@ class NetworkManager(context: Context) {
         .distinctUntilChanged()
         .stateIn(
             scope = scope,
-            started = SharingStarted.Companion.Eagerly,
+            started = SharingStarted.Eagerly,
             initialValue = isConnected,
         )
+
+    fun destroy() {
+        job.cancel()
+    }
 }
