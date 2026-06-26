@@ -26,7 +26,10 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 fun AdLoadingDialog() {
     Dialog(
         onDismissRequest = {},
-        properties = DialogProperties(dismissOnBackPress = false, dismissOnClickOutside = false),
+        properties = DialogProperties(
+            dismissOnBackPress = false,
+            dismissOnClickOutside = false
+        ),
     ) {
         AppCard {
             Column(

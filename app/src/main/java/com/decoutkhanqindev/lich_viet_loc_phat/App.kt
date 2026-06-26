@@ -2,8 +2,10 @@ package com.decoutkhanqindev.lich_viet_loc_phat
 
 import android.app.Application
 import com.decoutkhanqindev.lich_viet_loc_phat.di.appModule
+import com.decoutkhanqindev.lich_viet_loc_phat.utils.Tag
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.RequestConfiguration
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,10 +14,12 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
 
-class App : Application() {
+class App : Application(), Tag {
 
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val scope = CoroutineScope(Dispatchers.IO + job + CoroutineExceptionHandler { _, throwable ->
+            Timber.tag(tag).e(throwable.stackTraceToString())
+        })
 
     override fun onCreate() {
         super.onCreate()
@@ -44,7 +48,7 @@ class App : Application() {
         )
         scope.launch {
             MobileAds.initialize(this@App) { status ->
-                Timber.d("AdMob initialized: ${status.adapterStatusMap}")
+                Timber.tag(tag).d("AdMob initialized: ${status.adapterStatusMap}")
             }
         }
     }

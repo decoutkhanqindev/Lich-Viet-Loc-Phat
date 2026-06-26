@@ -2,6 +2,7 @@ package com.decoutkhanqindev.lich_viet_loc_phat.ads
 
 import android.content.Context
 import android.util.DisplayMetrics
+import androidx.compose.runtime.Stable
 import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnit
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
@@ -10,21 +11,25 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
-class BannerAdUnit(
-    id: String,
-    name: String,
-    private val networkManager: NetworkManager,
-) : AdUnit(id, name) {
+@Stable
+class BannerAdUnit(id: String, name: String) : AdUnit(id, name) {
+
+    private val networkManager: NetworkManager by inject(NetworkManager::class.java)
 
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+    private val scope =
+        CoroutineScope(Dispatchers.Main + job + CoroutineExceptionHandler { _, throwable ->
+            Timber.tag(tag).e(throwable.stackTraceToString())
+        })
 
     private var _adView: AdView? = null
     val adView: AdView? get() = _adView
@@ -57,17 +62,17 @@ class BannerAdUnit(
                     view.setAdSize(adSize)
                     view.adListener = object : AdListener() {
                         override fun onAdLoaded() {
-                            Timber.tag("BannerAdUnit").d("$name - Loaded")
+                            Timber.tag(tag).d("$name - Loaded")
                             _state.value = AdUnitState.LOADED
                         }
 
                         override fun onAdFailedToLoad(error: LoadAdError) {
-                            Timber.tag("BannerAdUnit").d("$name - Failed: ${error.message}")
+                            Timber.tag(tag).d("$name - Failed: ${error.message}")
                             _state.value = AdUnitState.FAILED
                         }
 
                         override fun onAdImpression() {
-                            Timber.tag("BannerAdUnit").d("$name - Impression")
+                            Timber.tag(tag).d("$name - Impression")
                             _state.value = AdUnitState.IMPRESSION
                         }
                     }
@@ -75,7 +80,7 @@ class BannerAdUnit(
             }
 
             _state.value = AdUnitState.LOADING
-            Timber.tag("BannerAdUnit").d("$name - Loading")
+            Timber.tag(tag).d("$name - Loading")
             _adView?.loadAd(AdRequest.Builder().build())
         }
     }

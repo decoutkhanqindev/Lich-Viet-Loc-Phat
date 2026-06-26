@@ -11,21 +11,24 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
+import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
-class InterstitialAdUnit(
-    id: String,
-    name: String,
-    private val networkManager: NetworkManager,
-) : AdUnit(id, name) {
+class InterstitialAdUnit(id: String, name: String) : AdUnit(id, name) {
+
+    private val networkManager: NetworkManager by inject(NetworkManager::class.java)
 
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+    private val scope =
+        CoroutineScope(Dispatchers.Main + job + CoroutineExceptionHandler { _, throwable ->
+            Timber.tag(tag).e(throwable.stackTraceToString())
+        })
 
     private var _interstitialAd: InterstitialAd? = null
     private var currentTabCount = 0
@@ -58,20 +61,20 @@ class InterstitialAdUnit(
 
         scope.launch {
             _state.value = AdUnitState.LOADING
-            Timber.tag("InterstitialAdUnit").d("$name - Loading")
+            Timber.tag(tag).d("$name - Loading")
             InterstitialAd.load(
                 context,
                 id,
                 AdRequest.Builder().build(),
                 object : InterstitialAdLoadCallback() {
                     override fun onAdLoaded(ad: InterstitialAd) {
-                        Timber.tag("InterstitialAdUnit").d("$name - Loaded")
+                        Timber.tag(tag).d("$name - Loaded")
                         _interstitialAd = ad
                         _state.value = AdUnitState.LOADED
                     }
 
                     override fun onAdFailedToLoad(error: LoadAdError) {
-                        Timber.tag("InterstitialAdUnit").d("$name - Failed: ${error.message}")
+                        Timber.tag(tag).d("$name - Failed: ${error.message}")
                         _state.value = AdUnitState.FAILED
                     }
                 },
@@ -79,26 +82,34 @@ class InterstitialAdUnit(
         }
     }
 
-    fun show(activity: Activity) {
+    fun show(
+        activity: Activity,
+        onImpression: () -> Unit = {},
+        onAdClosed: () -> Unit = {},
+        onAdFailedToShow: () -> Unit = {},
+    ) {
         val ad = _interstitialAd ?: return
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdImpression() {
-                Timber.tag("InterstitialAdUnit").d("$name - Impression")
+                Timber.tag(tag).d("$name - Impression")
                 lastShowTime = System.currentTimeMillis()
                 currentTabCount = 0
                 _state.value = AdUnitState.IMPRESSION
+                onImpression()
             }
 
             override fun onAdDismissedFullScreenContent() {
-                Timber.tag("InterstitialAdUnit").d("$name - Closed")
+                Timber.tag(tag).d("$name - Closed")
                 _interstitialAd = null
                 _state.value = AdUnitState.NONE
+                onAdClosed()
             }
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
-                Timber.tag("InterstitialAdUnit").d("$name - Failed to show: ${error.message}")
+                Timber.tag(tag).d("$name - Failed to show: ${error.message}")
                 _interstitialAd = null
                 _state.value = AdUnitState.NONE
+                onAdFailedToShow()
             }
         }
         ad.show(activity)

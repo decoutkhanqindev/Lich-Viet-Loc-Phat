@@ -16,7 +16,9 @@ fun CalendarScreen(onNavigateToToday: (SolarDate) -> Unit) {
     ObserveOnLifecycleOwner {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is CalendarEffect.NavigateToToday -> onNavigateToToday(effect.date)
+                is CalendarEffect.NavigateToToday -> {
+                    onNavigateToToday(effect.date)
+                }
             }
         }
     }

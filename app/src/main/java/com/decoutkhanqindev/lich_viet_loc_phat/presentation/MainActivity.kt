@@ -30,7 +30,11 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun openWifiSettings() {
-        runCatching { startActivity(Intent(Settings.ACTION_WIFI_SETTINGS)) }
+        try {
+            startActivity(Intent(Settings.ACTION_WIFI_SETTINGS))
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     override fun onDestroy() {

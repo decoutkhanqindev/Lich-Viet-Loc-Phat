@@ -60,6 +60,11 @@ android {
                 "ADMOB_INTER_HOME_ID",
                 "\"${"ca-app-pub-3940256099942544/1033173712"}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_INTER_SPLASH_ID",
+                "\"${"ca-app-pub-3940256099942544/1033173712"}\""
+            )
         }
 
         release {
@@ -94,6 +99,11 @@ android {
                 "String",
                 "ADMOB_INTER_HOME_ID",
                 "\"${releaseAdId("admob.inter.home.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_INTER_SPLASH_ID",
+                "\"${releaseAdId("admob.inter.splash.id")}\""
             )
         }
     }

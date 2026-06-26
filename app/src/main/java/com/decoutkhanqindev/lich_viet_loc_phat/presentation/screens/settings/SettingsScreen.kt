@@ -18,8 +18,9 @@ fun SettingsScreen() {
     ObserveOnLifecycleOwner {
         viewModel.effect.collect { effect ->
             when (effect) {
-                is SettingsEffect.ShowMessage ->
+                is SettingsEffect.ShowMessage -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

@@ -3,6 +3,8 @@ package com.decoutkhanqindev.lich_viet_loc_phat.device
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
+import com.decoutkhanqindev.lich_viet_loc_phat.utils.Tag
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -12,10 +14,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
+import timber.log.Timber
 
-class NetworkManager(context: Context) {
+class NetworkManager(context: Context): Tag {
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job)
+    private val scope = CoroutineScope(Dispatchers.IO + job + CoroutineExceptionHandler { _, throwable ->
+        Timber.tag(tag).e(throwable.stackTraceToString())
+    })
 
     private val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager

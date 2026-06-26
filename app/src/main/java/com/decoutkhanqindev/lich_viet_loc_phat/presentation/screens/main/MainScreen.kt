@@ -9,6 +9,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -20,6 +23,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppBottomNavBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppTopBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.AdLoadingDialog
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.MainNavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoBrush
@@ -31,25 +35,38 @@ fun MainScreen() {
     val context = LocalContext.current
     val activity = context as Activity
     val backStack = rememberNavBackStack(TodayDestination())
+    var pendingDest by remember { mutableStateOf<NavKey>(TodayDestination()) }
     val adsManager: AdsManager = koinInject()
     val interHomeState by adsManager.interHome.state.collectAsStateWithLifecycle()
-
     val handleNavigateTo: (NavKey) -> Unit = { dest ->
-        backStack.navigateTo(dest)
+        pendingDest = dest
+        if (dest == CalendarDestination) {
+            adsManager.nativeCalendar.load(context)
+        }
         if (adsManager.interHome.readyToLoad()) {
             adsManager.interHome.load(context)
         } else {
+            backStack.navigateTo(dest)
             adsManager.interHome.incrementTabCount()
         }
     }
 
     LaunchedEffect(Unit) {
         adsManager.nativeToday.load(context)
-        adsManager.nativeCalendar.load(context)
     }
 
     LaunchedEffect(interHomeState) {
-        if (interHomeState == AdUnitState.LOADED) adsManager.interHome.show(activity)
+        if (interHomeState == AdUnitState.LOADED) {
+            adsManager.interHome.show(
+                activity,
+                onImpression = {
+                    backStack.navigateTo(pendingDest)
+                },
+                onAdFailedToShow = {
+                    backStack.navigateTo(pendingDest)
+                }
+            )
+        }
     }
 
     if (interHomeState == AdUnitState.LOADING) AdLoadingDialog()
