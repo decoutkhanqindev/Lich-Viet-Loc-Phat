@@ -1,6 +1,5 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.main
 
-import android.app.Activity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,10 +19,10 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.rememberNavBackStack
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.MainActivity
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppBottomNavBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppTopBar
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.AdLoadingDialog
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.CalendarDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.MainNavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.navigation.TodayDestination
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoBrush
@@ -33,16 +32,14 @@ import org.koin.compose.koinInject
 @Composable
 fun MainScreen() {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context as MainActivity
     val backStack = rememberNavBackStack(TodayDestination())
     var pendingDest by remember { mutableStateOf<NavKey>(TodayDestination()) }
     val adsManager: AdsManager = koinInject()
+    val nativeTodayState by adsManager.nativeToday.state.collectAsStateWithLifecycle()
     val interHomeState by adsManager.interHome.state.collectAsStateWithLifecycle()
     val handleNavigateTo: (NavKey) -> Unit = { dest ->
         pendingDest = dest
-        if (dest == CalendarDestination) {
-            adsManager.nativeCalendar.load(context)
-        }
         if (adsManager.interHome.readyToLoad()) {
             adsManager.interHome.load(context)
         } else {
@@ -53,6 +50,12 @@ fun MainScreen() {
 
     LaunchedEffect(Unit) {
         adsManager.nativeToday.load(context)
+    }
+
+    LaunchedEffect(nativeTodayState) {
+        if (nativeTodayState == AdUnitState.LOADED) {
+            adsManager.nativeCalendar.load(context)
+        }
     }
 
     LaunchedEffect(interHomeState) {

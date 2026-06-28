@@ -50,6 +50,15 @@
   <string name="action_close">Đóng</string>
   <string name="action_confirm">Xác nhận</string>
 
+  <!-- Calendar - Widget Bottom Sheet -->
+  <string name="widget_preview_title">Xem trước Widget</string>
+  <string name="widget_add_row_label">Thêm widget lịch</string>
+  <string name="widget_watch_ad_button">Xem quảng cáo để thêm</string>
+  <string name="widget_pin_success">Thêm widget thành công!</string>
+  <string name="widget_pin_not_supported">Thiết bị không hỗ trợ thêm widget.</string>
+  <string name="widget_pin_already_added">Widget đã được thêm trước đó.</string>
+  <string name="widget_pin_failure">Không thể thêm widget. Vui lòng thử lại.</string>
+
   <!-- Ads -->
   <string name="ad_label">QC</string>
   <string name="ad_loading">Đang tải quảng cáo…</string>

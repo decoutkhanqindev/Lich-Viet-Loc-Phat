@@ -18,16 +18,12 @@ import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
 import org.koin.compose.koinInject
 
 @Composable
-fun AppNavDisplay(
-    onOpenWifiSettings: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+fun AppNavDisplay(modifier: Modifier = Modifier) {
     val backStack = rememberNavBackStack(SplashDestination)
-
     val networkManager: NetworkManager = koinInject()
     val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
 
-    if (!networkAvailable) NoInternetDialog(onOpenWifiSettings)
+    if (!networkAvailable) NoInternetDialog()
 
     NavDisplay(
         entries = rememberDecoratedNavEntries(

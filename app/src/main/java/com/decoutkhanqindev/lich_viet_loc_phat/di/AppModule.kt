@@ -36,6 +36,6 @@ val appModule = module {
     factory { GetSolarTermUseCase(get()) }
 
     viewModel { TodayViewModel(get()) }
-    viewModel { CalendarViewModel(get(), get()) }
+    viewModel { CalendarViewModel(get(), get(), androidApplication()) }
     viewModel { SettingsViewModel(androidApplication(), get()) }
 }

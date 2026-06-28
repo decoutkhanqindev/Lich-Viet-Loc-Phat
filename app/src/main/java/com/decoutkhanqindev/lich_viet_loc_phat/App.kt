@@ -17,7 +17,8 @@ import timber.log.Timber
 class App : Application(), Tag {
 
     private val job = SupervisorJob()
-    private val scope = CoroutineScope(Dispatchers.IO + job + CoroutineExceptionHandler { _, throwable ->
+    private val scope =
+        CoroutineScope(Dispatchers.IO + job + CoroutineExceptionHandler { _, throwable ->
             Timber.tag(tag).e(throwable.stackTraceToString())
         })
 
@@ -40,7 +41,6 @@ class App : Application(), Tag {
     }
 
     private fun initAdMob() {
-        // remove this in production
         MobileAds.setRequestConfiguration(
             RequestConfiguration.Builder()
                 .setTestDeviceIds(listOf("5B9A6B9AE0D81DDFBC4AA92424953A94"))

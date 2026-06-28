@@ -63,15 +63,6 @@ fun SettingsContent(
                 )
             }
 
-            SettingsGroup(title = stringResource(R.string.settings_group_utilities)) {
-                SettingsToggleRow(
-                    label = stringResource(R.string.settings_widget_label),
-                    subtitle = stringResource(R.string.settings_widget_subtitle),
-                    checked = state.calendarWidgetEnabled,
-                    onCheckedChange = { onIntent(SettingsIntent.ToggleCalendarWidget(it)) },
-                )
-            }
-
             SettingsGroup(title = stringResource(R.string.settings_group_about)) {
                 SettingsInfoRow(
                     label = stringResource(R.string.settings_version),

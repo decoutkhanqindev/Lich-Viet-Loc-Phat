@@ -68,6 +68,7 @@ val TodayCellFg = Color.White
 val TodayCellFgAlpha85 = Color.White.copy(alpha = 0.85f)
 val TodayCellFgAlpha80 = Color.White.copy(alpha = 0.8f)
 val TodayCellFgAlpha70 = Color.White.copy(alpha = 0.7f)
+val TodayCellFgAlpha20 = Color.White.copy(alpha = 0.2f)
 
 val BorderWarmAlpha50 = BorderWarm.copy(alpha = 0.5f)
 

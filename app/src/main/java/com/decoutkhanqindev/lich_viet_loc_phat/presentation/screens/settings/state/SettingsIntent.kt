@@ -5,7 +5,4 @@ import androidx.compose.runtime.Immutable
 sealed interface SettingsIntent {
     @Immutable
     data class ToggleCanChiOnCell(val enabled: Boolean) : SettingsIntent
-
-    @Immutable
-    data class ToggleCalendarWidget(val enabled: Boolean) : SettingsIntent
 }

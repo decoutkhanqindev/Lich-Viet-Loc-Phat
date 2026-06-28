@@ -28,6 +28,10 @@ class AdsManager(networkManager: NetworkManager) {
         id = BuildConfig.ADMOB_INTER_SPLASH_ID,
         name = "inter_splash",
     )
+    val rewardWidget = RewardAdUnit(
+        id = BuildConfig.ADMOB_REWARD_WIDGET_ID,
+        name = "reward_widget",
+    )
 
     fun destroyAll() {
         bannerSplash.destroy()
@@ -35,5 +39,6 @@ class AdsManager(networkManager: NetworkManager) {
         nativeToday.destroy()
         nativeCalendar.destroy()
         interHome.destroy()
+        rewardWidget.destroy()
     }
 }

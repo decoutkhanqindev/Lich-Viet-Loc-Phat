@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.R
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.MainActivity
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoSon
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoSonAlpha12
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.MucDen
@@ -33,7 +35,10 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFg
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.VangDong
 
 @Composable
-fun NoInternetDialog(onOpenWifiSettings: () -> Unit) {
+fun NoInternetDialog() {
+    val context = LocalContext.current
+    val activity = context as MainActivity
+
     Dialog(
         onDismissRequest = {},
         properties = DialogProperties(
@@ -85,7 +90,7 @@ fun NoInternetDialog(onOpenWifiSettings: () -> Unit) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .onClick(shape = RoundedCornerShape16dp) { onOpenWifiSettings() }
+                        .onClick(shape = RoundedCornerShape16dp) { activity.openWifiSettings() }
                         .background(color = VangDong, shape = RoundedCornerShape16dp)
                         .padding(vertical = 14.dp),
                     contentAlignment = Alignment.Center,

@@ -19,4 +19,12 @@ sealed interface CalendarIntent {
 
     @Immutable
     data class ConfirmMonthYear(val year: Int, val month: Int) : CalendarIntent
+
+    data object ShowWidgetBottomSheet : CalendarIntent
+
+    data object DismissWidgetBottomSheet : CalendarIntent
+
+    data object WatchAdToAddWidget : CalendarIntent
+
+    data object AddWidget : CalendarIntent
 }

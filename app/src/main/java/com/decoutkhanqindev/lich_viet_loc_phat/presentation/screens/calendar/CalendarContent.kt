@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
@@ -31,8 +32,15 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.filled.OndemandVideo
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,10 +65,12 @@ import androidx.compose.ui.window.DialogProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.SolarDate
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.AppCard
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.PrevNextButtons
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.TodayButton
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.ads.NativeMedia169Ad
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.onClick
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmerHighlight
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.AnimationContentKey
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.CalendarProperties
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.model.DayCellUiModel
@@ -69,7 +79,9 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.sta
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.BorderWarm
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.CuoiTuan
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoLe
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.DoSon
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoBrush
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.GiayDoMid
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.MucDen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.MucDenAlpha25
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.NauAm
@@ -86,9 +98,11 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerS
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape12dp
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape20dp
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerShape8dp
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.RoundedCornerTopShape20dp
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.SurfaceCard
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellBrush
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFg
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFgAlpha20
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFgAlpha70
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFgAlpha80
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.TodayCellFgAlpha85
@@ -170,6 +184,13 @@ fun CalendarContent(
             )
         }
 
+        WidgetEntryRow(
+            onClick = { onIntent(CalendarIntent.ShowWidgetBottomSheet) },
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .padding(top = 12.dp),
+        )
+
         NativeMedia169Ad(
             adUnit = adsManager.nativeCalendar,
             modifier = Modifier
@@ -183,7 +204,22 @@ fun CalendarContent(
             initialMonth = state.displayedMonth,
             initialYear = state.displayedYear,
             onDismiss = { onIntent(CalendarIntent.DismissMonthYearPicker) },
-            onConfirm = { y, m -> onIntent(CalendarIntent.ConfirmMonthYear(y, m)) },
+            onConfirm = { y, m ->
+                onIntent(CalendarIntent.ConfirmMonthYear(y, m))
+            },
+        )
+    }
+
+    if (state.showWidgetBottomSheet) {
+        WidgetBottomSheet(
+            displayedMonth = state.displayedMonth,
+            displayedYear = state.displayedYear,
+            lunarYearLabel = state.lunarYearLabel,
+            lunarMonthLabel = state.lunarMonthLabel,
+            days = state.days,
+            showCanChiOnCell = state.showCanChiOnCell,
+            onDismiss = { onIntent(CalendarIntent.DismissWidgetBottomSheet) },
+            onWatchAd = { onIntent(CalendarIntent.WatchAdToAddWidget) },
         )
     }
 }
@@ -208,10 +244,6 @@ private fun CalendarMonthHeader(
     onNext: () -> Unit,
     onShowPicker: () -> Unit,
 ) {
-    val monthNames = remember {
-        CalendarProperties.months.toImmutableList()
-    }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -245,7 +277,7 @@ private fun CalendarMonthHeader(
                 Text(
                     stringResource(
                         R.string.calendar_month_year_format,
-                        monthNames[hs.month - 1],
+                        CalendarProperties.months[hs.month - 1],
                         hs.year
                     ),
                     textAlign = TextAlign.Center,
@@ -354,24 +386,6 @@ private fun DayCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val solarTextColor = when {
-        !cell.isCurrentMonth -> MucDenAlpha25
-        cell.isToday -> TodayCellFg
-        else -> MucDen
-    }
-    val lunarTextColor = when {
-        !cell.isCurrentMonth -> NauNhatAlpha40
-        cell.isToday -> TodayCellFgAlpha85
-        else -> NauAmAlpha70
-    }
-    val canChiTextColor = when {
-        !cell.isCurrentMonth -> VangDongAlpha20
-        cell.isToday -> TodayCellFgAlpha80
-        else -> VangDongAlpha70
-    }
-    val holidayTextColor = if (cell.isToday) TodayCellFg else DoLe
-    val solarTermTextColor = if (cell.isToday) TodayCellFg else NgocBich
-    val lunarDotColor = if (cell.isToday) TodayCellFgAlpha70 else VangDongAlpha70
     val selectionBorderColor by animateColorAsState(
         targetValue = if (cell.isSelected) VangDongAlpha50 else Color.Transparent,
         animationSpec = tween(200),
@@ -395,45 +409,7 @@ private fun DayCell(
             ),
         contentAlignment = Alignment.Center,
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 5.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "${cell.solar.day}",
-                color = solarTextColor,
-                fontSize = 15.sp,
-                fontWeight = if (cell.isToday) FontWeight.Bold else FontWeight.Normal,
-                textAlign = TextAlign.Center,
-            )
-
-            Text(
-                text = if (cell.lunar.day == 1) "1/${cell.lunar.month}" else "${cell.lunar.day}",
-                color = lunarTextColor,
-                fontSize = 9.sp,
-                textAlign = TextAlign.Center,
-            )
-
-            if (showCanChi) {
-                Text(
-                    text = cell.canChiLabel,
-                    color = canChiTextColor,
-                    fontSize = 7.sp,
-                    textAlign = TextAlign.Center,
-                    maxLines = 1,
-                )
-            }
-            if (cell.isCurrentMonth) {
-                DayCellMarker(
-                    holiday = cell.holiday,
-                    solarTerm = cell.solarTerm,
-                    lunarDay = cell.lunar.day,
-                    holidayTextColor = holidayTextColor,
-                    solarTermTextColor = solarTermTextColor,
-                    lunarDotColor = lunarDotColor,
-                )
-            }
-        }
+        DayCellContent(cell = cell, showCanChi = showCanChi)
     }
 }
 
@@ -482,6 +458,359 @@ private fun DayCellMarker(
 }
 
 @Composable
+private fun DayCellContent(
+    cell: DayCellUiModel,
+    showCanChi: Boolean,
+) {
+    val solarTextColor = when {
+        !cell.isCurrentMonth -> MucDenAlpha25
+        cell.isToday -> TodayCellFg
+        else -> MucDen
+    }
+    val lunarTextColor = when {
+        !cell.isCurrentMonth -> NauNhatAlpha40
+        cell.isToday -> TodayCellFgAlpha85
+        else -> NauAmAlpha70
+    }
+    val canChiTextColor = when {
+        !cell.isCurrentMonth -> VangDongAlpha20
+        cell.isToday -> TodayCellFgAlpha80
+        else -> VangDongAlpha70
+    }
+    val holidayTextColor = if (cell.isToday) TodayCellFg else DoLe
+    val solarTermTextColor = if (cell.isToday) TodayCellFg else NgocBich
+    val lunarDotColor = if (cell.isToday) TodayCellFgAlpha70 else VangDongAlpha70
+
+    Column(
+        modifier = Modifier.padding(vertical = 5.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Text(
+            text = "${cell.solar.day}",
+            color = solarTextColor,
+            fontSize = 15.sp,
+            fontWeight = if (cell.isToday) FontWeight.Bold else FontWeight.Normal,
+            textAlign = TextAlign.Center,
+        )
+        Text(
+            text = if (cell.lunar.day == 1) "1/${cell.lunar.month}" else "${cell.lunar.day}",
+            color = lunarTextColor,
+            fontSize = 9.sp,
+            textAlign = TextAlign.Center,
+        )
+        if (showCanChi) {
+            Text(
+                text = cell.canChiLabel,
+                color = canChiTextColor,
+                fontSize = 7.sp,
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+            )
+        }
+        if (cell.isCurrentMonth) {
+            DayCellMarker(
+                holiday = cell.holiday,
+                solarTerm = cell.solarTerm,
+                lunarDay = cell.lunar.day,
+                holidayTextColor = holidayTextColor,
+                solarTermTextColor = solarTermTextColor,
+                lunarDotColor = lunarDotColor,
+            )
+        }
+    }
+}
+
+@Composable
+private fun WidgetEntryRow(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AppCard(
+        modifier = modifier.onClick(RoundedCornerShape12dp) { onClick() }
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(end = 12.dp)
+            ) {
+                Text(
+                    stringResource(R.string.widget_add_row_label),
+                    color = MucDen,
+                    fontSize = 14.sp,
+                )
+                Spacer(Modifier.height(2.dp))
+                Text(
+                    stringResource(R.string.settings_widget_subtitle),
+                    color = NauNhat,
+                    fontSize = 11.sp,
+                )
+            }
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = null,
+                tint = NauNhat,
+                modifier = Modifier.size(20.dp),
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WidgetBottomSheet(
+    displayedMonth: Int,
+    displayedYear: Int,
+    lunarYearLabel: String?,
+    lunarMonthLabel: String?,
+    days: ImmutableList<DayCellUiModel>,
+    showCanChiOnCell: Boolean,
+    onDismiss: () -> Unit,
+    onWatchAd: () -> Unit,
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        containerColor = SurfaceCard,
+        shape = RoundedCornerTopShape20dp,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Text(
+                stringResource(R.string.widget_preview_title),
+                color = MucDen,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            WidgetPreviewCard(
+                displayedMonth = displayedMonth,
+                displayedYear = displayedYear,
+                lunarYearLabel = lunarYearLabel,
+                lunarMonthLabel = lunarMonthLabel,
+                days = days,
+                showCanChiOnCell = showCanChiOnCell,
+            )
+
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .onClick(RoundedCornerShape12dp) { onDismiss() }
+                        .border(1.dp, BorderWarm, RoundedCornerShape12dp)
+                        .background(SurfaceCard, RoundedCornerShape12dp)
+                        .padding(vertical = 13.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        stringResource(R.string.action_close),
+                        color = NauNhat,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                    )
+                }
+
+                WatchAdButton(
+                    onClick = onWatchAd,
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun WidgetPreviewCard(
+    displayedMonth: Int,
+    displayedYear: Int,
+    lunarYearLabel: String?,
+    lunarMonthLabel: String?,
+    days: ImmutableList<DayCellUiModel>,
+    showCanChiOnCell: Boolean,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .border(1.dp, BorderWarm, RoundedCornerShape12dp)
+            .background(GiayDoMid, RoundedCornerShape12dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Spacer(Modifier.weight(1f))
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    stringResource(
+                        R.string.calendar_month_year_format,
+                        CalendarProperties.months[displayedMonth - 1],
+                        displayedYear,
+                    ),
+                    color = MucDen,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                )
+                if (lunarYearLabel != null && lunarMonthLabel != null) {
+                    Text(
+                        stringResource(
+                            R.string.calendar_lunar_format,
+                            lunarYearLabel,
+                            lunarMonthLabel,
+                        ),
+                        color = VangDongAlpha75,
+                        fontSize = 11.sp,
+                        textAlign = TextAlign.Center,
+                    )
+                }
+            }
+            Spacer(Modifier.weight(1f))
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+                    .padding(bottom = 4.dp),
+            ) {
+                CalendarProperties.weekdaysMonFirst.forEachIndexed { idx, label ->
+                    Text(
+                        label,
+                        modifier = Modifier.weight(1f),
+                        textAlign = TextAlign.Center,
+                        color = if (idx >= 5) CuoiTuan else NauAm,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Medium,
+                        letterSpacing = 0.5.sp,
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, BorderWarm, RoundedCornerShape12dp)
+                    .background(SurfaceCard, RoundedCornerShape12dp)
+                    .padding(8.dp),
+            ) {
+                WidgetCalendarGrid(days = days, showCanChiOnCell = showCanChiOnCell)
+            }
+        }
+
+        Text(
+            stringResource(R.string.app_name),
+            color = VangDong,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+        )
+    }
+}
+
+@Composable
+private fun WidgetCalendarGrid(
+    days: ImmutableList<DayCellUiModel>,
+    showCanChiOnCell: Boolean,
+) {
+    val weeks = remember(days) { days.chunked(7) }
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        weeks.forEach { week ->
+            Row(modifier = Modifier.fillMaxWidth()) {
+                week.forEach { cell ->
+                    WidgetDayCell(
+                        cell = cell,
+                        showCanChi = showCanChiOnCell,
+                        modifier = Modifier.weight(1f),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun WidgetDayCell(
+    cell: DayCellUiModel,
+    showCanChi: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .padding(1.dp)
+            .then(
+                if (cell.isToday) {
+                    Modifier.background(DoSon, RoundedCornerShape10dp)
+                } else {
+                    Modifier
+                }
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        DayCellContent(cell = cell, showCanChi = showCanChi)
+    }
+}
+
+@Composable
+private fun WatchAdButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .onClick(RoundedCornerShape12dp) { onClick() }
+            .clip(RoundedCornerShape12dp)
+            .shimmerHighlight(backgroundColor = VangDong, highlightColor = TodayCellFgAlpha20)
+            .padding(vertical = 13.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                imageVector = Icons.Default.OndemandVideo,
+                contentDescription = null,
+                tint = TodayCellFg,
+                modifier = Modifier.size(18.dp),
+            )
+            Text(
+                stringResource(R.string.widget_watch_ad_button),
+                color = TodayCellFg,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+            )
+        }
+    }
+}
+
+@Composable
 private fun MonthYearPickerDialog(
     initialMonth: Int,
     initialYear: Int,
@@ -511,6 +840,7 @@ private fun MonthYearPickerDialog(
         AnimatedVisibility(
             visibleState = transitionState,
             enter = scaleIn() + fadeIn(),
+            exit = scaleOut() + fadeOut()
         ) {
             Column(
                 modifier = Modifier
@@ -652,15 +982,15 @@ private fun DialogButton(
     isPrimary: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val baseModifier = modifier.onClick(RoundedCornerShape12dp) { onClick() }
-
     Box(
         modifier = if (isPrimary) {
-            baseModifier
+            modifier
+                .onClick(RoundedCornerShape12dp) { onClick() }
                 .background(color = VangDong, shape = RoundedCornerShape12dp)
                 .padding(vertical = 13.dp)
         } else {
-            baseModifier
+            modifier
+                .onClick(RoundedCornerShape12dp) { onClick() }
                 .border(
                     width = 1.dp,
                     color = BorderWarm,

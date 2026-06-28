@@ -20,7 +20,7 @@ import com.decoutkhanqindev.lich_viet_loc_phat.R
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.NativeAdUnit
 import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmer
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmerLoading
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.ShimmerBg
 import com.google.android.gms.ads.nativead.MediaView
 import com.google.android.gms.ads.nativead.NativeAd
@@ -57,7 +57,7 @@ fun NativeMedia43Ad(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .shimmer(isEnable = true)
+                    .shimmerLoading()
                     .background(ShimmerBg),
             )
         }

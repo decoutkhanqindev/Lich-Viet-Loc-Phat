@@ -9,8 +9,8 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
-class InterstitialAdUnit(id: String, name: String) : AdUnit(id, name) {
+class RewardAdUnit(id: String, name: String) : AdUnit(id, name) {
 
     private val networkManager: NetworkManager by inject(NetworkManager::class.java)
 
@@ -30,20 +30,8 @@ class InterstitialAdUnit(id: String, name: String) : AdUnit(id, name) {
             Timber.tag(tag).e(throwable.stackTraceToString())
         })
 
-    private var _interstitialAd: InterstitialAd? = null
-    private var currentTabCount = 0
-    private var lastShowTime = 0L
+    private var _rewardedAd: RewardedAd? = null
     private var networkObserveJob: Job? = null
-
-    fun incrementTabCount() {
-        currentTabCount++
-    }
-
-    fun readyToLoad(): Boolean {
-        val now = System.currentTimeMillis()
-        val intervalPassed = lastShowTime == 0L || now - lastShowTime >= INTERVAL
-        return currentTabCount >= TAB_THRESHOLD && intervalPassed
-    }
 
     override fun load(context: Context) {
         if (_state.value != AdUnitState.NONE) return
@@ -62,14 +50,14 @@ class InterstitialAdUnit(id: String, name: String) : AdUnit(id, name) {
         scope.launch {
             _state.value = AdUnitState.LOADING
             Timber.tag(tag).d("$name - Loading")
-            InterstitialAd.load(
+            RewardedAd.load(
                 context,
                 id,
                 AdRequest.Builder().build(),
-                object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(ad: InterstitialAd) {
+                object : RewardedAdLoadCallback() {
+                    override fun onAdLoaded(ad: RewardedAd) {
                         Timber.tag(tag).d("$name - Loaded")
-                        _interstitialAd = ad
+                        _rewardedAd = ad
                         _state.value = AdUnitState.LOADED
                     }
 
@@ -84,47 +72,42 @@ class InterstitialAdUnit(id: String, name: String) : AdUnit(id, name) {
 
     fun show(
         activity: Activity,
-        onImpression: () -> Unit = {},
+        onEarned: () -> Unit = {},
         onAdClosed: () -> Unit = {},
         onAdFailedToShow: () -> Unit = {},
     ) {
-        val ad = _interstitialAd ?: return
+        val ad = _rewardedAd ?: return
 
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdImpression() {
                 Timber.tag(tag).d("$name - Impression")
-                lastShowTime = System.currentTimeMillis()
-                currentTabCount = 0
                 _state.value = AdUnitState.IMPRESSION
-                onImpression()
             }
 
             override fun onAdDismissedFullScreenContent() {
                 Timber.tag(tag).d("$name - Closed")
-                _interstitialAd = null
+                _rewardedAd = null
                 _state.value = AdUnitState.NONE
                 onAdClosed()
             }
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
                 Timber.tag(tag).d("$name - Failed to show: ${error.message}")
-                _interstitialAd = null
+                _rewardedAd = null
                 _state.value = AdUnitState.NONE
                 onAdFailedToShow()
             }
         }
 
-        ad.show(activity)
+        ad.show(activity) {
+            Timber.tag(tag).d("$name - Reward earned")
+            onEarned()
+        }
     }
 
     override fun destroy() {
         job.cancel()
-        _interstitialAd = null
+        _rewardedAd = null
         _state.value = AdUnitState.NONE
-    }
-
-    companion object {
-        private const val TAB_THRESHOLD = 3
-        private const val INTERVAL = 60_000L
     }
 }

@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.BannerAdUnit
 import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
-import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmer
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.components.shimmerLoading
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.theme.ShimmerBg
 import org.koin.compose.koinInject
 
@@ -58,7 +58,7 @@ fun BannerAd(
             Box(
                 modifier = Modifier
                     .matchParentSize()
-                    .shimmer(isEnable = true)
+                    .shimmerLoading()
                     .background(ShimmerBg),
             )
         }

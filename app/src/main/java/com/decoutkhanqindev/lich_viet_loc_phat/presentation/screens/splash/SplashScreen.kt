@@ -1,6 +1,5 @@
 package com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.splash
 
-import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -9,12 +8,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.decoutkhanqindev.lich_viet_loc_phat.ads.AdsManager
 import com.decoutkhanqindev.lich_viet_loc_phat.device.NetworkManager
 import com.decoutkhanqindev.lich_viet_loc_phat.domain.model.ads.AdUnitState
+import com.decoutkhanqindev.lich_viet_loc_phat.presentation.MainActivity
 import org.koin.compose.koinInject
 
 @Composable
 fun SplashScreen(onNavigateToMain: () -> Unit) {
     val context = LocalContext.current
-    val activity = context as Activity
+    val activity = context as MainActivity
     val networkManager: NetworkManager = koinInject()
     val networkAvailable by networkManager.available.collectAsStateWithLifecycle()
     val adsManager: AdsManager = koinInject()

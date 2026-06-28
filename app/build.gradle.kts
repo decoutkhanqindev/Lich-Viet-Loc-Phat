@@ -65,6 +65,11 @@ android {
                 "ADMOB_INTER_SPLASH_ID",
                 "\"${"ca-app-pub-3940256099942544/1033173712"}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_REWARD_WIDGET_ID",
+                "\"${"ca-app-pub-3940256099942544/5224354917"}\""
+            )
         }
 
         release {
@@ -104,6 +109,11 @@ android {
                 "String",
                 "ADMOB_INTER_SPLASH_ID",
                 "\"${releaseAdId("admob.inter.splash.id")}\""
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_REWARD_WIDGET_ID",
+                "\"${releaseAdId("admob.reward.widget.id")}\""
             )
         }
     }
@@ -183,7 +193,7 @@ dependencies {
     // Timber
     implementation(libs.timber)
 
-    // Immutable Collections (ImmutableList cho Presentation State)
+    // Immutable Collections
     implementation(libs.kotlinx.collections.immutable)
 
     // Glance Widget
@@ -194,12 +204,10 @@ dependencies {
     // AdMob
     implementation(libs.play.services.ads)
 
-    // Shimmer
-    implementation(libs.compose.shimmer)
 
     // Lottie
     implementation(libs.lottie.compose)
 
-    // ConstraintLayout (XML native ad layouts)
+    // ConstraintLayout
     implementation(libs.androidx.constraintlayout)
 }
