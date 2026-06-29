@@ -33,13 +33,7 @@ fun AppNavDisplay(modifier: Modifier = Modifier) {
                 rememberViewModelStoreNavEntryDecorator(),
             ),
             entryProvider = entryProvider {
-                entry<SplashDestination> {
-                    SplashScreen(
-                        onNavigateToMain = {
-                            backStack.navigateTo(MainDestination, false)
-                        }
-                    )
-                }
+                entry<SplashDestination> { SplashScreen(backStack) }
                 entry<MainDestination> { MainScreen() }
             },
         ),

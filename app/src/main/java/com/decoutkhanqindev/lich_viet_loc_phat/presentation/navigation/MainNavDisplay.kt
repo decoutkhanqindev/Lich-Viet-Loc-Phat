@@ -12,7 +12,6 @@ import androidx.navigation3.ui.NavDisplay
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.calendar.CalendarScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.settings.SettingsScreen
 import com.decoutkhanqindev.lich_viet_loc_phat.presentation.screens.today.TodayScreen
-import com.decoutkhanqindev.lich_viet_loc_phat.utils.navigateTo
 
 @Composable
 fun MainNavDisplay(
@@ -30,13 +29,7 @@ fun MainNavDisplay(
                 entry<TodayDestination> { dest ->
                     TodayScreen(initialDate = dest.toSolarDate())
                 }
-                entry<CalendarDestination> {
-                    CalendarScreen(
-                        onNavigateToToday = { date ->
-                            backStack.navigateTo(date.toTodayDestination())
-                        }
-                    )
-                }
+                entry<CalendarDestination> { CalendarScreen(backStack) }
                 entry<SettingsDestination> { SettingsScreen() }
             },
         ),

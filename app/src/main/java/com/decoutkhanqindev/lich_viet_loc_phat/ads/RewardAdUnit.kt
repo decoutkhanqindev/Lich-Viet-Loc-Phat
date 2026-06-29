@@ -20,7 +20,12 @@ import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
-class RewardAdUnit(id: String, name: String) : AdUnit(id, name) {
+class RewardAdUnit(
+    id: String, name: String,
+    private val onShowing: () -> Unit = {},
+    private val onClosed: () -> Unit = {},
+    private val onFailedToShow: () -> Unit = {},
+) : AdUnit(id, name) {
 
     private val networkManager: NetworkManager by inject(NetworkManager::class.java)
 
@@ -79,9 +84,15 @@ class RewardAdUnit(id: String, name: String) : AdUnit(id, name) {
         val ad = _rewardedAd ?: return
 
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+            override fun onAdShowedFullScreenContent() {
+                Timber.tag(tag).d("$name - Showed")
+                onShowing()
+            }
+
             override fun onAdImpression() {
                 Timber.tag(tag).d("$name - Impression")
                 _state.value = AdUnitState.IMPRESSION
+                onShowing()
             }
 
             override fun onAdDismissedFullScreenContent() {
@@ -89,6 +100,7 @@ class RewardAdUnit(id: String, name: String) : AdUnit(id, name) {
                 _rewardedAd = null
                 _state.value = AdUnitState.NONE
                 onAdClosed()
+                onClosed()
             }
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
@@ -96,12 +108,14 @@ class RewardAdUnit(id: String, name: String) : AdUnit(id, name) {
                 _rewardedAd = null
                 _state.value = AdUnitState.NONE
                 onAdFailedToShow()
+                onFailedToShow()
             }
         }
 
         ad.show(activity) {
             Timber.tag(tag).d("$name - Reward earned")
             onEarned()
+            onShowing()
         }
     }
 

@@ -12,8 +12,8 @@ import com.decoutkhanqindev.lich_viet_loc_phat.presentation.widget.CalendarWidge
 import kotlinx.coroutines.launch
 
 class SettingsViewModel(
-    private val context: Application,
     private val sharedPrefs: SharedPrefsManager,
+    private val application: Application,
 ) : BaseViewModel<SettingsState, SettingsIntent, Nothing>(
     initialState = SettingsState(
         showCanChiOnCell = sharedPrefs.showCanChiOnCell,
@@ -33,7 +33,7 @@ class SettingsViewModel(
 
     private fun refreshWidget() {
         viewModelScope.launch {
-            runCatching { CalendarWidget().updateAll(context) }
+            runCatching { CalendarWidget().updateAll(application) }
         }
     }
 }

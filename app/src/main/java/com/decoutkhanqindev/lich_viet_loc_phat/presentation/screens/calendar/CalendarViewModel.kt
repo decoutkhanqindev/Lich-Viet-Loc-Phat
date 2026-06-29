@@ -168,15 +168,16 @@ class CalendarViewModel(
             }
 
             runCatching {
-                val isSupported = GlanceAppWidgetManager(application).requestPinGlanceAppWidget(
+                GlanceAppWidgetManager(application).requestPinGlanceAppWidget(
                     receiver = CalendarWidgetReceiver::class.java,
                     preview = CalendarWidget(),
                 )
-                if (!isSupported) {
+            }.onSuccess { isSupported ->
+                if (isSupported) {
+                    sendEffect(CalendarEffect.ShowMessage(R.string.widget_pin_success))
+                } else {
                     sendEffect(CalendarEffect.ShowMessage(R.string.widget_pin_not_supported))
                 }
-            }.onSuccess {
-                sendEffect(CalendarEffect.ShowMessage(R.string.widget_pin_success))
             }.onFailure {
                 sendEffect(CalendarEffect.ShowMessage(R.string.widget_pin_failure))
             }

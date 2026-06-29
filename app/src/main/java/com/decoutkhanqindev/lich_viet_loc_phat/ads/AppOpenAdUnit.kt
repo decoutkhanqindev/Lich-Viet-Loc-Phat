@@ -9,8 +9,7 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.interstitial.InterstitialAd
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
+import com.google.android.gms.ads.appopen.AppOpenAd
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,12 +19,7 @@ import kotlinx.coroutines.launch
 import org.koin.java.KoinJavaComponent.inject
 import timber.log.Timber
 
-class InterstitialAdUnit(
-    id: String, name: String,
-    private val onShowing: () -> Unit = {},
-    private val onClosed: () -> Unit = {},
-    private val onFailedToShow: () -> Unit = {},
-) : AdUnit(id, name) {
+class AppOpenAdUnit(id: String, name: String) : AdUnit(id, name) {
 
     private val networkManager: NetworkManager by inject(NetworkManager::class.java)
 
@@ -35,20 +29,8 @@ class InterstitialAdUnit(
             Timber.tag(tag).e(throwable.stackTraceToString())
         })
 
-    private var _interstitialAd: InterstitialAd? = null
-    private var currentTabCount = 0
-    private var lastShowTime = 0L
+    private var _appOpenAd: AppOpenAd? = null
     private var networkObserveJob: Job? = null
-
-    fun incrementTabCount() {
-        currentTabCount++
-    }
-
-    fun readyToLoad(): Boolean {
-        val now = System.currentTimeMillis()
-        val intervalPassed = lastShowTime == 0L || now - lastShowTime >= INTERVAL
-        return currentTabCount >= TAB_THRESHOLD && intervalPassed
-    }
 
     override fun load(context: Context) {
         if (_state.value != AdUnitState.NONE) return
@@ -67,14 +49,14 @@ class InterstitialAdUnit(
         scope.launch {
             _state.value = AdUnitState.LOADING
             Timber.tag(tag).d("$name - Loading")
-            InterstitialAd.load(
+            AppOpenAd.load(
                 context,
                 id,
                 AdRequest.Builder().build(),
-                object : InterstitialAdLoadCallback() {
-                    override fun onAdLoaded(ad: InterstitialAd) {
+                object : AppOpenAd.AppOpenAdLoadCallback() {
+                    override fun onAdLoaded(ad: AppOpenAd) {
                         Timber.tag(tag).d("$name - Loaded")
-                        _interstitialAd = ad
+                        _appOpenAd = ad
                         _state.value = AdUnitState.LOADED
                     }
 
@@ -91,53 +73,36 @@ class InterstitialAdUnit(
         activity: Activity,
         onImpression: () -> Unit = {},
         onAdClosed: () -> Unit = {},
-        onAdFailedToShow: () -> Unit = {},
+        adFailedToShow: () -> Unit = {},
     ) {
-        val ad = _interstitialAd ?: return
-
+        val ad = _appOpenAd ?: return
         ad.fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdShowedFullScreenContent() {
-                Timber.tag(tag).d("$name - Showed")
-                onShowing()
-            }
-
             override fun onAdImpression() {
                 Timber.tag(tag).d("$name - Impression")
-                lastShowTime = System.currentTimeMillis()
-                currentTabCount = 0
                 _state.value = AdUnitState.IMPRESSION
                 onImpression()
-                onShowing()
             }
 
             override fun onAdDismissedFullScreenContent() {
                 Timber.tag(tag).d("$name - Closed")
-                _interstitialAd = null
+                _appOpenAd = null
                 _state.value = AdUnitState.NONE
                 onAdClosed()
-                onClosed()
             }
 
             override fun onAdFailedToShowFullScreenContent(error: AdError) {
                 Timber.tag(tag).d("$name - Failed to show: ${error.message}")
-                _interstitialAd = null
+                _appOpenAd = null
                 _state.value = AdUnitState.NONE
-                onAdFailedToShow()
-                onFailedToShow()
+                adFailedToShow()
             }
         }
-
         ad.show(activity)
     }
 
     override fun destroy() {
         job.cancel()
-        _interstitialAd = null
+        _appOpenAd = null
         _state.value = AdUnitState.NONE
-    }
-
-    companion object {
-        private const val TAB_THRESHOLD = 3
-        private const val INTERVAL = 60_000L
     }
 }

@@ -8,11 +8,11 @@ plugins {
 
 android {
     namespace = "com.decoutkhanqindev.lich_viet_loc_phat"
-    compileSdk = 36
+    compileSdk = 37
     defaultConfig {
         applicationId = "com.decoutkhanqindev.lich_viet_loc_phat"
         minSdk = 26
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "v1.0.1"
     }
@@ -70,6 +70,11 @@ android {
                 "ADMOB_REWARD_WIDGET_ID",
                 "\"${"ca-app-pub-3940256099942544/5224354917"}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_APP_OPEN_RESUME_ID",
+                "\"${"ca-app-pub-3940256099942544/9257395921"}\""
+            )
         }
 
         release {
@@ -115,6 +120,11 @@ android {
                 "ADMOB_REWARD_WIDGET_ID",
                 "\"${releaseAdId("admob.reward.widget.id")}\""
             )
+            buildConfigField(
+                "String",
+                "ADMOB_APP_OPEN_RESUME_ID",
+                "\"${releaseAdId("admob.app.open.resume.id")}\""
+            )
         }
     }
 
@@ -142,6 +152,7 @@ kotlin {
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.process)
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     androidTestImplementation(composeBom)

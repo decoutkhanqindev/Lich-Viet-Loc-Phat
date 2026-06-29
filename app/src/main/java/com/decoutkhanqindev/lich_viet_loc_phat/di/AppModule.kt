@@ -26,7 +26,7 @@ val appModule = module {
     single<StaticAssetDataSource> { StaticAssetDataSourceImpl() }
     single { NetworkManager(androidContext()) }
     single { SharedPrefsManager(androidContext()) }
-    single { AdsManager(get()) }
+    single { AdsManager(androidApplication()) }
 
     single<CalendarRepository> { CalendarRepositoryImpl(get(), get()) }
 
@@ -37,5 +37,5 @@ val appModule = module {
 
     viewModel { TodayViewModel(get()) }
     viewModel { CalendarViewModel(get(), get(), androidApplication()) }
-    viewModel { SettingsViewModel(androidApplication(), get()) }
+    viewModel { SettingsViewModel(get(), androidApplication()) }
 }
